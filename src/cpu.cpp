@@ -30,7 +30,16 @@ void LR35902::step()
 {
     uint8 opcode = mcu.read_8bit(reg.pc);
 
-    execute_opcode(opcode);
+    if ( opcode != 0xCB )
+    {
+        execute_opcode(opcode, false);
+    }
+    else
+    {
+        reg.pc++;
+        opcode = mcu.read_8bit(reg.pc);
+        execute_opcode(opcode, true);
+    }
 }
 
 void LR35902::run(uint16 break_pc)
@@ -58,9 +67,12 @@ void LR35902::set_flag(Flag flag, bool value)
         reg.f &= ~flag;
 }
 
-void LR35902::execute_opcode(uint8 opcode)
+void LR35902::execute_opcode(uint8 opcode, bool CB_prefix)
 {
-    (this->*instructions[opcode])();
+    if ( CB_prefix )
+        (this->*instrCB_table[opcode])();
+    else
+        (this->*instr_table[opcode])();
 }
 
 // Misc functions //
@@ -148,7 +160,7 @@ void LR35902::jr(bool condition)
 {
     if ( condition )
     {
-        reg.pc += (int8) mcu.read_8bit(reg.pc + 1);
+        reg.pc += static_cast<int8>( mcu.read_8bit(reg.pc + 1) );
         t_cycles += 12;
         m_cycles += 3;
     }
@@ -195,7 +207,7 @@ void LR35902::add_8bit(uint8 source, bool with_carry)
     // Update c flag
     set_flag(Flag::carry, get_bit(8, result));
 
-    reg.a = (uint8) result;
+    reg.a = static_cast<uint8>( result );
 
     // Update z flag
     set_flag(Flag::zero, reg.a == 0);
@@ -266,7 +278,7 @@ void LR35902::add_16bit(uint16 source)
     // Update c flag
     set_flag(Flag::carry,get_bit(16, result));
 
-    reg.a = (uint16) result;
+    reg.af = static_cast<uint16>( result );
 
     // Update n flag
     set_flag(Flag::sub, false);
@@ -2350,7 +2362,7 @@ void LR35902::instr_0xC6() // ADD A,d8
 {
     log->trace("%v : 0xC6 - ADD A,d8", reg.pc);
 
-    add_8bit(mcu.read_16bit(reg.pc + 1), false);
+    add_8bit(mcu.read_8bit(reg.pc + 1), false);
 
     reg.pc   += 2;
     t_cycles += 8;
@@ -2406,13 +2418,7 @@ void LR35902::instr_0xCA() // JP Z,a16
 }
 void LR35902::instr_0xCB() // PREFIX CB
 {
-    log->error("%v : 0xCB - PREFIX CB m_cycles", reg.pc);
-
-    uint8 opcode = mcu.read_8bit(reg.pc + 1); 
-
-    reg.pc   += instruction_size[opcode];
-    t_cycles += instruction_cycles[opcode];
-    m_cycles += instruction_cycles[opcode] / 4;
+    log->error("%v : 0xCB - PREFIX CB", reg.pc);
 }
 void LR35902::instr_0xCC() // CALL Z,a16
 {
@@ -2740,7 +2746,7 @@ void LR35902::instr_0xE8() // ADD SP,r8
     uint16 temp_hl = reg.hl;
 
     reg.hl = reg.sp;
-    add_16bit( (int8) mcu.read_8bit(reg.pc + 1) );
+    add_16bit( static_cast<uint8>( mcu.read_8bit(reg.pc + 1) ) );
     reg.sp = reg.hl;
 
     reg.hl = temp_hl;
@@ -2791,7 +2797,7 @@ void LR35902::instr_0xED() // Invalid instruction
 {
     log->error("%v : 0xED - Invalid instruction", reg.pc);
 
-    // ****************************** //
+    // // ***************// *************** //
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -2970,4 +2976,2309 @@ void LR35902::instr_0xFF() // RST 38H
     reg.pc   += 1;
     t_cycles += 16;
     m_cycles += 4;
+}
+
+void LR35902::instr_0xCB00() // RLC B
+{
+	log->trace("%v : 0xCB00 - RLC B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB01() // RLC C
+{
+	log->trace("%v : 0xCB01 - RLC C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB02() // RLC D
+{
+	log->trace("%v : 0xCB02 - RLC D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB03() // RLC E
+{
+	log->trace("%v : 0xCB03 - RLC E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB04() // RLC H
+{
+	log->trace("%v : 0xCB04 - RLC H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB05() // RLC L
+{
+	log->trace("%v : 0xCB05 - RLC L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB06() // RLC (HL)
+{
+	log->trace("%v : 0xCB06 - RLC (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB07() // RLC A
+{
+	log->trace("%v : 0xCB07 - RLC A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB08() // RRC B
+{
+	log->trace("%v : 0xCB08 - RRC B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB09() // RRC C
+{
+	log->trace("%v : 0xCB09 - RRC C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB0A() // RRC D
+{
+	log->trace("%v : 0xCB0A - RRC D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB0B() // RRC E
+{
+	log->trace("%v : 0xCB0B - RRC E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB0C() // RRC H
+{
+	log->trace("%v : 0xCB0C - RRC H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB0D() // RRC L
+{
+	log->trace("%v : 0xCB0D - RRC L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB0E() // RRC (HL)
+{
+	log->trace("%v : 0xCB0E - RRC (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB0F() // RRC A
+{
+	log->trace("%v : 0xCB0F - RRC A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB10() // RL B
+{
+	log->trace("%v : 0xCB10 - RL B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB11() // RL C
+{
+	log->trace("%v : 0xCB11 - RL C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB12() // RL D
+{
+	log->trace("%v : 0xCB12 - RL D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB13() // RL E
+{
+	log->trace("%v : 0xCB13 - RL E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB14() // RL H
+{
+	log->trace("%v : 0xCB14 - RL H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB15() // RL L
+{
+	log->trace("%v : 0xCB15 - RL L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB16() // RL (HL)
+{
+	log->trace("%v : 0xCB16 - RL (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB17() // RL A
+{
+	log->trace("%v : 0xCB17 - RL A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB18() // RR B
+{
+	log->trace("%v : 0xCB18 - RR B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB19() // RR C
+{
+	log->trace("%v : 0xCB19 - RR C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB1A() // RR D
+{
+	log->trace("%v : 0xCB1A - RR D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB1B() // RR E
+{
+	log->trace("%v : 0xCB1B - RR E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB1C() // RR H
+{
+	log->trace("%v : 0xCB1C - RR H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB1D() // RR L
+{
+	log->trace("%v : 0xCB1D - RR L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB1E() // RR (HL)
+{
+	log->trace("%v : 0xCB1E - RR (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB1F() // RR A
+{
+	log->trace("%v : 0xCB1F - RR A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB20() // SLA B
+{
+	log->trace("%v : 0xCB20 - SLA B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB21() // SLA C
+{
+	log->trace("%v : 0xCB21 - SLA C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB22() // SLA D
+{
+	log->trace("%v : 0xCB22 - SLA D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB23() // SLA E
+{
+	log->trace("%v : 0xCB23 - SLA E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB24() // SLA H
+{
+	log->trace("%v : 0xCB24 - SLA H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB25() // SLA L
+{
+	log->trace("%v : 0xCB25 - SLA L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB26() // SLA (HL)
+{
+	log->trace("%v : 0xCB26 - SLA (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB27() // SLA A
+{
+	log->trace("%v : 0xCB27 - SLA A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB28() // SRA B
+{
+	log->trace("%v : 0xCB28 - SRA B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB29() // SRA C
+{
+	log->trace("%v : 0xCB29 - SRA C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB2A() // SRA D
+{
+	log->trace("%v : 0xCB2A - SRA D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB2B() // SRA E
+{
+	log->trace("%v : 0xCB2B - SRA E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB2C() // SRA H
+{
+	log->trace("%v : 0xCB2C - SRA H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB2D() // SRA L
+{
+	log->trace("%v : 0xCB2D - SRA L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB2E() // SRA (HL)
+{
+	log->trace("%v : 0xCB2E - SRA (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB2F() // SRA A
+{
+	log->trace("%v : 0xCB2F - SRA A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB30() // SWAP B
+{
+	log->trace("%v : 0xCB30 - SWAP B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB31() // SWAP C
+{
+	log->trace("%v : 0xCB31 - SWAP C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB32() // SWAP D
+{
+	log->trace("%v : 0xCB32 - SWAP D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB33() // SWAP E
+{
+	log->trace("%v : 0xCB33 - SWAP E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB34() // SWAP H
+{
+	log->trace("%v : 0xCB34 - SWAP H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB35() // SWAP L
+{
+	log->trace("%v : 0xCB35 - SWAP L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB36() // SWAP (HL)
+{
+	log->trace("%v : 0xCB36 - SWAP (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB37() // SWAP A
+{
+	log->trace("%v : 0xCB37 - SWAP A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB38() // SRL B
+{
+	log->trace("%v : 0xCB38 - SRL B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB39() // SRL C
+{
+	log->trace("%v : 0xCB39 - SRL C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB3A() // SRL D
+{
+	log->trace("%v : 0xCB3A - SRL D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB3B() // SRL E
+{
+	log->trace("%v : 0xCB3B - SRL E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB3C() // SRL H
+{
+	log->trace("%v : 0xCB3C - SRL H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB3D() // SRL L
+{
+	log->trace("%v : 0xCB3D - SRL L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB3E() // SRL (HL)
+{
+	log->trace("%v : 0xCB3E - SRL (HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB3F() // SRL A
+{
+	log->trace("%v : 0xCB3F - SRL A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB40() // BIT 0,B
+{
+	log->trace("%v : 0xCB40 - BIT 0,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB41() // BIT 0,C
+{
+	log->trace("%v : 0xCB41 - BIT 0,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB42() // BIT 0,D
+{
+	log->trace("%v : 0xCB42 - BIT 0,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB43() // BIT 0,E
+{
+	log->trace("%v : 0xCB43 - BIT 0,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB44() // BIT 0,H
+{
+	log->trace("%v : 0xCB44 - BIT 0,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB45() // BIT 0,L
+{
+	log->trace("%v : 0xCB45 - BIT 0,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB46() // BIT 0,(HL)
+{
+	log->trace("%v : 0xCB46 - BIT 0,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB47() // BIT 0,A
+{
+	log->trace("%v : 0xCB47 - BIT 0,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB48() // BIT 1,B
+{
+	log->trace("%v : 0xCB48 - BIT 1,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB49() // BIT 1,C
+{
+	log->trace("%v : 0xCB49 - BIT 1,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB4A() // BIT 1,D
+{
+	log->trace("%v : 0xCB4A - BIT 1,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB4B() // BIT 1,E
+{
+	log->trace("%v : 0xCB4B - BIT 1,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB4C() // BIT 1,H
+{
+	log->trace("%v : 0xCB4C - BIT 1,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB4D() // BIT 1,L
+{
+	log->trace("%v : 0xCB4D - BIT 1,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB4E() // BIT 1,(HL)
+{
+	log->trace("%v : 0xCB4E - BIT 1,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB4F() // BIT 1,A
+{
+	log->trace("%v : 0xCB4F - BIT 1,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB50() // BIT 2,B
+{
+	log->trace("%v : 0xCB50 - BIT 2,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB51() // BIT 2,C
+{
+	log->trace("%v : 0xCB51 - BIT 2,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB52() // BIT 2,D
+{
+	log->trace("%v : 0xCB52 - BIT 2,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB53() // BIT 2,E
+{
+	log->trace("%v : 0xCB53 - BIT 2,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB54() // BIT 2,H
+{
+	log->trace("%v : 0xCB54 - BIT 2,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB55() // BIT 2,L
+{
+	log->trace("%v : 0xCB55 - BIT 2,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB56() // BIT 2,(HL)
+{
+	log->trace("%v : 0xCB56 - BIT 2,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB57() // BIT 2,A
+{
+	log->trace("%v : 0xCB57 - BIT 2,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB58() // BIT 3,B
+{
+	log->trace("%v : 0xCB58 - BIT 3,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB59() // BIT 3,C
+{
+	log->trace("%v : 0xCB59 - BIT 3,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB5A() // BIT 3,D
+{
+	log->trace("%v : 0xCB5A - BIT 3,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB5B() // BIT 3,E
+{
+	log->trace("%v : 0xCB5B - BIT 3,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB5C() // BIT 3,H
+{
+	log->trace("%v : 0xCB5C - BIT 3,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB5D() // BIT 3,L
+{
+	log->trace("%v : 0xCB5D - BIT 3,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB5E() // BIT 3,(HL)
+{
+	log->trace("%v : 0xCB5E - BIT 3,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB5F() // BIT 3,A
+{
+	log->trace("%v : 0xCB5F - BIT 3,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB60() // BIT 4,B
+{
+	log->trace("%v : 0xCB60 - BIT 4,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB61() // BIT 4,C
+{
+	log->trace("%v : 0xCB61 - BIT 4,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB62() // BIT 4,D
+{
+	log->trace("%v : 0xCB62 - BIT 4,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB63() // BIT 4,E
+{
+	log->trace("%v : 0xCB63 - BIT 4,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB64() // BIT 4,H
+{
+	log->trace("%v : 0xCB64 - BIT 4,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB65() // BIT 4,L
+{
+	log->trace("%v : 0xCB65 - BIT 4,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB66() // BIT 4,(HL)
+{
+	log->trace("%v : 0xCB66 - BIT 4,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB67() // BIT 4,A
+{
+	log->trace("%v : 0xCB67 - BIT 4,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB68() // BIT 5,B
+{
+	log->trace("%v : 0xCB68 - BIT 5,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB69() // BIT 5,C
+{
+	log->trace("%v : 0xCB69 - BIT 5,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB6A() // BIT 5,D
+{
+	log->trace("%v : 0xCB6A - BIT 5,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB6B() // BIT 5,E
+{
+	log->trace("%v : 0xCB6B - BIT 5,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB6C() // BIT 5,H
+{
+	log->trace("%v : 0xCB6C - BIT 5,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB6D() // BIT 5,L
+{
+	log->trace("%v : 0xCB6D - BIT 5,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB6E() // BIT 5,(HL)
+{
+	log->trace("%v : 0xCB6E - BIT 5,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB6F() // BIT 5,A
+{
+	log->trace("%v : 0xCB6F - BIT 5,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB70() // BIT 6,B
+{
+	log->trace("%v : 0xCB70 - BIT 6,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB71() // BIT 6,C
+{
+	log->trace("%v : 0xCB71 - BIT 6,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB72() // BIT 6,D
+{
+	log->trace("%v : 0xCB72 - BIT 6,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB73() // BIT 6,E
+{
+	log->trace("%v : 0xCB73 - BIT 6,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB74() // BIT 6,H
+{
+	log->trace("%v : 0xCB74 - BIT 6,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB75() // BIT 6,L
+{
+	log->trace("%v : 0xCB75 - BIT 6,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB76() // BIT 6,(HL)
+{
+	log->trace("%v : 0xCB76 - BIT 6,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB77() // BIT 6,A
+{
+	log->trace("%v : 0xCB77 - BIT 6,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB78() // BIT 7,B
+{
+	log->trace("%v : 0xCB78 - BIT 7,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB79() // BIT 7,C
+{
+	log->trace("%v : 0xCB79 - BIT 7,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB7A() // BIT 7,D
+{
+	log->trace("%v : 0xCB7A - BIT 7,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB7B() // BIT 7,E
+{
+	log->trace("%v : 0xCB7B - BIT 7,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB7C() // BIT 7,H
+{
+	log->trace("%v : 0xCB7C - BIT 7,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB7D() // BIT 7,L
+{
+	log->trace("%v : 0xCB7D - BIT 7,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB7E() // BIT 7,(HL)
+{
+	log->trace("%v : 0xCB7E - BIT 7,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB7F() // BIT 7,A
+{
+	log->trace("%v : 0xCB7F - BIT 7,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB80() // RES 0,B
+{
+	log->trace("%v : 0xCB80 - RES 0,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB81() // RES 0,C
+{
+	log->trace("%v : 0xCB81 - RES 0,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB82() // RES 0,D
+{
+	log->trace("%v : 0xCB82 - RES 0,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB83() // RES 0,E
+{
+	log->trace("%v : 0xCB83 - RES 0,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB84() // RES 0,H
+{
+	log->trace("%v : 0xCB84 - RES 0,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB85() // RES 0,L
+{
+	log->trace("%v : 0xCB85 - RES 0,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB86() // RES 0,(HL)
+{
+	log->trace("%v : 0xCB86 - RES 0,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB87() // RES 0,A
+{
+	log->trace("%v : 0xCB87 - RES 0,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB88() // RES 1,B
+{
+	log->trace("%v : 0xCB88 - RES 1,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB89() // RES 1,C
+{
+	log->trace("%v : 0xCB89 - RES 1,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB8A() // RES 1,D
+{
+	log->trace("%v : 0xCB8A - RES 1,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB8B() // RES 1,E
+{
+	log->trace("%v : 0xCB8B - RES 1,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB8C() // RES 1,H
+{
+	log->trace("%v : 0xCB8C - RES 1,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB8D() // RES 1,L
+{
+	log->trace("%v : 0xCB8D - RES 1,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB8E() // RES 1,(HL)
+{
+	log->trace("%v : 0xCB8E - RES 1,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB8F() // RES 1,A
+{
+	log->trace("%v : 0xCB8F - RES 1,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB90() // RES 2,B
+{
+	log->trace("%v : 0xCB90 - RES 2,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB91() // RES 2,C
+{
+	log->trace("%v : 0xCB91 - RES 2,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB92() // RES 2,D
+{
+	log->trace("%v : 0xCB92 - RES 2,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB93() // RES 2,E
+{
+	log->trace("%v : 0xCB93 - RES 2,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB94() // RES 2,H
+{
+	log->trace("%v : 0xCB94 - RES 2,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB95() // RES 2,L
+{
+	log->trace("%v : 0xCB95 - RES 2,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB96() // RES 2,(HL)
+{
+	log->trace("%v : 0xCB96 - RES 2,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB97() // RES 2,A
+{
+	log->trace("%v : 0xCB97 - RES 2,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB98() // RES 3,B
+{
+	log->trace("%v : 0xCB98 - RES 3,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB99() // RES 3,C
+{
+	log->trace("%v : 0xCB99 - RES 3,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB9A() // RES 3,D
+{
+	log->trace("%v : 0xCB9A - RES 3,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB9B() // RES 3,E
+{
+	log->trace("%v : 0xCB9B - RES 3,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB9C() // RES 3,H
+{
+	log->trace("%v : 0xCB9C - RES 3,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB9D() // RES 3,L
+{
+	log->trace("%v : 0xCB9D - RES 3,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCB9E() // RES 3,(HL)
+{
+	log->trace("%v : 0xCB9E - RES 3,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCB9F() // RES 3,A
+{
+	log->trace("%v : 0xCB9F - RES 3,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA0() // RES 4,B
+{
+	log->trace("%v : 0xCBA0 - RES 4,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA1() // RES 4,C
+{
+	log->trace("%v : 0xCBA1 - RES 4,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA2() // RES 4,D
+{
+	log->trace("%v : 0xCBA2 - RES 4,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA3() // RES 4,E
+{
+	log->trace("%v : 0xCBA3 - RES 4,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA4() // RES 4,H
+{
+	log->trace("%v : 0xCBA4 - RES 4,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA5() // RES 4,L
+{
+	log->trace("%v : 0xCBA5 - RES 4,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA6() // RES 4,(HL)
+{
+	log->trace("%v : 0xCBA6 - RES 4,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBA7() // RES 4,A
+{
+	log->trace("%v : 0xCBA7 - RES 4,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA8() // RES 5,B
+{
+	log->trace("%v : 0xCBA8 - RES 5,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBA9() // RES 5,C
+{
+	log->trace("%v : 0xCBA9 - RES 5,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBAA() // RES 5,D
+{
+	log->trace("%v : 0xCBAA - RES 5,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBAB() // RES 5,E
+{
+	log->trace("%v : 0xCBAB - RES 5,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBAC() // RES 5,H
+{
+	log->trace("%v : 0xCBAC - RES 5,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBAD() // RES 5,L
+{
+	log->trace("%v : 0xCBAD - RES 5,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBAE() // RES 5,(HL)
+{
+	log->trace("%v : 0xCBAE - RES 5,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBAF() // RES 5,A
+{
+	log->trace("%v : 0xCBAF - RES 5,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB0() // RES 6,B
+{
+	log->trace("%v : 0xCBB0 - RES 6,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB1() // RES 6,C
+{
+	log->trace("%v : 0xCBB1 - RES 6,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB2() // RES 6,D
+{
+	log->trace("%v : 0xCBB2 - RES 6,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB3() // RES 6,E
+{
+	log->trace("%v : 0xCBB3 - RES 6,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB4() // RES 6,H
+{
+	log->trace("%v : 0xCBB4 - RES 6,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB5() // RES 6,L
+{
+	log->trace("%v : 0xCBB5 - RES 6,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB6() // RES 6,(HL)
+{
+	log->trace("%v : 0xCBB6 - RES 6,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBB7() // RES 6,A
+{
+	log->trace("%v : 0xCBB7 - RES 6,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB8() // RES 7,B
+{
+	log->trace("%v : 0xCBB8 - RES 7,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBB9() // RES 7,C
+{
+	log->trace("%v : 0xCBB9 - RES 7,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBBA() // RES 7,D
+{
+	log->trace("%v : 0xCBBA - RES 7,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBBB() // RES 7,E
+{
+	log->trace("%v : 0xCBBB - RES 7,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBBC() // RES 7,H
+{
+	log->trace("%v : 0xCBBC - RES 7,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBBD() // RES 7,L
+{
+	log->trace("%v : 0xCBBD - RES 7,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBBE() // RES 7,(HL)
+{
+	log->trace("%v : 0xCBBE - RES 7,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBBF() // RES 7,A
+{
+	log->trace("%v : 0xCBBF - RES 7,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC0() // SET 0,B
+{
+	log->trace("%v : 0xCBC0 - SET 0,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC1() // SET 0,C
+{
+	log->trace("%v : 0xCBC1 - SET 0,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC2() // SET 0,D
+{
+	log->trace("%v : 0xCBC2 - SET 0,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC3() // SET 0,E
+{
+	log->trace("%v : 0xCBC3 - SET 0,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC4() // SET 0,H
+{
+	log->trace("%v : 0xCBC4 - SET 0,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC5() // SET 0,L
+{
+	log->trace("%v : 0xCBC5 - SET 0,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC6() // SET 0,(HL)
+{
+	log->trace("%v : 0xCBC6 - SET 0,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBC7() // SET 0,A
+{
+	log->trace("%v : 0xCBC7 - SET 0,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC8() // SET 1,B
+{
+	log->trace("%v : 0xCBC8 - SET 1,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBC9() // SET 1,C
+{
+	log->trace("%v : 0xCBC9 - SET 1,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBCA() // SET 1,D
+{
+	log->trace("%v : 0xCBCA - SET 1,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBCB() // SET 1,E
+{
+	log->trace("%v : 0xCBCB - SET 1,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBCC() // SET 1,H
+{
+	log->trace("%v : 0xCBCC - SET 1,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBCD() // SET 1,L
+{
+	log->trace("%v : 0xCBCD - SET 1,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBCE() // SET 1,(HL)
+{
+	log->trace("%v : 0xCBCE - SET 1,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBCF() // SET 1,A
+{
+	log->trace("%v : 0xCBCF - SET 1,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD0() // SET 2,B
+{
+	log->trace("%v : 0xCBD0 - SET 2,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD1() // SET 2,C
+{
+	log->trace("%v : 0xCBD1 - SET 2,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD2() // SET 2,D
+{
+	log->trace("%v : 0xCBD2 - SET 2,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD3() // SET 2,E
+{
+	log->trace("%v : 0xCBD3 - SET 2,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD4() // SET 2,H
+{
+	log->trace("%v : 0xCBD4 - SET 2,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD5() // SET 2,L
+{
+	log->trace("%v : 0xCBD5 - SET 2,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD6() // SET 2,(HL)
+{
+	log->trace("%v : 0xCBD6 - SET 2,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBD7() // SET 2,A
+{
+	log->trace("%v : 0xCBD7 - SET 2,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD8() // SET 3,B
+{
+	log->trace("%v : 0xCBD8 - SET 3,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBD9() // SET 3,C
+{
+	log->trace("%v : 0xCBD9 - SET 3,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBDA() // SET 3,D
+{
+	log->trace("%v : 0xCBDA - SET 3,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBDB() // SET 3,E
+{
+	log->trace("%v : 0xCBDB - SET 3,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBDC() // SET 3,H
+{
+	log->trace("%v : 0xCBDC - SET 3,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBDD() // SET 3,L
+{
+	log->trace("%v : 0xCBDD - SET 3,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBDE() // SET 3,(HL)
+{
+	log->trace("%v : 0xCBDE - SET 3,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBDF() // SET 3,A
+{
+	log->trace("%v : 0xCBDF - SET 3,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE0() // SET 4,B
+{
+	log->trace("%v : 0xCBE0 - SET 4,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE1() // SET 4,C
+{
+	log->trace("%v : 0xCBE1 - SET 4,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE2() // SET 4,D
+{
+	log->trace("%v : 0xCBE2 - SET 4,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE3() // SET 4,E
+{
+	log->trace("%v : 0xCBE3 - SET 4,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE4() // SET 4,H
+{
+	log->trace("%v : 0xCBE4 - SET 4,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE5() // SET 4,L
+{
+	log->trace("%v : 0xCBE5 - SET 4,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE6() // SET 4,(HL)
+{
+	log->trace("%v : 0xCBE6 - SET 4,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBE7() // SET 4,A
+{
+	log->trace("%v : 0xCBE7 - SET 4,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE8() // SET 5,B
+{
+	log->trace("%v : 0xCBE8 - SET 5,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBE9() // SET 5,C
+{
+	log->trace("%v : 0xCBE9 - SET 5,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBEA() // SET 5,D
+{
+	log->trace("%v : 0xCBEA - SET 5,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBEB() // SET 5,E
+{
+	log->trace("%v : 0xCBEB - SET 5,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBEC() // SET 5,H
+{
+	log->trace("%v : 0xCBEC - SET 5,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBED() // SET 5,L
+{
+	log->trace("%v : 0xCBED - SET 5,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBEE() // SET 5,(HL)
+{
+	log->trace("%v : 0xCBEE - SET 5,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBEF() // SET 5,A
+{
+	log->trace("%v : 0xCBEF - SET 5,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF0() // SET 6,B
+{
+	log->trace("%v : 0xCBF0 - SET 6,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF1() // SET 6,C
+{
+	log->trace("%v : 0xCBF1 - SET 6,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF2() // SET 6,D
+{
+	log->trace("%v : 0xCBF2 - SET 6,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF3() // SET 6,E
+{
+	log->trace("%v : 0xCBF3 - SET 6,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF4() // SET 6,H
+{
+	log->trace("%v : 0xCBF4 - SET 6,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF5() // SET 6,L
+{
+	log->trace("%v : 0xCBF5 - SET 6,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF6() // SET 6,(HL)
+{
+	log->trace("%v : 0xCBF6 - SET 6,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBF7() // SET 6,A
+{
+	log->trace("%v : 0xCBF7 - SET 6,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF8() // SET 7,B
+{
+	log->trace("%v : 0xCBF8 - SET 7,B", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBF9() // SET 7,C
+{
+	log->trace("%v : 0xCBF9 - SET 7,C", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBFA() // SET 7,D
+{
+	log->trace("%v : 0xCBFA - SET 7,D", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBFB() // SET 7,E
+{
+	log->trace("%v : 0xCBFB - SET 7,E", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBFC() // SET 7,H
+{
+	log->trace("%v : 0xCBFC - SET 7,H", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBFD() // SET 7,L
+{
+	log->trace("%v : 0xCBFD - SET 7,L", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
+}
+void LR35902::instr_0xCBFE() // SET 7,(HL)
+{
+	log->trace("%v : 0xCBFE - SET 7,(HL)", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 10;
+	m_cycles += 4;
+}
+void LR35902::instr_0xCBFF() // SET 7,A
+{
+	log->trace("%v : 0xCBFF - SET 7,A", reg.pc);
+
+	// ***************
+	reg.pc   += 1;
+	t_cycles += 8;
+	m_cycles += 2;
 }
