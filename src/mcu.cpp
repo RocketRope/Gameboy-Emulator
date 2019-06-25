@@ -77,7 +77,7 @@ bool MCU::loadCartridge(const char* filename)
 }
 
 // 
-uint8&  MCU::read_8bit( uint16 address)
+uint8 MCU::read_8bit( uint16 address)
 {
     return ram[address];
 }

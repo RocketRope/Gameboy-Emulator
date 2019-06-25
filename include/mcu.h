@@ -121,7 +121,7 @@ class MCU
         bool loadCartridge(const char* filename);
         
         //
-        uint8&  read_8bit( uint16 address);
+        uint8  read_8bit( uint16 address);
         uint16 read_16bit(uint16 address);
 
         //

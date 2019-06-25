@@ -61,12 +61,22 @@ class LR35902
 
         void daa();
         void cpl();
+        void swap(uint8 &source);
+
         void ccf();
         void scf();
+
         void di();
         void ei();
+
         void stop();
         void halt();
+
+        // Bit Opcodes //
+
+        void bit(uint8 n, uint8 source);
+        void set(uint8 n, uint8& source);
+        void res(uint8 n, uint8& source);
 
         // Jump functions //
 
@@ -107,7 +117,7 @@ class LR35902
         void sra_8bit(uint8& source);
         void srl_8bit(uint8& source);
 
-        // Jump table for instructions //
+        // Jump table for opcode instructions //
 
         void (LR35902::*instr_table[0xFF + 1])(void) = 
         {
@@ -245,7 +255,7 @@ class LR35902
             &LR35902::instr_0xCBFC, &LR35902::instr_0xCBFD, &LR35902::instr_0xCBFE, &LR35902::instr_0xCBFF
         };
 
-        // Instructions functions // 
+        // Opcode functions // 
         
         void instr_0x00(); void instr_0x01(); void instr_0x02(); void instr_0x03();
         void instr_0x04(); void instr_0x05(); void instr_0x06(); void instr_0x07();
