@@ -60,10 +60,10 @@ public:
     QLabel *sp_label;
     QGroupBox *Flags_groupBox;
     QVBoxLayout *verticalLayout;
+    QCheckBox *zero_checkBox;
+    QCheckBox *subtraction_checkBox;
     QCheckBox *carry_checkBox;
     QCheckBox *half_carry_checkBox;
-    QCheckBox *subtraction_checkBox;
-    QCheckBox *zero_checkBox;
     QCheckBox *interrupt_enable_checkBox;
     QPlainTextEdit *source_plainTextEdit;
     QPushButton *reset_pushButton;
@@ -300,6 +300,16 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        zero_checkBox = new QCheckBox(Flags_groupBox);
+        zero_checkBox->setObjectName(QString::fromUtf8("zero_checkBox"));
+
+        verticalLayout->addWidget(zero_checkBox);
+
+        subtraction_checkBox = new QCheckBox(Flags_groupBox);
+        subtraction_checkBox->setObjectName(QString::fromUtf8("subtraction_checkBox"));
+
+        verticalLayout->addWidget(subtraction_checkBox);
+
         carry_checkBox = new QCheckBox(Flags_groupBox);
         carry_checkBox->setObjectName(QString::fromUtf8("carry_checkBox"));
 
@@ -309,16 +319,6 @@ public:
         half_carry_checkBox->setObjectName(QString::fromUtf8("half_carry_checkBox"));
 
         verticalLayout->addWidget(half_carry_checkBox);
-
-        subtraction_checkBox = new QCheckBox(Flags_groupBox);
-        subtraction_checkBox->setObjectName(QString::fromUtf8("subtraction_checkBox"));
-
-        verticalLayout->addWidget(subtraction_checkBox);
-
-        zero_checkBox = new QCheckBox(Flags_groupBox);
-        zero_checkBox->setObjectName(QString::fromUtf8("zero_checkBox"));
-
-        verticalLayout->addWidget(zero_checkBox);
 
         interrupt_enable_checkBox = new QCheckBox(Flags_groupBox);
         interrupt_enable_checkBox->setObjectName(QString::fromUtf8("interrupt_enable_checkBox"));
@@ -406,10 +406,10 @@ public:
         bc_label->setText(QCoreApplication::translate("RegistersWindow", "BC:", nullptr));
         sp_label->setText(QCoreApplication::translate("RegistersWindow", "SP:", nullptr));
         Flags_groupBox->setTitle(QCoreApplication::translate("RegistersWindow", "Flags", nullptr));
+        zero_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Zero", nullptr));
+        subtraction_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Subtraction", nullptr));
         carry_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Carry", nullptr));
         half_carry_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Half Carry", nullptr));
-        subtraction_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Subtraction", nullptr));
-        zero_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Zero", nullptr));
         interrupt_enable_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Interrupt Enable", nullptr));
         reset_pushButton->setText(QCoreApplication::translate("RegistersWindow", "Reset", nullptr));
         run_pushButton->setText(QCoreApplication::translate("RegistersWindow", "Run", nullptr));

@@ -1,9 +1,6 @@
 #ifndef _CPU_H_
 #define _CPU_H_
 
-// std
-#include <array>
-
 // el
 #include <el/easylogging++.h>
 
@@ -40,7 +37,7 @@ class LR35902
         bool get_flag(Flag flag);
         void set_flag(Flag flag, bool value = true);
 
-        // interrupt enable flag // 
+        // Interrupt enable flag // 
         bool interrupt_enable;
 
         Registers reg;
@@ -101,8 +98,14 @@ class LR35902
 
         // Rotates & Shifts functions //
 
-        void rotate_left_8bit(uint8& source, bool through_carry);
-        void rotate_right_8bit(uint8& source, bool through_carry);
+        void rlc_8bit(uint8& source);
+        void rl_8bit(uint8& source);
+        void rrc_8bit(uint8& source);
+        void rr_8bit(uint8& source);
+
+        void sla_8bit(uint8& source);
+        void sra_8bit(uint8& source);
+        void srl_8bit(uint8& source);
 
         // Jump table for instructions //
 

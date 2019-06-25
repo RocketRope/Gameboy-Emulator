@@ -21,13 +21,12 @@ bool get_bit(uint8 n, T source)
 }
 
 template <typename T>
-void set_bit(uint8 n, T& source, bool value)
+void set_bit(uint8 n, T& source, bool value = true)
 {
     if ( value )
         source |= 0x01 << n;
     else
         source &= ~0x01 << n;
-    
 }
 
 #endif // _TYPES_H_

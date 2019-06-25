@@ -331,38 +331,110 @@ void LR35902::cp_8bit(uint8 source)
     reg.a = temp_a;
 }
 
-void LR35902::rotate_left_8bit(uint8& source, bool through_carry)
-{
-    bool carry = get_flag(Flag::carry);
+// Rotates & Shifts functions //
 
-    // Update c flag
+void LR35902::rlc_8bit(uint8& source)
+{
+    // Bit 7 to carry
     set_flag(Flag::carry, get_bit(7, source));
 
-    if ( !through_carry )
-        carry = get_flag(Flag::carry);
-
+    // Shift
     source = source << 1;
 
-    if ( carry )
-        source |= 0x01;
+    // Bit 0 same as old bit 7
+    if ( get_flag(Flag::carry) )
+        set_bit(0, source, true);
 
     // Update z flag
     set_flag(Flag::zero, source == 0);
 }
-void LR35902::rotate_right_8bit(uint8& source, bool through_carry)
+void LR35902::rl_8bit(uint8& source)
 {
-    bool carry = get_flag(Flag::carry);
+    bool old_carry = get_flag(Flag::carry);
 
-    // Update c flag
+    // Bit 7 to carry
     set_flag(Flag::carry, get_bit(7, source));
 
-    if ( !through_carry )
-        carry = get_flag(Flag::carry);
-
+    // Shift
     source = source << 1;
 
-    if ( carry )
-        source |= 0x01;
+    // Bit 0 same as old carry
+    if ( old_carry )
+        set_bit(0, source, true);
+
+    // Update z flag
+    set_flag(Flag::zero, source == 0);
+}
+void LR35902::rrc_8bit(uint8& source)
+{
+    // Bit 0 to carry
+    set_flag(Flag::carry, get_bit(0, source));
+
+    // Shift
+    source = source >> 1;
+
+    // Bit 7 same as old bit 0
+    if ( get_flag(Flag::carry) )
+        set_bit(7, source, true);
+
+    // Update z flag
+    set_flag(Flag::zero, source == 0);
+}
+void LR35902::rr_8bit(uint8& source)
+{
+    bool old_carry = get_flag(Flag::carry);
+
+    // Bit 0 to carry
+    set_flag(Flag::carry, get_bit(0, source));
+
+    // Shift
+    source = source >> 1;
+
+    // Bit 7 same as old carry
+    if ( old_carry )
+        set_bit(7, source, true);
+
+    // Update z flag
+    set_flag(Flag::zero, source == 0);
+}
+
+void LR35902::sla_8bit(uint8& source)
+{
+    // Bit 7 to carry
+    set_flag(Flag::carry, get_bit(7, source));
+
+    // Shift 
+    source = source << 1;
+
+    // Update z flag
+    set_flag(Flag::zero, source == 0);
+}
+void LR35902::sra_8bit(uint8& source)
+{
+    // Save bit 7
+    bool old_bit7 = get_bit(7, source);
+
+    // Bit 0 to carry
+    set_flag(Flag::carry, get_bit(0, source));
+
+    // Shift
+    source = source >> 1;
+
+    // Set bit 7 to old bit 7
+    if ( old_bit7 )
+        set_bit(7, source, true);
+
+    // Update z flag
+    set_flag(Flag::zero, source == 0);
+
+}
+void LR35902::srl_8bit(uint8& source)
+{
+    // Bit 0 to carry
+    set_flag(Flag::carry, get_bit(0, source));
+
+    // Shift
+    source = source >> 1;
 
     // Update z flag
     set_flag(Flag::zero, source == 0);
@@ -442,7 +514,7 @@ void LR35902::instr_0x07() // RLCA
 {
     log->trace("%v : 0x07 - RLCA", reg.pc);
 
-    rotate_left_8bit(reg.a, false);
+    rlc_8bit(reg.a);
 
     set_flag(Flag::zero, false);
 
@@ -524,7 +596,9 @@ void LR35902::instr_0x0F() // RRCA
 {
     log->trace("%v : 0x0F - RRCA", reg.pc);
 
-    rotate_right_8bit(reg.a, false);
+    rrc_8bit(reg.a);
+
+    set_flag(Flag::zero, false);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -604,7 +678,9 @@ void LR35902::instr_0x17() // RLA
 {
     log->trace("%v : 0x17 - RLA", reg.pc);
 
-    rotate_left_8bit(reg.a, true);
+    rl_8bit(reg.a);
+
+    set_flag(Flag::zero, false);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -680,7 +756,9 @@ void LR35902::instr_0x1F() // RRA
 {
     log->trace("%v : 0x1F - RRA", reg.pc);
 
-    rotate_right_8bit(reg.a, true);
+    rr_8bit(reg.a);
+
+    set_flag(Flag::zero, false);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -3046,6 +3124,7 @@ void LR35902::instr_0xCB07() // RLC A
 	log->trace("%v : 0xCB07 - RLC A", reg.pc);
 
 	// ***************
+
 	reg.pc   += 1;
 	t_cycles += 8;
 	m_cycles += 2;

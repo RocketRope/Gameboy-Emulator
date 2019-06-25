@@ -478,16 +478,9 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QCheckBox" name="carry_checkBox">
+           <widget class="QCheckBox" name="zero_checkBox">
             <property name="text">
-             <string>Carry</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="half_carry_checkBox">
-            <property name="text">
-             <string>Half Carry</string>
+             <string>Zero</string>
             </property>
            </widget>
           </item>
@@ -499,9 +492,16 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="zero_checkBox">
+           <widget class="QCheckBox" name="carry_checkBox">
             <property name="text">
-             <string>Zero</string>
+             <string>Carry</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="half_carry_checkBox">
+            <property name="text">
+             <string>Half Carry</string>
             </property>
            </widget>
           </item>
