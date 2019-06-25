@@ -26,6 +26,7 @@ class LR35902
 
         void reset();
         void step();
+        void run(uint16 break_pc_postion = 0x00);
 
         // Flags // 
 
@@ -76,6 +77,7 @@ class LR35902
         void call(uint16 address);
         void ret();
         void rst(uint16 address);
+        void jr(bool condition);
 
         // Load functions //
 

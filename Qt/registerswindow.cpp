@@ -15,22 +15,7 @@ RegistersWindow::RegistersWindow(Gameboy& gb, QWidget *parent) :
 
     ui->io_registers_tableView->setModel(&io_register_model);
 
-    QFile source_file("../tests/game.z80");
-
-    if ( source_file.open(QFile::ReadOnly | QFile::Text) )
-    {
-        int line = 1;
-
-        while ( !source_file.atEnd() )
-        {
-            ui->source_plainTextEdit->moveCursor(QTextCursor::End);
-            ui->source_plainTextEdit->insertPlainText(QString::number(line) + ":   " + source_file.readLine());
-
-            line++;
-        }
-    }
-
-    source_file.close();
+    on_actionLoadROM_triggered();
 
     update_register_widgets();
 }
@@ -111,7 +96,7 @@ void RegistersWindow::on_step_pushButton_released()
 
 void RegistersWindow::on_reset_pushButton_released()
 {
-    gameboy.reset();
+    gameboy.cpu.reset();
     update_register_widgets();
 }
 
@@ -187,7 +172,7 @@ MemoryTableModel::~MemoryTableModel()
 
 int MemoryTableModel::rowCount(const QModelIndex & parent) const
 {
-    return 0xFFFF / columnCount(parent);
+    return (0xFFFF / columnCount(parent)) + 1;
 }
 
 int MemoryTableModel::columnCount(const QModelIndex & /*parent*/) const
@@ -316,4 +301,22 @@ QVariant IoRegistersListModel::headerData(int section, Qt::Orientation orientati
 Qt::ItemFlags IoRegistersListModel::flags(const QModelIndex &index) const
 {
     return QAbstractItemModel::flags(index) |= Qt::ItemIsEditable;
+}
+
+
+void RegistersWindow::on_actionLoadROM_triggered()
+{
+    gameboy.reset();
+
+    QString rom_name = QFileDialog::getOpenFileName(this,"Load ROM", ".","Rom (*.gb)");
+    gameboy.mcu.loadCartridge(rom_name.toStdString().data());
+}
+
+
+void RegistersWindow::on_run_pushButton_clicked()
+{
+    uint16 pc = ui->pc_break_lineEdit->text().toUShort(nullptr, 16);
+    gameboy.cpu.run(pc);
+
+    update_register_widgets();
 }

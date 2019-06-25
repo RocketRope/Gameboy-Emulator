@@ -11,17 +11,17 @@ LR35902::LR35902(MCU& _mcu)
 }
 LR35902::~LR35902()
 {
-    el::Loggers::unregisterLogger("CPU");
+   el::Loggers::unregisterLogger("CPU");
 }
 
 // Controll functions //
 
 void LR35902::reset()
 {    
-    reg.af = 0x01B0;
-    reg.bc = 0x0013;
-    reg.de = 0x00D8;
-    reg.hl = 0x014D;
+    reg.af = 0x1180; // 0x01B0;
+    reg.bc = 0x0000; // 0x0013;
+    reg.de = 0xFF56; // 0x00D8;
+    reg.hl = 0x000D; //0x014D;
     reg.sp = 0xFFFE;
     reg.pc = 0x0100;
 }
@@ -31,8 +31,17 @@ void LR35902::step()
     uint8 opcode = mcu.read_8bit(reg.pc);
 
     execute_opcode(opcode);
+}
 
-    log->debug("%v", reg);
+void LR35902::run(uint16 break_pc)
+{
+    for ( int i = 0 ; i < 100000 ; i++ )
+    {
+        step();
+
+        if ( reg.pc == break_pc )
+            return;
+    }
 }
 
 // Flags //
@@ -123,7 +132,7 @@ void LR35902::halt()
 
 void LR35902::call(uint16 address)
 {
-    push(reg.pc);
+    push(reg.pc + 3);
     reg.pc = address;
 }
 void LR35902::ret()
@@ -135,19 +144,36 @@ void LR35902::rst(uint16 address)
     push(reg.pc);
     reg.pc = address;
 }
+void LR35902::jr(bool condition)
+{
+    if ( condition )
+    {
+        reg.pc += (int8) mcu.read_8bit(reg.pc + 1);
+        t_cycles += 12;
+        m_cycles += 3;
+    }
+    else
+    {
+        t_cycles += 8;
+        m_cycles += 2;
+    }
+
+    reg.pc   += 2; 
+}
 
 // Load functions //
 
 uint16 LR35902::pop()
 {
+    uint16 value = mcu.read_16bit(reg.sp);
     reg.sp += 2;
-    return mcu.read_16bit(reg.sp - 2);
+    
+    return value;
 }
 void LR35902::push(uint16 source)
 {
-    reg.sp--;
+    reg.sp -= 2;
     mcu.write_16bit(reg.sp, source);
-    reg.sp--;
 }
 
 // ALU functions //
@@ -180,25 +206,14 @@ void LR35902::add_8bit(uint8 source, bool with_carry)
 
 void LR35902::sub_8bit(uint8 source, bool with_carry)
 {
-    // Sub lower nibbles (to check half_carry)
-    uint16 result = (reg.a & 0x0F) - (source & 0x0F);
-
-    if ( with_carry && get_flag(Flag::carry) )
-        result--;
+    // Add Two's Complement
+    add_8bit((source ^ 0xFF ) + 1, with_carry);
 
     // Update h flag
-    set_flag(Flag::half_carry, get_bit(4, result));
-
-    // Higher nibbles
-    result -= (reg.a & 0xF0) - (source & 0xF0);
+    set_flag(Flag::half_carry, !get_flag(Flag::half_carry));
 
     // Update c flag
-    set_flag(Flag::carry, get_bit(8, result));
-
-    reg.a = (uint8) result;
-
-    // Update z flag
-    set_flag(Flag::zero, reg.a == 0);
+    set_flag(Flag::carry, !get_flag(Flag::carry));
 
     // Update n flag
     set_flag(Flag::sub, true);
@@ -206,15 +221,13 @@ void LR35902::sub_8bit(uint8 source, bool with_carry)
 void LR35902::inc_8bit(uint8& source)
 {
     // Add lower nibbles (to check half carry)
-    uint8 result = (source & 0x0F) + 1;
+    uint8 result_low = (source & 0x0F) + 1;
 
     // Update h flag
-    set_flag(Flag::half_carry, get_bit(4, result));
+    set_flag(Flag::half_carry, get_bit(4, result_low));
 
-    // Higher nibbles
-    result += source & 0xF0;
-
-    source = result;
+    // 
+    source++;
 
     // Update z flag
     set_flag(Flag::zero, source == 0);
@@ -224,16 +237,13 @@ void LR35902::inc_8bit(uint8& source)
 }
 void LR35902::dec_8bit(uint8& source)
 {
-    // Sub lower nibbles (to check half carry)
-    uint8 result = (source & 0x0F) - 1;
+    uint8 result_low = (source & 0x0F) - 1;
 
     // Update h flag
-    set_flag(Flag::half_carry, get_bit(4, source));
+    set_flag(Flag::half_carry, get_bit(4, result_low));
 
-    // Higher nibbles
-    result -= source & 0xF0;
-
-    source = result;
+    //
+    source--;
 
     // Update z flag
     set_flag(Flag::zero, source == 0);
@@ -272,7 +282,7 @@ void LR35902::dec_16bit(uint16& source)
 
 void LR35902::and_8bit(uint8 source)
 {
-    reg.a &= source;
+    reg.a = reg.a & source;
 
     set_flag(Flag::zero, reg.a == 0);
 
@@ -282,7 +292,7 @@ void LR35902::and_8bit(uint8 source)
 }
 void LR35902::or_8bit(uint8 source)
 {
-    reg.a |= source;
+    reg.a = reg.a | source;
 
     set_flag(Flag::zero, reg.a == 0);
 
@@ -292,7 +302,7 @@ void LR35902::or_8bit(uint8 source)
 }
 void LR35902::xor_8bit(uint8 source)
 {
-    reg.a ^= source;
+    reg.a = reg.a ^ source;
 
     set_flag(Flag::zero, reg.a == 0);
 
@@ -302,7 +312,11 @@ void LR35902::xor_8bit(uint8 source)
 }
 void LR35902::cp_8bit(uint8 source)
 {
+    uint8 temp_a = reg.a;
+
     sub_8bit(source);
+
+    reg.a = temp_a;
 }
 
 void LR35902::rotate_left_8bit(uint8& source, bool through_carry)
@@ -588,10 +602,7 @@ void LR35902::instr_0x18() // JR r8
 {
     log->trace("%v : 0x18 - JR r8", reg.pc);
 
-    reg.pc += (int8) mcu.read_8bit(reg.pc + 1);
-
-    t_cycles += 12;
-    m_cycles += 3;
+    jr( true );
 }
 void LR35902::instr_0x19() // ADD HL,DE
 {
@@ -667,18 +678,7 @@ void LR35902::instr_0x20() // JR NZ,r8
 {
     log->trace("%v : 0x20 - JR NZ,r8", reg.pc);
 
-    if ( get_flag(Flag::zero) == false )
-    {
-        reg.pc += (int8) mcu.read_8bit(reg.pc + 1);
-        t_cycles += 12;
-        m_cycles += 3;
-    }
-    else
-    {
-        reg.pc   += 2;
-        t_cycles += 8;
-        m_cycles += 2;
-    }    
+    jr( get_flag(Flag::zero) == false );   
 }
 void LR35902::instr_0x21() // LD HL,d16
 {
@@ -755,16 +755,7 @@ void LR35902::instr_0x28() // JR Z,r8
 {
     log->trace("%v : 0x28 - JR Z,r8", reg.pc);
 
-    if ( get_flag(Flag::zero) == true )
-    {   reg.pc += (int8) mcu.read_8bit(reg.pc + 1);
-        t_cycles += 12;
-        m_cycles += 3;
-    }
-    else
-    {
-        t_cycles += 8;
-        m_cycles += 2;
-    }       
+    jr( get_flag(Flag::zero) == true );
 }
 void LR35902::instr_0x29() // ADD HL,HL
 {
@@ -841,17 +832,7 @@ void LR35902::instr_0x30() // JR NC,r8
 {
     log->trace("%v : 0x30 - JR NC,r8", reg.pc);
 
-    if ( get_flag(Flag::carry) == false )
-    {
-        reg.pc += (int8) mcu.read_8bit(reg.pc + 1);
-        t_cycles += 12;
-        m_cycles += 3;
-    }
-    else
-    {
-        t_cycles += 8;
-        m_cycles += 2; 
-    }
+    jr( get_flag(Flag::carry) == false );
 }
 void LR35902::instr_0x31() // LD SP,d16
 {
@@ -932,17 +913,7 @@ void LR35902::instr_0x38() // JR C,r8
 {
     log->trace("%v : 0x38 - JR C,r8", reg.pc);
 
-    if ( get_flag(Flag::carry) == true )
-    {
-        reg.pc += (int8) mcu.read_8bit(reg.pc + 1);
-        t_cycles += 12;
-        m_cycles += 3;
-    }
-    else
-    {
-        t_cycles += 8;
-        m_cycles += 2;
-    }    
+    jr( get_flag(Flag::carry) == true );
 }
 void LR35902::instr_0x39() // ADD HL,SP
 {
@@ -2139,7 +2110,7 @@ void LR35902::instr_0xB0() // OR B
 {
     log->trace("%v : 0xB0 - OR B", reg.pc);
 
-    xor_8bit(reg.b);
+    or_8bit(reg.b);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -2149,7 +2120,7 @@ void LR35902::instr_0xB1() // OR C
 {
     log->trace("%v : 0xB1 - OR C", reg.pc);
 
-    xor_8bit(reg.c);
+    or_8bit(reg.c);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -2159,7 +2130,7 @@ void LR35902::instr_0xB2() // OR D
 {
     log->trace("%v : 0xB2 - OR D", reg.pc);
 
-    xor_8bit(reg.d);
+    or_8bit(reg.d);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -2169,7 +2140,7 @@ void LR35902::instr_0xB3() // OR E
 {
     log->trace("%v : 0xB3 - OR E", reg.pc);
 
-    xor_8bit(reg.e);
+    or_8bit(reg.e);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -2179,7 +2150,7 @@ void LR35902::instr_0xB4() // OR H
 {
     log->trace("%v : 0xB4 - OR H", reg.pc);
 
-    xor_8bit(reg.h);
+    or_8bit(reg.h);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -2189,7 +2160,7 @@ void LR35902::instr_0xB5() // OR L
 {
     log->trace("%v : 0xB5 - OR L", reg.pc);
 
-    xor_8bit(reg.l);
+    or_8bit(reg.l);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -2199,7 +2170,7 @@ void LR35902::instr_0xB6() // OR (HL)
 {
     log->trace("%v : 0xB6 - OR (HL)", reg.pc);
 
-    xor_8bit(mcu.read_8bit(reg.hl));
+    or_8bit(mcu.read_8bit(reg.hl));
 
     reg.pc   += 1;
     t_cycles += 8;
@@ -2209,7 +2180,7 @@ void LR35902::instr_0xB7() // OR A
 {
     log->trace("%v : 0xB7 - OR A", reg.pc);
 
-    xor_8bit(reg.a);
+    or_8bit(reg.a);
 
     reg.pc   += 1;
     t_cycles += 4;

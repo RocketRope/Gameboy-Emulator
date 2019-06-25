@@ -1,14 +1,14 @@
 ROM Bank #0 (HOME):
-  SECTION: $0000-$0166 ($0167 bytes) ["rom"]
-           $0165 = draw
-           $0165 = stat
-           $0165 = timer
-           $0165 = serial
-           $0165 = joypad
+  SECTION: $0000-$0167 ($0168 bytes) ["rom"]
+           $0166 = draw
+           $0166 = stat
+           $0166 = timer
+           $0166 = serial
+           $0166 = joypad
            $0150 = main
            $0152 = main.loop1
-           $0161 = main.loop
-    SLACK: $3E99 bytes
+           $0162 = main.loop
+    SLACK: $3E98 bytes
 
 WRAM Bank #0:
   EMPTY

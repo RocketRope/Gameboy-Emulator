@@ -95,6 +95,11 @@ uint16 MCU::read_16bit(uint16 address)
 void MCU::write_8bit( uint16 address, uint8  data)
 {
     ram[address] = data;
+
+    if ( (address == MCU::Addr::sc) && (data == 0x81) )
+    {
+        log->debug("%v", read_8bit(MCU::Addr::sb));
+    }
 }
 void MCU::write_16bit(uint16 address, uint16 data)
 {

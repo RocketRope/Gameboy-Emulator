@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QAbstractTableModel>
+#include <QFileDialog>
 
 #include "gameboy.h"
 
@@ -143,9 +144,7 @@ public:
 private slots:
     void highlight_line(int line);
 
-    void on_step_pushButton_released();
-    void on_reset_pushButton_released();
-
+    // Slots
     void on_af_lineEdit_editingFinished();
     void on_bc_lineEdit_editingFinished();
     void on_de_lineEdit_editingFinished();
@@ -158,6 +157,12 @@ private slots:
     void on_subtraction_checkBox_toggled(bool checked);
     void on_zero_checkBox_toggled(bool checked);
     void on_interrupt_enable_checkBox_toggled(bool checked);
+
+    void on_step_pushButton_released();
+    void on_reset_pushButton_released();
+    void on_run_pushButton_clicked();
+
+    void on_actionLoadROM_triggered();
 
 private:
     Ui::RegistersWindow *ui;

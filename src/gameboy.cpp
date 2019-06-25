@@ -16,6 +16,4 @@ void Gameboy::reset()
 {
     mcu.reset();
     cpu.reset();
-
-    mcu.loadCartridge("../tests/game.gb");
 }
