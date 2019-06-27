@@ -82,11 +82,11 @@ void LR35902::daa()
     uint8 correction = 0;
 
     // least significant bcd nibble > 9
-    if ( (reg.a & 0x0F) > 0x09 || get_flag(Flag::half_carry) )
+    if ( ( ((reg.a & 0x0F) > 0x09) && !get_flag(Flag::subtraction) ) || get_flag(Flag::half_carry) )
         correction |= 0x06;
 
     // Most significant bcd nibble > 9
-    if ( (reg.a & 0xF0) > 0x90 || get_flag(Flag::carry) )
+    if ( ( (reg.a > 0x99) && !get_flag(Flag::subtraction) ) || get_flag(Flag::carry) )
     {
         correction |= 0x60;
         set_flag(Flag::carry, true);
