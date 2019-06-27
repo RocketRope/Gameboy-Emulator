@@ -186,22 +186,6 @@ void LR35902::rst(uint16 address)
     push(reg.pc + 1);
     reg.pc = address;
 }
-void LR35902::jr(bool condition)
-{
-    if ( condition )
-    {
-        reg.pc += static_cast<int8>( mcu.read_8bit(reg.pc + 1) );
-        t_cycles += 12;
-        m_cycles += 3;
-    }
-    else
-    {
-        t_cycles += 8;
-        m_cycles += 2;
-    }
-
-    reg.pc   += 2; 
-}
 
 // Load functions //
 
@@ -759,7 +743,11 @@ void LR35902::instr_0x18() // JR r8
 {
     log->trace("%v : 0x18 - JR r8", reg.pc);
 
-    jr( true );
+    reg.pc += static_cast<int8>( mcu.read_8bit(reg.pc + 1) );
+    t_cycles += 12;
+    m_cycles += 3;
+
+    reg.pc   += 2; 
 }
 void LR35902::instr_0x19() // ADD HL,DE
 {
@@ -837,7 +825,19 @@ void LR35902::instr_0x20() // JR NZ,r8
 {
     log->trace("%v : 0x20 - JR NZ,r8", reg.pc);
 
-    jr( get_flag(Flag::zero) == false );   
+    if ( get_flag(Flag::zero) == false )
+    {
+        reg.pc += static_cast<int8>( mcu.read_8bit(reg.pc + 1) );
+        t_cycles += 12;
+        m_cycles += 3;
+    }
+    else
+    {
+        t_cycles += 8;
+        m_cycles += 2;
+    }
+
+    reg.pc   += 2;   
 }
 void LR35902::instr_0x21() // LD HL,d16
 {
@@ -914,7 +914,21 @@ void LR35902::instr_0x28() // JR Z,r8
 {
     log->trace("%v : 0x28 - JR Z,r8", reg.pc);
 
-    jr( get_flag(Flag::zero) == true );
+    if ( get_flag(Flag::zero) == true )
+    {
+        reg.pc += static_cast<int8>( mcu.read_8bit(reg.pc + 1) );
+        t_cycles += 12;
+        m_cycles += 3;
+    }
+    else
+    {
+        t_cycles += 8;
+        m_cycles += 2;
+    }
+
+    reg.pc   += 2; 
+
+    
 }
 void LR35902::instr_0x29() // ADD HL,HL
 {
@@ -991,7 +1005,19 @@ void LR35902::instr_0x30() // JR NC,r8
 {
     log->trace("%v : 0x30 - JR NC,r8", reg.pc);
 
-    jr( get_flag(Flag::carry) == false );
+    if ( get_flag(Flag::carry) == false )
+    {
+        reg.pc += static_cast<int8>( mcu.read_8bit(reg.pc + 1) );
+        t_cycles += 12;
+        m_cycles += 3;
+    }
+    else
+    {
+        t_cycles += 8;
+        m_cycles += 2;
+    }
+
+    reg.pc   += 2; 
 }
 void LR35902::instr_0x31() // LD SP,d16
 {
@@ -1076,7 +1102,19 @@ void LR35902::instr_0x38() // JR C,r8
 {
     log->trace("%v : 0x38 - JR C,r8", reg.pc);
 
-    jr( get_flag(Flag::carry) == true );
+    if ( get_flag(Flag::carry) == true )
+    {
+        reg.pc += static_cast<int8>( mcu.read_8bit(reg.pc + 1) );
+        t_cycles += 12;
+        m_cycles += 3;
+    }
+    else
+    {
+        t_cycles += 8;
+        m_cycles += 2;
+    }
+
+    reg.pc   += 2; 
 }
 void LR35902::instr_0x39() // ADD HL,SP
 {

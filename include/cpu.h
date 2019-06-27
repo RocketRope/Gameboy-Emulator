@@ -83,7 +83,6 @@ class LR35902
         void call(uint16 address);
         void ret();
         void rst(uint16 address);
-        void jr(bool condition);
 
         // Load functions //
 
