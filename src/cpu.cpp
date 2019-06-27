@@ -2737,7 +2737,6 @@ void LR35902::instr_0xD9() // RETI
     ret();
     ei();
 
-    reg.pc   += 1;
     t_cycles += 16;
     m_cycles += 4;
 }
