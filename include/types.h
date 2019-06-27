@@ -14,7 +14,7 @@ typedef unsigned long long  uint64;
 template <typename T>
 bool get_bit(uint8 n, T source)
 {
-    if ( ( (source >> n) & 0x01 ) == 1 )
+    if ( ( (source >> n) & 1 ) == 1 )
         return true;
     else
         return false;
@@ -26,7 +26,7 @@ void set_bit(uint8 n, T& source, bool value = true)
     if ( value )
         source |= 0x01 << n;
     else
-        source &= ~0x01 << n;
+        source &= ~(0x01 << n);
 }
 
 #endif // _TYPES_H_

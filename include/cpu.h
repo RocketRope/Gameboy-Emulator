@@ -28,10 +28,10 @@ class LR35902
 
         enum Flag : uint8
         {
-            carry      = 0x10,
-            half_carry = 0x20, 
-            sub        = 0x40, 
-            zero       = 0x80
+            carry        = 0x10,
+            half_carry   = 0x20, 
+            subtraction  = 0x40, 
+            zero         = 0x80
         };
 
         bool get_flag(Flag flag);
@@ -94,10 +94,15 @@ class LR35902
 
         void add_8bit(uint8 source, bool with_carry = false);
         void sub_8bit(uint8 source, bool with_carry = false);
+        
+        void adc_8bit(uint8 source) { add_8bit(source, true); }
+        void sbc_8bit(uint8 source) { sub_8bit(source, true); }
+        
         void inc_8bit(uint8& source);
         void dec_8bit(uint8& source);
 
         void add_16bit(uint16 source);
+        
         void inc_16bit(uint16& source);
         void dec_16bit(uint16& source);
         

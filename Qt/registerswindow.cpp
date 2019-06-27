@@ -53,7 +53,7 @@ void RegistersWindow::update_register_widgets()
 
     ui->half_carry_checkBox->setChecked(gameboy.cpu.get_flag(LR35902::Flag::half_carry));
 
-    ui->subtraction_checkBox->setChecked(gameboy.cpu.get_flag(LR35902::Flag::sub));
+    ui->subtraction_checkBox->setChecked(gameboy.cpu.get_flag(LR35902::Flag::subtraction));
 
     ui->zero_checkBox->setChecked(gameboy.cpu.get_flag(LR35902::Flag::zero));
 
@@ -144,7 +144,7 @@ void RegistersWindow::on_half_carry_checkBox_toggled(bool checked)
 }
 void RegistersWindow::on_subtraction_checkBox_toggled(bool checked)
 {
-    gameboy.cpu.set_flag(LR35902::Flag::sub, checked);
+    gameboy.cpu.set_flag(LR35902::Flag::subtraction, checked);
     update_register_widgets();
 }
 void RegistersWindow::on_zero_checkBox_toggled(bool checked)

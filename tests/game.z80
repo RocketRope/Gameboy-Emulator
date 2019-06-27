@@ -165,12 +165,16 @@ DW $FACE
 ; $0150: Code!
 main:         ; z n h c
 
-ld b, $00
+ld h, $00
+ld l, $00
 .loop1:
-    ld a, b
-    daa
-    inc b
-    jr z, .loop1
+    ld sp, hl
+    add sp, $FF
+    inc l
+    jr nz, .loop1
+    inc h
+    jr nz, .loop1
+
 
 jr z, .loop
 ld a, $00     ; 1 0 1 1

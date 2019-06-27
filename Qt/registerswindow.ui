@@ -492,16 +492,16 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="carry_checkBox">
+           <widget class="QCheckBox" name="half_carry_checkBox">
             <property name="text">
-             <string>Carry</string>
+             <string>Half Carry</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="half_carry_checkBox">
+           <widget class="QCheckBox" name="carry_checkBox">
             <property name="text">
-             <string>Half Carry</string>
+             <string>Carry</string>
             </property>
            </widget>
           </item>

@@ -62,8 +62,8 @@ public:
     QVBoxLayout *verticalLayout;
     QCheckBox *zero_checkBox;
     QCheckBox *subtraction_checkBox;
-    QCheckBox *carry_checkBox;
     QCheckBox *half_carry_checkBox;
+    QCheckBox *carry_checkBox;
     QCheckBox *interrupt_enable_checkBox;
     QPlainTextEdit *source_plainTextEdit;
     QPushButton *reset_pushButton;
@@ -310,15 +310,15 @@ public:
 
         verticalLayout->addWidget(subtraction_checkBox);
 
-        carry_checkBox = new QCheckBox(Flags_groupBox);
-        carry_checkBox->setObjectName(QString::fromUtf8("carry_checkBox"));
-
-        verticalLayout->addWidget(carry_checkBox);
-
         half_carry_checkBox = new QCheckBox(Flags_groupBox);
         half_carry_checkBox->setObjectName(QString::fromUtf8("half_carry_checkBox"));
 
         verticalLayout->addWidget(half_carry_checkBox);
+
+        carry_checkBox = new QCheckBox(Flags_groupBox);
+        carry_checkBox->setObjectName(QString::fromUtf8("carry_checkBox"));
+
+        verticalLayout->addWidget(carry_checkBox);
 
         interrupt_enable_checkBox = new QCheckBox(Flags_groupBox);
         interrupt_enable_checkBox->setObjectName(QString::fromUtf8("interrupt_enable_checkBox"));
@@ -408,8 +408,8 @@ public:
         Flags_groupBox->setTitle(QCoreApplication::translate("RegistersWindow", "Flags", nullptr));
         zero_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Zero", nullptr));
         subtraction_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Subtraction", nullptr));
-        carry_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Carry", nullptr));
         half_carry_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Half Carry", nullptr));
+        carry_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Carry", nullptr));
         interrupt_enable_checkBox->setText(QCoreApplication::translate("RegistersWindow", "Interrupt Enable", nullptr));
         reset_pushButton->setText(QCoreApplication::translate("RegistersWindow", "Reset", nullptr));
         run_pushButton->setText(QCoreApplication::translate("RegistersWindow", "Run", nullptr));
