@@ -10,7 +10,6 @@
 // gbe
 #include "mcu.h"
 #include "types.h"
-#include "registers.h"
 
 struct Registers
 {

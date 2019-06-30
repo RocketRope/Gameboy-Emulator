@@ -25,7 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-    Qt/widgets/cpuregisterwidget.cpp \
+    Qt/widgets/cpuregisterswidget.cpp \
     Qt/windows/debugwindow.cpp \
     src/cpu.cpp \
     src/el/easylogging++.cc \
@@ -34,17 +34,16 @@ SOURCES += \
     src/mcu.cpp
 
 HEADERS += \
-    Qt/widgets/cpuregisterwidget.h \
+    Qt/widgets/cpuregisterswidget.h \
     Qt/windows/debugwindow.h \
     include/cpu.h \
     include/el/easylogging++.h \
     include/gameboy.h \
     include/mcu.h \
-    include/registers.h \
     include/types.h
 
 FORMS += \
-    Qt/widgets/cpuregisterwidget.ui \
+    Qt/widgets/cpuregisterswidget.ui \
     Qt/windows/debugwindow.ui
 
 INCLUDEPATH = \

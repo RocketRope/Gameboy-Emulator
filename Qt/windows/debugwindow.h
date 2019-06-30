@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "gameboy.h"
+
 namespace Ui {
 class DebugWindow;
 }

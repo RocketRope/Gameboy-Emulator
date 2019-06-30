@@ -10,7 +10,6 @@ class Gameboy
 {
     public:
 
-
         // Constructor/Destructor //
 
         Gameboy();
@@ -19,13 +18,17 @@ class Gameboy
         void reset();
 
         // Cpu functions //
+
         Registers get_cpu_registers() const;
-        void      set_cpu_registers();
+        void      set_cpu_registers(Registers reg);
         
     private:
 
         MCU mcu;
         LR35902 cpu;
 };
+
+// Global gameboy pointer
+extern Gameboy* g_gameboy;
 
 #endif // _GAMEBOY_H_
