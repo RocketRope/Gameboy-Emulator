@@ -1,7 +1,7 @@
 #ifndef DEBUGWINDOW_H
 #define DEBUGWINDOW_H
 
-#include <QMainWindow>
+#include "basegameboywindow.h"
 
 #include "gameboy.h"
 
@@ -9,7 +9,7 @@ namespace Ui {
 class DebugWindow;
 }
 
-class DebugWindow : public QMainWindow
+class DebugWindow : public BaseGameboyWindow
 {
     Q_OBJECT
 

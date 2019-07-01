@@ -2,7 +2,7 @@
 #include "ui_cpuregisterswidget.h"
 
 CpuRegistersWidget::CpuRegistersWidget(QWidget *parent) :
-    QWidget(parent),
+    BaseGameboyWidget(parent),
     ui(new Ui::CpuRegistersWidget)
 {
     ui->setupUi(this);
@@ -41,7 +41,7 @@ void CpuRegistersWidget::on_af_lineEdit_editingFinished()
     if ( ok )
         g_gameboy->set_cpu_registers(reg);
 
-    update();
+    updateSiblings();
 }
 void CpuRegistersWidget::on_bc_lineEdit_editingFinished()
 {
@@ -52,7 +52,7 @@ void CpuRegistersWidget::on_bc_lineEdit_editingFinished()
     if ( ok )
         g_gameboy->set_cpu_registers(reg);
 
-    update();
+    updateSiblings();
 }
 void CpuRegistersWidget::on_de_lineEdit_editingFinished()
 {
@@ -63,7 +63,7 @@ void CpuRegistersWidget::on_de_lineEdit_editingFinished()
     if ( ok )
         g_gameboy->set_cpu_registers(reg);
 
-    update();
+    updateSiblings();
 }
 void CpuRegistersWidget::on_hl_lineEdit_editingFinished()
 {
@@ -74,7 +74,7 @@ void CpuRegistersWidget::on_hl_lineEdit_editingFinished()
     if ( ok )
         g_gameboy->set_cpu_registers(reg);
 
-    update();
+    updateSiblings();
 }
 void CpuRegistersWidget::on_sp_lineEdit_editingFinished()
 {
@@ -85,7 +85,7 @@ void CpuRegistersWidget::on_sp_lineEdit_editingFinished()
     if ( ok )
         g_gameboy->set_cpu_registers(reg);
 
-    update();
+    updateSiblings();
 }
 void CpuRegistersWidget::on_pc_lineEdit_editingFinished()
 {
@@ -96,6 +96,6 @@ void CpuRegistersWidget::on_pc_lineEdit_editingFinished()
     if ( ok )
         g_gameboy->set_cpu_registers(reg);
 
-    update();
+    updateSiblings();
 }
 

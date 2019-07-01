@@ -1,7 +1,7 @@
 #ifndef CPUREGISTERSWIDGET_H
 #define CPUREGISTERSWIDGET_H
 
-#include <QWidget>
+#include "basegameboywidget.h"
 
 #include "gameboy.h"
 
@@ -9,7 +9,7 @@ namespace Ui {
 class CpuRegistersWidget;
 }
 
-class CpuRegistersWidget : public QWidget
+class CpuRegistersWidget : public BaseGameboyWidget
 {
     Q_OBJECT
 

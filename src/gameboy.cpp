@@ -1,5 +1,8 @@
 #include "gameboy.h"
 
+// Global gameboy pointer
+Gameboy* g_gameboy;
+
 // Constructor/Destructor //
 
 Gameboy::Gameboy() :
@@ -29,4 +32,12 @@ void Gameboy::set_cpu_registers(Registers reg)
     cpu.reg = reg;
 }
 
-Gameboy* g_gameboy;
+bool Gameboy::get_cpu_flag(CPU::Flag flag)
+{
+    return cpu.get_flag(flag);
+}
+void Gameboy::set_cpu_flag(CPU::Flag flag, bool value)
+{
+    cpu.set_flag(flag, value);
+}
+

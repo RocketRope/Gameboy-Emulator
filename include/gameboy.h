@@ -6,6 +6,8 @@
 #include "cpu.h"
 #include "mcu.h"
 
+typedef LR35902 CPU;
+
 class Gameboy
 {
     public:
@@ -21,6 +23,9 @@ class Gameboy
 
         Registers get_cpu_registers() const;
         void      set_cpu_registers(Registers reg);
+
+        bool get_cpu_flag(CPU::Flag flag);
+        void set_cpu_flag(CPU::Flag flag, bool value = true);
         
     private:
 
