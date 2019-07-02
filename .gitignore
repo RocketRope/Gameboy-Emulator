@@ -41,3 +41,4 @@
 # Qt
 moc_*.h
 moc_*.cpp
+*.autosave
