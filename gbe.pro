@@ -28,6 +28,7 @@ SOURCES += \
     Qt/widgets/basegameboywidget.cpp \
     Qt/widgets/cpuregisterswidget.cpp \
     Qt/widgets/cpuflagswidget.cpp \
+    Qt/widgets/memorywidget.cpp \
     Qt/windows/basegameboywindow.cpp \
     Qt/windows/debugwindow.cpp \
     src/cpu.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     Qt/widgets/basegameboywidget.h \
     Qt/widgets/cpuregisterswidget.h \
     Qt/widgets/cpuflagswidget.h \
+    Qt/widgets/memorywidget.h \
     Qt/windows/basegameboywindow.h \
     Qt/windows/debugwindow.h \
     include/cpu.h \
@@ -51,6 +53,7 @@ HEADERS += \
 FORMS += \
     Qt/widgets/cpuregisterswidget.ui \
     Qt/widgets/cpuflagswidget.ui \
+    Qt/widgets/memorywidget.ui \
     Qt/windows/debugwindow.ui
 
 INCLUDEPATH = \

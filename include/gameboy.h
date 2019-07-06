@@ -26,7 +26,15 @@ class Gameboy
 
         bool get_cpu_flag(CPU::Flag flag);
         void set_cpu_flag(CPU::Flag flag, bool value = true);
-        
+
+        // Mcu functions //
+
+        uint8  memory_read_8bit(uint16 address);
+        uint16 memory_read_16bit(uint16 address);
+
+        void memory_write_8bit(uint16 address, uint8 data);
+        void memory_write_16bit(uint16 address, uint16 data); 
+
     private:
 
         MCU mcu;

@@ -7,7 +7,7 @@ BaseGameboyWidget::BaseGameboyWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(this, SIGNAL(updateSiblings()), parent->parent(), SLOT(updateChildren()));
+    connect(this, SIGNAL(updateSiblings()), QWidget::window(), SLOT(updateChildren()));
 }
 
 BaseGameboyWidget::~BaseGameboyWidget()

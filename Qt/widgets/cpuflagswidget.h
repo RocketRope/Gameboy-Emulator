@@ -3,8 +3,6 @@
 
 #include "basegameboywidget.h"
 
-#include "gameboy.h"
-
 namespace Ui {
 class CpuFlagsWidget;
 }

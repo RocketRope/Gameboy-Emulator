@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "gameboy.h"
+
 namespace Ui {
 class BaseGameboyWidget;
 }
