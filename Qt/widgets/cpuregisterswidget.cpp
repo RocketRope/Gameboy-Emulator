@@ -27,7 +27,6 @@ void CpuRegistersWidget::update()
     ui->hl_lineEdit->setText(QString::number(reg.hl, 16).toUpper().rightJustified(4, '0'));
     ui->sp_lineEdit->setText(QString::number(reg.sp, 16).toUpper().rightJustified(4, '0'));
     ui->pc_lineEdit->setText(QString::number(reg.pc, 16).toUpper().rightJustified(4, '0'));
-
 }
 
 // Slots //

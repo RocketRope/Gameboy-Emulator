@@ -6,6 +6,8 @@ CpuFlagsWidget::CpuFlagsWidget(QWidget *parent) :
     ui(new Ui::CpuFlagsWidget)
 {
     ui->setupUi(this);
+
+    update();
 }
 
 CpuFlagsWidget::~CpuFlagsWidget()

@@ -103,7 +103,6 @@ class LR35902
 
         Registers reg;
 
-
     private:
 
         el::Logger* log;
