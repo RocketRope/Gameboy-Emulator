@@ -79,12 +79,7 @@ std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
 No_MBC::No_MBC(Header _header, std::ifstream& ifs) :
     Cartridge(_header)
 {
-    std::copy_n( std::istream_iterator<uint8>(ifs),
-                 rom.size(),
-                 rom.begin() 
-               );
-
-    std::cout << rom[0x0106] << '\n';
+    ifs.read((char*) rom.data(), 0x8000);
 }
 
 // Override Read/Write functions //

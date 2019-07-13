@@ -20,8 +20,18 @@ public:
 private slots:
     void on_actionLoad_ROM_triggered();
 
+    void on_run_to_pushButton_clicked();
+
+    void on_run_pushButton_clicked();
+
+    void on_step_pushButton_clicked();
+
+    void on_pushButton_clicked();
+
 private:
     Ui::DebugWindow *ui;
+
+    QString last_path = "../";
 };
 
 #endif // DEBUGWINDOW_H

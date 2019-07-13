@@ -42,17 +42,6 @@ void LR35902::step()
     }
 }
 
-void LR35902::run(uint16 break_pc)
-{
-    for ( int i = 0 ; i < 1000000 ; i++ )
-    {
-        step();
-
-        if ( reg.pc == break_pc )
-            return;
-    }
-}
-
 // Flags //
 
 bool LR35902::get_flag(Flag flag)

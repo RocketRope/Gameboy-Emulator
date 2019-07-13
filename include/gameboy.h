@@ -26,7 +26,7 @@ class Gameboy
 
         void reset();
 
-        void run(int cycles);
+        void run(int cycles, uint16 break_pc = 0x0000);
 
         void load_rom(const char* filename);
 

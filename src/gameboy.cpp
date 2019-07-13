@@ -22,11 +22,14 @@ void Gameboy::reset()
     cpu.reset();
 }
 
-void Gameboy::run(int cycles)
+void Gameboy::run(int cycles, uint16 break_pc)
 {
     for ( int i = 0 ; i < cycles ; i++ )
     {
         cpu.step();
+        
+        if ( cpu.reg.pc == break_pc )
+            return;
     }
 }
 

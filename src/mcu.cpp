@@ -98,15 +98,15 @@ bool MCU::write_8bit( uint16 address, uint8  data)
 
     if ( (address == MCU::Addr::sc) && (data == 0x81) )
     {
-        log->debug("%v", read_8bit(MCU::Addr::sb));
-
         if ( serial_send_callback )
             serial_send_callback( ram[MCU::Addr::sb] );
 
         return true;
     }
 
-    return false;
+    ram[address] = data;
+
+    return true;
 }
 bool MCU::write_16bit(uint16 address, uint16 data)
 {
