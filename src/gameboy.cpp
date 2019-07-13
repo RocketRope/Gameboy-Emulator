@@ -22,6 +22,14 @@ void Gameboy::reset()
     cpu.reset();
 }
 
+void Gameboy::run(int cycles)
+{
+    for ( int i = 0 ; i < cycles ; i++ )
+    {
+        cpu.step();
+    }
+}
+
 void Gameboy::load_rom(const char* filename)
 {
     cartridge = Cartridge::load_rom(filename);

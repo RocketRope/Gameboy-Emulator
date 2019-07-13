@@ -26,6 +26,8 @@ class Gameboy
 
         void reset();
 
+        void run(int cycles);
+
         void load_rom(const char* filename);
 
     private:

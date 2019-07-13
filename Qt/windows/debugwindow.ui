@@ -77,8 +77,20 @@
          <string>Serial</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="leftMargin">
+          <number>1</number>
+         </property>
+         <property name="topMargin">
+          <number>1</number>
+         </property>
+         <property name="rightMargin">
+          <number>1</number>
+         </property>
+         <property name="bottomMargin">
+          <number>1</number>
+         </property>
          <item>
-          <widget class="QWidget" name="widget" native="true"/>
+          <widget class="SerialWidget" name="serial" native="true"/>
          </item>
         </layout>
        </widget>
@@ -151,6 +163,12 @@
    <class>MemoryWidget</class>
    <extends>QWidget</extends>
    <header>memorywidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SerialWidget</class>
+   <extends>QWidget</extends>
+   <header>serialwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

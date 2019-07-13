@@ -21,7 +21,7 @@ public:
     explicit BaseGameboyWidget(QWidget *parent = nullptr);
     ~BaseGameboyWidget();
 
-    virtual void update() = 0;
+    virtual void update() {}
 
 signals:
     void updateSiblings();
