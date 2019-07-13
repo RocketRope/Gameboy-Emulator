@@ -3,12 +3,14 @@
 
 // std
 #include <array>
+#include <functional>
 
 // el
 #include "el/easylogging++.h"
 
 // gbe
 #include "types.h"
+#include "cartridge.h"
 
 class MCU 
 {
@@ -17,7 +19,7 @@ class MCU
         // Addresses
         enum Addr : uint16
         {
-            // Restart vector addresses
+            // Restart vector
             rst_0x00 = 0x0000,
             rst_0x08 = 0x0008,
             rst_0x10 = 0x0010,
@@ -27,7 +29,7 @@ class MCU
             rst_0x30 = 0x0030,
             rst_0x38 = 0x0038,
 
-            // Interupt vector addresses
+            // Interupt vector
             interupt_vblank = 0x0040,
             interupt_lcdc   = 0x0048,
             interupt_timer  = 0x0050,
@@ -111,28 +113,35 @@ class MCU
         };
 
         // Constructor/Destructor //
-        MCU();
+        MCU(std::unique_ptr<Cartridge>& _cartridge);
         ~MCU();
 
         //
         void reset();
 
         //
-        bool loadCartridge(const char* filename);
-        
-        //
         uint8  read_8bit( uint16 address);
         uint16 read_16bit(uint16 address);
 
         //
-        void write_8bit( uint16 address, uint8  data);
-        void write_16bit(uint16 address, uint16 data);
+        bool write_8bit( uint16 address, uint8  data);
+        bool write_16bit(uint16 address, uint16 data);
+
+        //
+        void register_serial_send_callback(std::function<void(uint8)> callback);
+        void register_input_read_callback(std::function<void(void)> callback);
 
     private:
 
         el::Logger* log;
 
+        std::unique_ptr<Cartridge>& cartridge;
+
         std::array<uint8, 0xFFFF> ram;
+
+        // Callback functions
+        std::function<void(uint8)> serial_send_callback;
+        std::function<void(void)>  input_read_callback;
 };
 
 #endif // _MCU_H_

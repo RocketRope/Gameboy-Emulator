@@ -76,7 +76,7 @@ class LR35902
 
         // Constructor/Destructor //
 
-        LR35902(MCU& _mcu);
+        LR35902(MCU* _mcu);
         ~LR35902();
 
         // Controll functions //
@@ -107,7 +107,7 @@ class LR35902
 
         el::Logger* log;
 
-        MCU& mcu;
+        MCU* mcu;
 
         // Cycles counters //
         uint64 t_cycles = 0;

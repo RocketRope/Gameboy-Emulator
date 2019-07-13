@@ -3,8 +3,9 @@
 
 // Memory Table Model Class //
 
-MemoryTableModel::MemoryTableModel(QWidget *parent) :
-    QAbstractTableModel(parent)
+MemoryTableModel::MemoryTableModel( MCU* _mcu, QWidget *parent) :
+    QAbstractTableModel(parent),
+    mcu(_mcu)
 {
 
 }
@@ -46,7 +47,7 @@ QVariant MemoryTableModel::data(const QModelIndex &index, int role) const
             {
                 address += index.column();
 
-                uint8 value = g_gameboy->memory_read_8bit(address);
+                uint8 value = mcu->read_8bit(address);
 
                 return QString::number(value, 16).toUpper().rightJustified(2, '0');
             }
@@ -56,7 +57,7 @@ QVariant MemoryTableModel::data(const QModelIndex &index, int role) const
 
                 for ( uint16 i = 0 ; i < data_columns ; i++ )
                 {
-                    char character = static_cast<char>( g_gameboy->memory_read_8bit(address + i) );
+                    char character = static_cast<char>( mcu->read_8bit(address + i) );
 
                     if ( character < 0x20 )
                         character = 0x2E;
@@ -82,7 +83,7 @@ bool MemoryTableModel::setData(const QModelIndex &index, const QVariant &value, 
 
             uint16 address = static_cast<uint16>( ( index.row() * data_columns ) + index.column() );
 
-            g_gameboy->memory_write_8bit(address, data);
+            mcu->write_8bit(address, data);
 
             return  true;
         }
@@ -163,7 +164,7 @@ void MemoryTableModel::columnSet(int columns)
 MemoryWidget::MemoryWidget(QWidget *parent) :
     BaseGameboyWidget(parent),
     ui(new Ui::MemoryWidget),
-    table_model(this)
+    table_model(mcu, this)
 {
     ui->setupUi(this);
 

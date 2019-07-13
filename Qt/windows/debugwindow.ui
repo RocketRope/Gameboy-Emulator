@@ -42,7 +42,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="usesScrollButtons">
         <bool>true</bool>
@@ -68,7 +68,7 @@
           <number>1</number>
          </property>
          <item>
-          <widget class="MemoryWidget" name="widget" native="true"/>
+          <widget class="MemoryWidget" name="memory" native="true"/>
          </item>
         </layout>
        </widget>
@@ -76,6 +76,11 @@
         <attribute name="title">
          <string>Serial</string>
         </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QWidget" name="widget" native="true"/>
+         </item>
+        </layout>
        </widget>
       </widget>
      </widget>
@@ -114,8 +119,20 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionLoad_ROM"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionLoad_ROM">
+   <property name="text">
+    <string>Load ROM</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

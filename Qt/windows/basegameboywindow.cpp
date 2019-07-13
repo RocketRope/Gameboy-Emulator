@@ -1,18 +1,16 @@
 #include "basegameboywindow.h"
-#include "ui_basegameboywindow.h"
 
 #include "basegameboywidget.h"
 
 BaseGameboyWindow::BaseGameboyWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::BaseGameboyWindow)
+    QMainWindow(parent)
 {
-    ui->setupUi(this);
+
 }
 
 BaseGameboyWindow::~BaseGameboyWindow()
 {
-    delete ui;
+
 }
 
 void BaseGameboyWindow::updateChildren()

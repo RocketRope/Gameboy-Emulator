@@ -1,12 +1,8 @@
 #include "mcu.h"
 
-// temp??????
-#include <fstream>
-#include <iterator>
-#include <algorithm>
-
 // Constructor
-MCU::MCU()
+MCU::MCU(std::unique_ptr<Cartridge>& _cartridge) :
+    cartridge(_cartridge)
 {
     log = el::Loggers::getLogger("MCU");
 
@@ -58,27 +54,21 @@ void MCU::reset()
     write_8bit(Addr::ly,   0x90);   // IE
 }
 
-//
-bool MCU::loadCartridge(const char* filename)
-{
-    std::ifstream ifs(filename, std::ios::binary ); 
-    
-    if( !ifs.is_open() )
-    {
-        log->error("Unable to open cartridge \"%v\"", filename);
-        return false;
-    }
-
-    ifs.read((char*) ram.data(), 0xFFFF);
-
-    ifs.close();
-
-    return true;
-}
 
 // 
 uint8 MCU::read_8bit( uint16 address)
 {
+    // Rom
+    if ( address < 0x8000 )
+        return cartridge->read_8bit(address);
+
+    // 
+    if ( address < 0xA000 )
+        return ram[address];
+
+    if ( address < 0xC000 )
+        return cartridge->read_8bit(address);
+
     return ram[address];
 }
 uint16 MCU::read_16bit(uint16 address)
@@ -92,20 +82,46 @@ uint16 MCU::read_16bit(uint16 address)
 }
 
 //
-void MCU::write_8bit( uint16 address, uint8  data)
+bool MCU::write_8bit( uint16 address, uint8  data)
 {
-    ram[address] = data;
+    if ( address < 0x8000 )
+            return cartridge->write_8bit(address, data);
+
+    if ( address < 0xA000 )
+    {
+        ram[address] = data;
+        return true;
+    }
+
+    if ( address < 0xC000 )
+        return cartridge->write_8bit(address, data);
 
     if ( (address == MCU::Addr::sc) && (data == 0x81) )
     {
         log->debug("%v", read_8bit(MCU::Addr::sb));
+
+        if ( serial_send_callback )
+            serial_send_callback( ram[MCU::Addr::sb] );
+
+        return true;
     }
+
+    return false;
 }
-void MCU::write_16bit(uint16 address, uint16 data)
+bool MCU::write_16bit(uint16 address, uint16 data)
 {
     uint8 low  = data;
     uint8 high = data >> 8;
 
-    write_8bit(address, low);
-    write_8bit(address + 1, high);
+    bool low_ok  = write_8bit(address, low);
+    bool high_ok = write_8bit(address + 1, high);
+
+    return low_ok && high_ok;
+}
+
+//
+
+void MCU::register_serial_send_callback(std::function<void(uint8)> callback)
+{
+    serial_send_callback = callback;
 }

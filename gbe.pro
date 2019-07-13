@@ -22,7 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += c++11
+CONFIG += c++17
 
 SOURCES += \
     Qt/widgets/basegameboywidget.cpp \
@@ -35,7 +35,8 @@ SOURCES += \
     src/el/easylogging++.cc \
     src/gameboy.cpp \
     src/main.cpp \
-    src/mcu.cpp
+    src/mcu.cpp \
+    src/cartridge.cpp
 
 HEADERS += \
     Qt/widgets/basegameboywidget.h \
@@ -48,7 +49,8 @@ HEADERS += \
     include/el/easylogging++.h \
     include/gameboy.h \
     include/mcu.h \
-    include/types.h
+    include/types.h \
+    include/cartridge.h
 
 FORMS += \
     Qt/widgets/cpuregisterswidget.ui \

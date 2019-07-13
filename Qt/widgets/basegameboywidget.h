@@ -14,6 +14,10 @@ class BaseGameboyWidget : public QWidget
     Q_OBJECT
 
 public:
+
+    CPU* cpu = &g_gameboy->cpu;
+    MCU* mcu = &g_gameboy->mcu;
+
     explicit BaseGameboyWidget(QWidget *parent = nullptr);
     ~BaseGameboyWidget();
 
@@ -24,6 +28,7 @@ signals:
 
 private:
     Ui::BaseGameboyWidget *ui;
+
 };
 
 #endif // BASEGAMEBOYWIDGET_H

@@ -17,6 +17,9 @@ public:
     explicit DebugWindow(QWidget *parent = nullptr);
     ~DebugWindow();
 
+private slots:
+    void on_actionLoad_ROM_triggered();
+
 private:
     Ui::DebugWindow *ui;
 };

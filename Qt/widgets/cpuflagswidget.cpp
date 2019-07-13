@@ -17,36 +17,36 @@ CpuFlagsWidget::~CpuFlagsWidget()
 
 void CpuFlagsWidget::update()
 {
-    ui->zero_checkBox->setChecked(g_gameboy->get_cpu_flag(CPU::Flag::zero));
-    ui->subtraction_checkBox->setChecked(g_gameboy->get_cpu_flag(CPU::Flag::subtraction));
-    ui->half_carry_checkBox->setChecked(g_gameboy->get_cpu_flag(CPU::Flag::half_carry));
-    ui->carry_checkBox->setChecked(g_gameboy->get_cpu_flag(CPU::Flag::carry));
+    ui->zero_checkBox->setChecked(cpu->get_flag(CPU::Flag::zero));
+    ui->subtraction_checkBox->setChecked(cpu->get_flag(CPU::Flag::subtraction));
+    ui->half_carry_checkBox->setChecked(cpu->get_flag(CPU::Flag::half_carry));
+    ui->carry_checkBox->setChecked(cpu->get_flag(CPU::Flag::carry));
 }
 
 void CpuFlagsWidget::on_zero_checkBox_toggled(bool checked)
 {
-    g_gameboy->set_cpu_flag(CPU::Flag::zero, checked);
+    cpu->set_flag(CPU::Flag::zero, checked);
 
     emit updateSiblings();
 }
 
 void CpuFlagsWidget::on_subtraction_checkBox_toggled(bool checked)
 {
-    g_gameboy->set_cpu_flag(CPU::Flag::subtraction, checked);
+    cpu->set_flag(CPU::Flag::subtraction, checked);
 
     emit updateSiblings();
 }
 
 void CpuFlagsWidget::on_half_carry_checkBox_toggled(bool checked)
 {
-    g_gameboy->set_cpu_flag(CPU::Flag::half_carry, checked);
+   cpu->set_flag(CPU::Flag::half_carry, checked);
 
     emit updateSiblings();
 }
 
 void CpuFlagsWidget::on_carry_checkBox_toggled(bool checked)
 {
-    g_gameboy->set_cpu_flag(CPU::Flag::carry, checked);
+    cpu->set_flag(CPU::Flag::carry, checked);
 
     emit updateSiblings();
 }

@@ -1,16 +1,23 @@
 #ifndef _GAMEBOY_H_
 #define _GAMEBOY_H_
 
+#include <iostream>
+
 #include "el/easylogging++.h"
 
 #include "cpu.h"
 #include "mcu.h"
+#include "cartridge.h"
 
 typedef LR35902 CPU;
 
 class Gameboy
 {
     public:
+
+        MCU mcu;
+        LR35902 cpu;
+        std::unique_ptr<Cartridge> cartridge;
 
         // Constructor/Destructor //
 
@@ -19,26 +26,10 @@ class Gameboy
 
         void reset();
 
-        // Cpu functions //
-
-        Registers get_cpu_registers() const;
-        void      set_cpu_registers(Registers reg);
-
-        bool get_cpu_flag(CPU::Flag flag);
-        void set_cpu_flag(CPU::Flag flag, bool value = true);
-
-        // Mcu functions //
-
-        uint8  memory_read_8bit(uint16 address);
-        uint16 memory_read_16bit(uint16 address);
-
-        void memory_write_8bit(uint16 address, uint8 data);
-        void memory_write_16bit(uint16 address, uint16 data); 
+        void load_rom(const char* filename);
 
     private:
 
-        MCU mcu;
-        LR35902 cpu;
 };
 
 // Global gameboy pointer

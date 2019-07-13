@@ -1,7 +1,6 @@
 #ifndef MEMORYWIDGET_H
 #define MEMORYWIDGET_H
 
-#include <QWidget>
 #include <QAbstractTableModel>
 
 #include "basegameboywidget.h"
@@ -17,7 +16,7 @@ class MemoryTableModel : public QAbstractTableModel
 
 public:
 
-    explicit MemoryTableModel(QWidget *parent = nullptr);
+    explicit MemoryTableModel(MCU* _mcu, QWidget *parent = nullptr);
     ~MemoryTableModel();
 
     int rowCount(const QModelIndex &parent) const;
@@ -32,6 +31,8 @@ public:
     void columnSet(int columns);
 
 private:
+
+    MCU* mcu;
 
     int data_columns = 8;
     bool show_ascii = true;
