@@ -2,7 +2,6 @@
 
 #include <iterator>
 #include <algorithm>
-#include <iostream>
 
 // Constructor/Destructor //
 
@@ -18,13 +17,18 @@ Cartridge::~Cartridge()
 
 // Virtual Read/Write functions //
 
-uint8 Cartridge::read_8bit(uint16 address)
+uint8 Cartridge::read_8bit(uint16 /*address*/)
 {
-    return 0xFF;
+    return 0x00;
 }
 bool Cartridge::write_8bit(uint16 /*address*/, uint8 /*data*/)
 {
     return false;
+}
+
+Cartridge::Header Cartridge::get_header()
+{
+    return header;
 }
 
 // Static functions //
@@ -37,10 +41,7 @@ std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
     file.open(filename, std::ios::binary);
 
     if ( !file.is_open() )
-    {
-        std::cout << "Failed to load file " << filename << std::endl;
         return std::unique_ptr<Cartridge>();
-    }
 
     // Go to start of rom header
     file.seekg(0x0104);
@@ -50,9 +51,6 @@ std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
 
     // Rewind
     file.seekg(0x0000);
-
-    std::cout << h.title << std::endl;
-    std::cout << "MBC type: " << (int) h.cartridge_type << std::endl;
 
     switch ( h.cartridge_type )
     {
@@ -68,8 +66,6 @@ std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
     default:
         break;
     }
-
-    std::cout << "empty" << std::endl;
 
     return std::make_unique<Cartridge>();
 }
@@ -90,12 +86,12 @@ uint8 No_MBC::read_8bit(uint16 address)
         return rom[address];
 
     if ( address < 0xA000 )
-        return 0xFF;
+        return 0x00;
         
     if ( address < 0xC000 )
         return ram[address - 0xA000];
 
-    return 0xFF;
+    return 0x00;
 }
 bool  No_MBC::write_8bit(uint16 address, uint8 data)
 {

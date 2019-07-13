@@ -80,24 +80,19 @@ class Cartridge
         virtual uint8 read_8bit(uint16 address);
         virtual bool  write_8bit(uint16 address, uint8 data);
 
+        // Get functions //
+        Header get_header();
+
         // Static functions //
 
         static std::unique_ptr<Cartridge> load_rom(const char* filename);
         
-        Header header;
-
     protected:
 
+        Header header;
 
         std::array<uint8, 0x8000> rom;
         std::array<uint8, 0x2000> ram;
-
-        // MBC subclasses
-        //class No_MBC;
-        class MBC1;
-        class MBC2;
-        class MBC3;
-        class MBC5;
 };
 
 class No_MBC : public Cartridge
