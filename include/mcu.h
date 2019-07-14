@@ -127,7 +127,7 @@ class MCU
         bool write_8bit( uint16 address, uint8  data);
         bool write_16bit(uint16 address, uint16 data);
 
-        //
+        // Callback functions 
         void register_serial_send_callback(std::function<void(uint8)> callback);
         void register_input_read_callback(std::function<void(void)> callback);
 
@@ -139,9 +139,18 @@ class MCU
 
         std::array<uint8, 0xFFFF> ram;
 
-        // Callback functions
+        // Callback functions variables
         std::function<void(uint8)> serial_send_callback;
         std::function<void(void)>  input_read_callback;
+
+        // 
+        uint8&  get_memory_reference(uint16 address);
+        //uint16& get_memory_reference(uint16 address);
+
+
+    // Friends
+
+    friend class Timer;
 };
 
 #endif // _MCU_H_

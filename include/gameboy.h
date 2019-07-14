@@ -7,6 +7,7 @@
 
 #include "cpu.h"
 #include "mcu.h"
+#include "timer.h"
 #include "cartridge.h"
 
 typedef LR35902 CPU;
@@ -17,6 +18,7 @@ class Gameboy
 
         MCU mcu;
         LR35902 cpu;
+        Timer timer;
         std::unique_ptr<Cartridge> cartridge;
 
         // Constructor/Destructor //

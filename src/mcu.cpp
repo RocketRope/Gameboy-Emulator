@@ -119,9 +119,24 @@ bool MCU::write_16bit(uint16 address, uint16 data)
     return low_ok && high_ok;
 }
 
-//
+// Callback functions
 
 void MCU::register_serial_send_callback(std::function<void(uint8)> callback)
 {
     serial_send_callback = callback;
 }
+
+
+// 
+
+uint8&  MCU::get_memory_reference(uint16 address)
+{
+    return ram[address];
+}
+/*
+uint16& MCU::get_memory_reference(uint16 address)
+{
+    return static_cast<uint16&>( ram[address] );
+}
+
+*/

@@ -7,7 +7,8 @@ Gameboy* g_gameboy;
 
 Gameboy::Gameboy() :
     mcu(cartridge),
-    cpu(&mcu)
+    cpu(&mcu),
+    timer(&mcu)
 {
     cartridge = std::make_unique<Cartridge>();
 }
@@ -27,7 +28,7 @@ void Gameboy::run(int cycles, uint16 break_pc)
     for ( int i = 0 ; i < cycles ; i++ )
     {
         cpu.step();
-        
+
         if ( cpu.reg.pc == break_pc )
             return;
     }

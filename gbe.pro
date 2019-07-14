@@ -37,7 +37,8 @@ SOURCES += \
     src/gameboy.cpp \
     src/main.cpp \
     src/mcu.cpp \
-    src/cartridge.cpp
+    src/cartridge.cpp \
+    src/timer.cpp
 
 HEADERS += \
     Qt/widgets/basegameboywidget.h \
@@ -51,6 +52,7 @@ HEADERS += \
     include/el/easylogging++.h \
     include/gameboy.h \
     include/mcu.h \
+    include/timer.h \
     include/types.h \
     include/cartridge.h
 

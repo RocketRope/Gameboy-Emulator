@@ -7,16 +7,6 @@ class Timer
 {
     public:
         Timer(MCU* _mcu);
-        ~Timer();
-
-        union // Divider
-        {
-            uint16 div;
-            struct { uint8 div_low, div_high; };
-        };
-
-        uint8 tma;
-        uint8 tima;
 
         enum Speed : uint8
         {
@@ -24,13 +14,25 @@ class Timer
             freq_65KHz  = 0x02,
             freq_16KHz  = 0x03,
             freq_4KHz   = 0x00
-        }
+        };
 
-        bool timer_interrupt_enabled;
+        void step(uint32 delta_cycles);
 
     private:
 
         MCU* mcu;
+
+        uint16& div;
+        uint8&  div_low;
+        uint8&  dic_high;
+
+        uint8& tima;
+        uint8& tma;
+        uint8& tac;
+
+        uint8& if_register;
+
+        bool prev_edge = false;
 };
 
 #endif // _TIMER_H_
