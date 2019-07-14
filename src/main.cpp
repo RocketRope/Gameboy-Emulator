@@ -15,10 +15,13 @@ int main(int argc, char *argv[])
 
     Gameboy gameboy;
 
-    g_gameboy = &gameboy;
+
 
     QApplication a(argc, argv);
-    DebugWindow w;
+
+
+    DebugWindow w(&gameboy);
+
     w.show();
 
     return a.exec();

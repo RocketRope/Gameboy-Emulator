@@ -1,7 +1,7 @@
 #ifndef DEBUGWINDOW_H
 #define DEBUGWINDOW_H
 
-#include "basegameboywindow.h"
+#include <QMainWindow>
 
 #include "gameboy.h"
 
@@ -9,12 +9,12 @@ namespace Ui {
 class DebugWindow;
 }
 
-class DebugWindow : public BaseGameboyWindow
+class DebugWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit DebugWindow(QWidget *parent = nullptr);
+    explicit DebugWindow(Gameboy* _gameboy, QWidget *parent = nullptr);
     ~DebugWindow();
 
 private slots:
@@ -30,6 +30,8 @@ private slots:
 
 private:
     Ui::DebugWindow *ui;
+
+    Gameboy* gameboy;
 
     QString last_path = "../";
 };

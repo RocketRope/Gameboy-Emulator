@@ -30,7 +30,7 @@ SOURCES += \
     Qt/widgets/cpuflagswidget.cpp \
     Qt/widgets/memorywidget.cpp \
     Qt/widgets/serialwidget.cpp \
-    Qt/windows/basegameboywindow.cpp \
+    Qt/widgets/timerwidget.cpp \
     Qt/windows/debugwindow.cpp \
     src/cpu.cpp \
     src/el/easylogging++.cc \
@@ -46,7 +46,7 @@ HEADERS += \
     Qt/widgets/cpuflagswidget.h \
     Qt/widgets/memorywidget.h \
     Qt/widgets/serialwidget.h \
-    Qt/windows/basegameboywindow.h \
+    Qt/widgets/timerwidget.h \
     Qt/windows/debugwindow.h \
     include/cpu.h \
     include/el/easylogging++.h \
@@ -61,6 +61,7 @@ FORMS += \
     Qt/widgets/cpuflagswidget.ui \
     Qt/widgets/memorywidget.ui \
     Qt/widgets/serialwidget.ui \
+    Qt/widgets/timerwidget.ui \
     Qt/windows/debugwindow.ui
 
 INCLUDEPATH = \

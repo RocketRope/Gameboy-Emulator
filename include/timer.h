@@ -16,7 +16,7 @@ class Timer
             freq_4KHz   = 0x00
         };
 
-        void step(uint32 delta_cycles);
+        void step(uint16 delta_cycles);
 
     private:
 
@@ -24,7 +24,7 @@ class Timer
 
         uint16& div;
         uint8&  div_low;
-        uint8&  dic_high;
+        uint8&  div_high;
 
         uint8& tima;
         uint8& tma;

@@ -36,7 +36,4 @@ class Gameboy
 
 };
 
-// Global gameboy pointer
-extern Gameboy* g_gameboy;
-
 #endif // _GAMEBOY_H_

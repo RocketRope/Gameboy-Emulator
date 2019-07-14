@@ -36,7 +36,7 @@ void CpuRegistersWidget::on_af_lineEdit_editingFinished()
     if ( ok )
         cpu->reg.af = af;
 
-    updateSiblings();
+    updateWidgets();
 }
 void CpuRegistersWidget::on_bc_lineEdit_editingFinished()
 {
@@ -47,7 +47,7 @@ void CpuRegistersWidget::on_bc_lineEdit_editingFinished()
     if ( ok )
         cpu->reg.bc = bc;
 
-    updateSiblings();
+    updateWidgets();
 }
 void CpuRegistersWidget::on_de_lineEdit_editingFinished()
 {
@@ -58,7 +58,7 @@ void CpuRegistersWidget::on_de_lineEdit_editingFinished()
     if ( ok )
         cpu->reg.de = de;
 
-    updateSiblings();
+    updateWidgets();
 }
 void CpuRegistersWidget::on_hl_lineEdit_editingFinished()
 {
@@ -69,7 +69,7 @@ void CpuRegistersWidget::on_hl_lineEdit_editingFinished()
     if ( ok )
         cpu->reg.hl = hl;
 
-    updateSiblings();
+    updateWidgets();
 }
 void CpuRegistersWidget::on_sp_lineEdit_editingFinished()
 {
@@ -80,7 +80,7 @@ void CpuRegistersWidget::on_sp_lineEdit_editingFinished()
     if ( ok )
         cpu->reg.sp = sp;
 
-    updateSiblings();
+    updateWidgets();
 }
 void CpuRegistersWidget::on_pc_lineEdit_editingFinished()
 {
@@ -91,6 +91,6 @@ void CpuRegistersWidget::on_pc_lineEdit_editingFinished()
     if ( ok )
         cpu->reg.pc = pc;
 
-    updateSiblings();
+    updateWidgets();
 }
 

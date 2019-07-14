@@ -6,10 +6,13 @@
 #include <QFileDialog>
 #include <QString>
 
-DebugWindow::DebugWindow(QWidget *parent) :
-    BaseGameboyWindow(parent),
-    ui(new Ui::DebugWindow)
+DebugWindow::DebugWindow(Gameboy* _gameboy, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::DebugWindow),
+    gameboy(_gameboy)
 {
+    BaseGameboyWidget::setGameboyPtr(gameboy);
+
     ui->setupUi(this);
 }
 
@@ -24,11 +27,11 @@ void DebugWindow::on_actionLoad_ROM_triggered()
 
     last_path = rom_name.left(rom_name.lastIndexOf('/'));
 
-    g_gameboy->load_rom(rom_name.toStdString().data());
+    gameboy->load_rom(rom_name.toStdString().data());
 
-    g_gameboy->reset();
+    gameboy->reset();
 
-    updateChildren();
+    BaseGameboyWidget::updateWidgets();
 
     this->setWindowTitle("Debug Window | " + rom_name.mid(rom_name.lastIndexOf('/') + 1));
 }
@@ -40,32 +43,28 @@ void DebugWindow::on_run_to_pushButton_clicked()
     uint16 break_pc = static_cast<uint16>( ui->run_to_lineEdit->text().toUInt(&ok, 16) );
 
     if ( ok )
-        g_gameboy->run(100000, break_pc);
+        gameboy->run(100000, break_pc);
 
-    updateChildren();
-
+    BaseGameboyWidget::updateWidgets();
 }
 
 void DebugWindow::on_run_pushButton_clicked()
 {
-    g_gameboy->run(100000);
+    gameboy->run(100000);
 
-    updateChildren();
-
+    BaseGameboyWidget::updateWidgets();
 }
 
 void DebugWindow::on_step_pushButton_clicked()
 {
-    g_gameboy->run(1);
+    gameboy->run(1);
 
-    updateChildren();
-
+    BaseGameboyWidget::updateWidgets();
 }
 
 void DebugWindow::on_pushButton_clicked()
 {
-    g_gameboy->reset();
+    gameboy->reset();
 
-    updateChildren();
-
+    BaseGameboyWidget::updateWidgets();
 }

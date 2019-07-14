@@ -27,26 +27,26 @@ void CpuFlagsWidget::on_zero_checkBox_toggled(bool checked)
 {
     cpu->set_flag(CPU::Flag::zero, checked);
 
-    emit updateSiblings();
+    emit updateWidgets();
 }
 
 void CpuFlagsWidget::on_subtraction_checkBox_toggled(bool checked)
 {
     cpu->set_flag(CPU::Flag::subtraction, checked);
 
-    emit updateSiblings();
+    emit updateWidgets();
 }
 
 void CpuFlagsWidget::on_half_carry_checkBox_toggled(bool checked)
 {
    cpu->set_flag(CPU::Flag::half_carry, checked);
 
-    emit updateSiblings();
+    emit updateWidgets();
 }
 
 void CpuFlagsWidget::on_carry_checkBox_toggled(bool checked)
 {
     cpu->set_flag(CPU::Flag::carry, checked);
 
-    emit updateSiblings();
+    emit updateWidgets();
 }

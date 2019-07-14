@@ -82,7 +82,7 @@ class LR35902
         // Controll functions //
 
         void reset();
-        void step();
+        uint64 step();
 
         // Flags // 
 

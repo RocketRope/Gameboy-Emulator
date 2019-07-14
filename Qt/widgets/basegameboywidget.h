@@ -2,6 +2,7 @@
 #define BASEGAMEBOYWIDGET_H
 
 #include <QWidget>
+#include <QVector>
 
 #include "gameboy.h"
 
@@ -15,20 +16,25 @@ class BaseGameboyWidget : public QWidget
 
 public:
 
-    CPU* cpu = &g_gameboy->cpu;
-    MCU* mcu = &g_gameboy->mcu;
-
     explicit BaseGameboyWidget(QWidget *parent = nullptr);
     ~BaseGameboyWidget();
 
-    virtual void update() {}
+    static void setGameboyPtr(Gameboy* _gameboy);
 
-signals:
-    void updateSiblings();
+    virtual void update() {}
+    static void updateWidgets();
+
+protected:
+
+    static Gameboy* gameboy;
+    static CPU* cpu;
+    static MCU* mcu;
 
 private:
+
     Ui::BaseGameboyWidget *ui;
 
+    static QVector<BaseGameboyWidget*> widgets;
 };
 
 #endif // BASEGAMEBOYWIDGET_H

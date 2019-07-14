@@ -48,7 +48,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="usesScrollButtons">
         <bool>true</bool>
@@ -111,7 +111,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="spacing">
-         <number>6</number>
+         <number>0</number>
         </property>
         <item>
          <widget class="CpuRegistersWidget" name="cpuRegisters" native="true"/>
@@ -120,6 +120,9 @@
          <widget class="CpuFlagsWidget" name="cpuFlags" native="true"/>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="TimerWidget" name="timer" native="true"/>
       </item>
       <item>
        <spacer name="verticalSpacer">
@@ -233,6 +236,12 @@
    <class>SerialWidget</class>
    <extends>QWidget</extends>
    <header>serialwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TimerWidget</class>
+   <extends>QWidget</extends>
+   <header>timerwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

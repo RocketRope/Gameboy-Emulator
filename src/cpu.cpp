@@ -26,8 +26,9 @@ void LR35902::reset()
     reg.pc = 0x0100;
 }
 
-void LR35902::step()
+uint64 LR35902::step()
 {
+    uint64 prev_t_cycles = t_cycles;
     uint8 opcode = mcu->read_8bit(reg.pc);
 
     if ( opcode != 0xCB )
@@ -40,6 +41,8 @@ void LR35902::step()
         opcode = mcu->read_8bit(reg.pc);
         execute_opcode(opcode, true);
     }
+
+    return t_cycles - prev_t_cycles;
 }
 
 // Flags //

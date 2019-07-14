@@ -1,8 +1,5 @@
 #include "gameboy.h"
 
-// Global gameboy pointer
-Gameboy* g_gameboy;
-
 // Constructor/Destructor //
 
 Gameboy::Gameboy() :
@@ -27,7 +24,9 @@ void Gameboy::run(int cycles, uint16 break_pc)
 {
     for ( int i = 0 ; i < cycles ; i++ )
     {
-        cpu.step();
+        uint64 elapsed_cycles = cpu.step();
+        
+        timer.step(elapsed_cycles);
 
         if ( cpu.reg.pc == break_pc )
             return;
