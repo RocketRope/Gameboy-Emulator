@@ -97,11 +97,28 @@ class LR35902
         bool get_flag(Flag flag);
         void set_flag(Flag flag, bool value = true);
 
-        // Interrupt enable flag // 
+        // Interrupts //
+
+        enum Interrupt : uint8
+        {
+            v_blank = 0x00,
+            lcd     = 0x01,
+            timer   = 0x02,
+            serial  = 0x03,
+            joypad  = 0x04
+        };
+
         bool interrupt_enable;
 
-        Registers reg;
+        void requests_interupt(Interrupt interrupt);
 
+        //
+
+        bool halted;
+
+        // Registers //
+
+        Registers reg;
     private:
 
         el::Logger* log;
@@ -111,12 +128,17 @@ class LR35902
         // Cycles counters //
         uint64 t_cycles = 0;
         uint64 m_cycles = 0;
+
+        // 
+
+        void handle_interrupts();
         
         //
 
         void execute_opcode(uint8 opcode, bool CB_prefix = false);
 
-        // Misc functions //
+
+        // Misc Instructions //
 
         void daa();
         void cpl();
@@ -137,18 +159,18 @@ class LR35902
         void set(uint8 n, uint8& source);
         void res(uint8 n, uint8& source);
 
-        // Jump functions //
+        // Jump Instructions //
 
         void call(uint16 address);
         void ret();
         void rst(uint16 address);
 
-        // Load functions //
+        // Load Instructions //
 
         uint16 pop();
         void   push(uint16 source);
 
-        // ALU functions //
+        // ALU Instructions //
 
         void add_8bit(uint8 source, bool with_carry = false);
         void sub_8bit(uint8 source, bool with_carry = false);
@@ -169,7 +191,7 @@ class LR35902
         void xor_8bit(uint8 source);
         void cp_8bit(uint8 source);
 
-        // Rotates & Shifts functions //
+        // Rotates & Shifts Instructions //
 
         void rlc_8bit(uint8& source);
         void rl_8bit(uint8& source);
@@ -180,7 +202,7 @@ class LR35902
         void sra_8bit(uint8& source);
         void srl_8bit(uint8& source);
 
-        // Jump table for opcode instructions //
+        // Opcode jump tables //
 
         void (LR35902::*instr_table[0xFF + 1])(void) = 
         {

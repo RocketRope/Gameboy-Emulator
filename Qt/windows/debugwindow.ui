@@ -105,6 +105,9 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>2</number>
+      </property>
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
@@ -120,6 +123,9 @@
          <widget class="CpuFlagsWidget" name="cpuFlags" native="true"/>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="InterruptWidget" name="Interrupt" native="true"/>
       </item>
       <item>
        <widget class="TimerWidget" name="timer" native="true"/>
@@ -242,6 +248,12 @@
    <class>TimerWidget</class>
    <extends>QWidget</extends>
    <header>timerwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>InterruptWidget</class>
+   <extends>QWidget</extends>
+   <header>interruptwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

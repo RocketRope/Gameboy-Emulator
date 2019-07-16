@@ -13,39 +13,46 @@ Timer::Timer(MCU* _mcu) :
 
 }
 
-void Timer::step(uint16 delta_cycles)
+void Timer::step(uint16 elapsed_cycles)
 {
-    div +=  delta_cycles;
 
-    // If timer is enabled 
-    if ( tac & 0x04 )
+    uint16 cycles = 0;
+
+    while ( elapsed_cycles > cycles )
     {
-        // Detect falling edge
-        bool curr_edge;
-        uint8 tima_speed = tac & 0x03;
+        div +=  4;
+        cycles += 4;
 
-        if ( tima_speed == Speed::freq_262KHz )
-            curr_edge = get_bit(3, div);
-        else if ( tima_speed == Speed::freq_65KHz )
-            curr_edge = get_bit(5, div);
-        else if ( tima_speed == Speed::freq_16KHz )
-            curr_edge = get_bit(7, div);
-        else // if ( tima_speed == Speed::freq_4KHz )
-            curr_edge = get_bit(9, div);
-
-        if ( (prev_edge == true) && (curr_edge == false) )
+        // If timer is enabled 
+        if ( get_bit(2, tac) )
         {
-            // Overflow
-            if ( tima == 0x00 )
+            // Detect falling edge
+            bool curr_edge;
+            uint8 tima_speed = tac & 0x03;
+
+            if ( tima_speed == Speed::freq_262KHz )
+                curr_edge = get_bit(3, div);
+            else if ( tima_speed == Speed::freq_65KHz )
+                curr_edge = get_bit(5, div);
+            else if ( tima_speed == Speed::freq_16KHz )
+                curr_edge = get_bit(7, div);
+            else // if ( tima_speed == Speed::freq_4KHz )
+                curr_edge = get_bit(9, div);
+
+            if ( (prev_edge == true) && (curr_edge == false) )
             {
-                tima = tma;
-
-                set_bit(2, if_register, true);
-            }
-            else
                 tima++;
-        }
 
-        prev_edge = curr_edge;
+                // Overflow
+                if ( tima == 0x00 )
+                {
+                    tima = tma;
+
+                    set_bit(2, if_register, true);
+                }
+            }
+
+            prev_edge = curr_edge;
+        }
     }
 }

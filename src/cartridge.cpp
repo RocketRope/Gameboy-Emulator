@@ -41,7 +41,7 @@ std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
     file.open(filename, std::ios::binary);
 
     if ( !file.is_open() )
-        return std::unique_ptr<Cartridge>();
+        return std::make_unique<Cartridge>();
 
     // Go to start of rom header
     file.seekg(0x0104);

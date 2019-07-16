@@ -16,7 +16,7 @@ class Timer
             freq_4KHz   = 0x00
         };
 
-        void step(uint16 delta_cycles);
+        void step(uint16 elapsed_cycles);
 
     private:
 

@@ -18,6 +18,9 @@ LR35902::~LR35902()
 
 void LR35902::reset()
 {    
+    interrupt_enable = false;
+    halted = false;
+
     reg.af = 0x1180; // 0x01B0;
     reg.bc = 0x0000; // 0x0013;
     reg.de = 0xFF56; // 0x00D8;
@@ -29,8 +32,14 @@ void LR35902::reset()
 uint64 LR35902::step()
 {
     uint64 prev_t_cycles = t_cycles;
+
+    // Interrupts
+    handle_interrupts();
+
+    // Fetch
     uint8 opcode = mcu->read_8bit(reg.pc);
 
+    // Decode
     if ( opcode != 0xCB )
     {
         execute_opcode(opcode, false);
@@ -57,6 +66,53 @@ void LR35902::set_flag(Flag flag, bool value)
         reg.f |= flag;
     else
         reg.f &= ~flag;
+}
+
+void LR35902::requests_interupt(Interrupt interrupt)
+{
+    uint8 if_ = mcu->read_8bit(MCU::Addr::if_);
+
+    set_bit(interrupt, if_, true);
+
+    mcu->write_8bit(MCU::Addr::if_, if_);
+}
+
+// 
+
+void LR35902::handle_interrupts()
+{
+    if ( interrupt_enable )
+    {
+        uint8 ie = mcu->read_8bit(MCU::Addr::ie);
+        uint8 if_ = mcu->read_8bit(MCU::Addr::if_);
+
+        uint8 ie_if = ie & if_;
+
+        if ( ie_if > 0 )
+        {
+            if ( get_bit(Interrupt::v_blank, ie_if) )
+                call( MCU::Addr::interupt_vblank );
+            else if ( get_bit(Interrupt::lcd, ie_if) )
+                call( MCU::Addr::interupt_lcd );
+            else if ( get_bit(Interrupt::timer, ie_if) )
+                call( MCU::Addr::interupt_timer );
+            else if ( get_bit(Interrupt::serial, ie_if) )
+                call( MCU::Addr::interupt_serial );
+            else if ( get_bit(Interrupt::joypad, ie_if) )
+                call( MCU::Addr::interupt_joypad );
+
+            di();
+
+            t_cycles += 80;
+            m_cycles += 20;
+
+            if ( halted )
+            {
+                t_cycles += 4;
+                m_cycles += 16;
+            }
+        }
+    }
 }
 
 void LR35902::execute_opcode(uint8 opcode, bool CB_prefix)
@@ -2563,12 +2619,18 @@ void LR35902::instr_0xC8() // RET Z
     log->trace("%v : 0xC8 - RET Z", reg.pc);
 
     if ( get_flag(Flag::zero) == true )
+    {
         ret();
-    else
-        reg.pc   += 1;
 
-    t_cycles += 8;
-    m_cycles += 2;
+        t_cycles += 20;
+        m_cycles += 5;
+    }
+    else
+    {
+        reg.pc   += 1;
+        t_cycles += 8;
+        m_cycles += 2;
+    }
 }
 void LR35902::instr_0xC9() // RET
 {
@@ -2750,14 +2812,14 @@ void LR35902::instr_0xD8() // RET C
     if ( get_flag(Flag::carry) == true )
     {
         ret();
-        t_cycles += 20;    
+        t_cycles += 20;
         m_cycles += 5;
     }
     else
     {
         reg.pc   += 1;
         t_cycles += 8;
-        m_cycles += 2;    
+        m_cycles += 2;
     }
 }
 void LR35902::instr_0xD9() // RETI

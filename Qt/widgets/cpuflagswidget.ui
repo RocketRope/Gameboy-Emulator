@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>128</width>
-    <height>142</height>
+    <width>102</width>
+    <height>123</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,28 +72,8 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="interrupt_enabled_checkBox">
-        <property name="text">
-         <string>Interrupt Enabled</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

@@ -28,6 +28,7 @@ SOURCES += \
     Qt/widgets/basegameboywidget.cpp \
     Qt/widgets/cpuregisterswidget.cpp \
     Qt/widgets/cpuflagswidget.cpp \
+    Qt/widgets/interruptwidget.cpp \
     Qt/widgets/memorywidget.cpp \
     Qt/widgets/serialwidget.cpp \
     Qt/widgets/timerwidget.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     Qt/widgets/basegameboywidget.h \
     Qt/widgets/cpuregisterswidget.h \
     Qt/widgets/cpuflagswidget.h \
+    Qt/widgets/interruptwidget.h \
     Qt/widgets/memorywidget.h \
     Qt/widgets/serialwidget.h \
     Qt/widgets/timerwidget.h \
@@ -59,6 +61,7 @@ HEADERS += \
 FORMS += \
     Qt/widgets/cpuregisterswidget.ui \
     Qt/widgets/cpuflagswidget.ui \
+    Qt/widgets/interruptwidget.ui \
     Qt/widgets/memorywidget.ui \
     Qt/widgets/serialwidget.ui \
     Qt/widgets/timerwidget.ui \

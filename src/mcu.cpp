@@ -51,7 +51,10 @@ void MCU::reset()
     write_8bit(Addr::wx,   0x00);   // WX
     write_8bit(Addr::ie,   0x00);   // IE
 
-    write_8bit(Addr::ly,   0x90);   // IE
+    write_8bit(Addr::ly,   0x90);   // LY
+
+    ram[Addr::div] = 0x1E; // DIV TEMP?
+    write_8bit(Addr::div - 1, 0xA0);
 }
 
 
@@ -100,6 +103,14 @@ bool MCU::write_8bit( uint16 address, uint8  data)
     {
         if ( serial_send_callback )
             serial_send_callback( ram[MCU::Addr::sb] );
+
+        return true;
+    }
+
+    if ( address == MCU::Addr::div )
+    {
+        ram[MCU::Addr::div] = 0x00;
+        ram[MCU::Addr::div - 1] = 0x00;
 
         return true;
     }

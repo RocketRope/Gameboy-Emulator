@@ -31,7 +31,7 @@ class MCU
 
             // Interupt vector
             interupt_vblank = 0x0040,
-            interupt_lcdc   = 0x0048,
+            interupt_lcd    = 0x0048,
             interupt_timer  = 0x0050,
             interupt_serial = 0x0058,
             interupt_joypad = 0x0060,
@@ -141,7 +141,7 @@ class MCU
 
         // Callback functions variables
         std::function<void(uint8)> serial_send_callback;
-        std::function<void(void)>  input_read_callback;
+        std::function<void(void)>  joypad_read_callback;
 
         // 
         uint8&  get_memory_reference(uint16 address);
