@@ -18,7 +18,8 @@ LR35902::~LR35902()
 
 void LR35902::reset()
 {    
-    interrupt_enable = false;
+    di();
+
     halted = false;
 
     reg.af = 0x1180; // 0x01B0;
@@ -33,22 +34,24 @@ uint64 LR35902::step()
 {
     uint64 prev_t_cycles = t_cycles;
 
-    // Interrupts
-    handle_interrupts();
-
-    // Fetch
-    uint8 opcode = mcu->read_8bit(reg.pc);
-
-    // Decode
-    if ( opcode != 0xCB )
+    // Interrupts (Skip Fetch-Decode-Execute if interrupt occurred)
+    if ( !handle_interrupts() )
     {
-        execute_opcode(opcode, false);
-    }
-    else
-    {
-        reg.pc++;
-        opcode = mcu->read_8bit(reg.pc);
-        execute_opcode(opcode, true);
+        // Fetch
+        uint8 opcode = mcu->read_8bit(reg.pc);
+
+        // Decode/Execute
+        if ( opcode != 0xCB )
+        {
+            execute_opcode(opcode, false);
+        }
+        else
+        {
+            reg.pc++;
+            opcode = mcu->read_8bit(reg.pc);
+
+            execute_opcode(opcode, true);
+        }
     }
 
     return t_cycles - prev_t_cycles;
@@ -79,7 +82,7 @@ void LR35902::requests_interupt(Interrupt interrupt)
 
 // 
 
-void LR35902::handle_interrupts()
+bool LR35902::handle_interrupts()
 {
     if ( interrupt_enable )
     {
@@ -91,17 +94,36 @@ void LR35902::handle_interrupts()
         if ( ie_if > 0 )
         {
             if ( get_bit(Interrupt::v_blank, ie_if) )
+            {
                 call( MCU::Addr::interupt_vblank );
+                set_bit(Interrupt::v_blank, if_, false);
+            }
             else if ( get_bit(Interrupt::lcd, ie_if) )
+            {
                 call( MCU::Addr::interupt_lcd );
+                set_bit(Interrupt::lcd, if_, false);
+            }
             else if ( get_bit(Interrupt::timer, ie_if) )
+            {
                 call( MCU::Addr::interupt_timer );
+                set_bit(Interrupt::timer, if_, false);
+
+            }
             else if ( get_bit(Interrupt::serial, ie_if) )
+            {
                 call( MCU::Addr::interupt_serial );
+                set_bit(Interrupt::serial, if_, false);
+
+            }
             else if ( get_bit(Interrupt::joypad, ie_if) )
+            {
                 call( MCU::Addr::interupt_joypad );
+                set_bit(Interrupt::joypad, if_, false);
+            }
 
             di();
+
+            mcu->write_8bit(MCU::Addr::if_, if_);
 
             t_cycles += 80;
             m_cycles += 20;
@@ -111,8 +133,12 @@ void LR35902::handle_interrupts()
                 t_cycles += 4;
                 m_cycles += 16;
             }
+
+            return true;
         }
     }
+
+    return false;
 }
 
 void LR35902::execute_opcode(uint8 opcode, bool CB_prefix)

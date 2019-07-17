@@ -131,7 +131,7 @@ class LR35902
 
         // 
 
-        void handle_interrupts();
+        bool handle_interrupts();
         
         //
 
