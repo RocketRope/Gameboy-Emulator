@@ -74,28 +74,16 @@ class LR35902
 {
     public:
 
-        // Constructor/Destructor //
+        // Registers //
 
-        LR35902(MCU* _mcu);
-        ~LR35902();
-
-        // Controll functions //
-
-        void reset();
-        uint64 step();
+        Registers reg;
 
         // Flags // 
 
-        enum Flag : uint8
-        {
-            carry        = 0x10,
-            half_carry   = 0x20, 
-            subtraction  = 0x40, 
-            zero         = 0x80
-        };
-
-        bool get_flag(Flag flag);
-        void set_flag(Flag flag, bool value = true);
+        Bit<4> carry;
+        Bit<5> half_carry;
+        Bit<6> subtraction;
+        Bit<7> zero;
 
         // Interrupts //
 
@@ -110,15 +98,22 @@ class LR35902
 
         bool interrupt_enable;
 
-        void requests_interupt(Interrupt interrupt);
-
         //
 
         bool halted;
 
-        // Registers //
+        // Constructor/Destructor //
 
-        Registers reg;
+        LR35902(MCU* _mcu);
+        ~LR35902();
+
+        // Controll functions //
+
+        void reset();
+        uint64 step();
+
+        void requests_interupt(Interrupt interrupt);
+
     private:
 
         el::Logger* log;
@@ -132,11 +127,8 @@ class LR35902
         // 
 
         bool handle_interrupts();
-        
-        //
 
         void execute_opcode(uint8 opcode, bool CB_prefix = false);
-
 
         // Misc Instructions //
 

@@ -17,36 +17,36 @@ CpuFlagsWidget::~CpuFlagsWidget()
 
 void CpuFlagsWidget::update()
 {
-    ui->zero_checkBox->setChecked(cpu->get_flag(CPU::Flag::zero));
-    ui->subtraction_checkBox->setChecked(cpu->get_flag(CPU::Flag::subtraction));
-    ui->half_carry_checkBox->setChecked(cpu->get_flag(CPU::Flag::half_carry));
-    ui->carry_checkBox->setChecked(cpu->get_flag(CPU::Flag::carry));
+    ui->zero_checkBox->setChecked(cpu->zero);
+    ui->subtraction_checkBox->setChecked(cpu->subtraction);
+    ui->half_carry_checkBox->setChecked(cpu->half_carry);
+    ui->carry_checkBox->setChecked(cpu->carry);
 }
 
 void CpuFlagsWidget::on_zero_checkBox_toggled(bool checked)
 {
-    cpu->set_flag(CPU::Flag::zero, checked);
+    cpu->zero = checked;
 
     emit updateWidgets();
 }
 
 void CpuFlagsWidget::on_subtraction_checkBox_toggled(bool checked)
 {
-    cpu->set_flag(CPU::Flag::subtraction, checked);
+    cpu->subtraction = checked;
 
     emit updateWidgets();
 }
 
 void CpuFlagsWidget::on_half_carry_checkBox_toggled(bool checked)
 {
-   cpu->set_flag(CPU::Flag::half_carry, checked);
+   cpu->half_carry = checked;
 
     emit updateWidgets();
 }
 
 void CpuFlagsWidget::on_carry_checkBox_toggled(bool checked)
 {
-    cpu->set_flag(CPU::Flag::carry, checked);
+    cpu->carry = checked;
 
     emit updateWidgets();
 }

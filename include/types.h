@@ -29,4 +29,37 @@ void set_bit(uint8 n, T& source, bool value = true)
         source &= ~(0x01 << n);
 }
 
+template <int B, class T = uint8>
+class Bit
+{
+    public:
+
+        explicit Bit(T& _byte) :
+            byte(_byte)
+        {
+
+        }
+
+        operator bool () const 
+        { 
+            return (byte & mask) != 0;
+        }
+
+        Bit& operator = (const bool& rhs)
+        {
+            if ( rhs )
+                byte |= mask;
+            else
+                byte &= ~mask;
+
+            return *this;
+        }
+
+    private:
+
+        T& byte;
+        const T mask = 0x01 << B;
+};
+
+
 #endif // _TYPES_H_
