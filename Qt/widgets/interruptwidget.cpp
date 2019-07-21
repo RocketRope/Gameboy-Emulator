@@ -6,6 +6,8 @@ InterruptWidget::InterruptWidget(QWidget *parent) :
     ui(new Ui::InterruptWidget)
 {
     ui->setupUi(this);
+
+    update();
 }
 
 InterruptWidget::~InterruptWidget()

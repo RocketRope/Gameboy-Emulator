@@ -8,7 +8,7 @@ Timer::Timer(MCU* _mcu) :
     tima( mcu->get_memory_reference(MCU::Addr::tima) ),
     tma( mcu->get_memory_reference(MCU::Addr::tma) ),
     tac( mcu->get_memory_reference(MCU::Addr::tac) ),
-    if_register(mcu->get_memory_reference(MCU::Addr::if_))
+    if_timer_flag( mcu->get_memory_reference(MCU::Addr::if_) )
 {
 
 }
@@ -48,7 +48,8 @@ void Timer::step(uint16 elapsed_cycles)
                 {
                     tima = tma;
 
-                    set_bit(2, if_register, true);
+                    // Request interrupt
+                    if_timer_flag = true;
                 }
             }
 

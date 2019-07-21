@@ -96,6 +96,9 @@ class LR35902
             joypad  = 0x04
         };
 
+        uint8& if_register;
+        uint8& ie_register;
+
         bool interrupt_enable;
 
         //

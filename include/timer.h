@@ -30,7 +30,7 @@ class Timer
         uint8& tma;
         uint8& tac;
 
-        uint8& if_register;
+        Bit<2> if_timer_flag;
 
         bool prev_edge = false;
 };

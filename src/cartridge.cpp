@@ -64,7 +64,7 @@ std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
         return std::make_unique<No_MBC>(h, file); // Temp!!!!!
 
     default:
-        break;
+        return std::make_unique<No_MBC>(h, file); // Temp!!!!!
     }
 
     return std::make_unique<Cartridge>();

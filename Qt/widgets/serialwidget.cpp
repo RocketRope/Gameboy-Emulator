@@ -1,6 +1,7 @@
 #include "serialwidget.h"
 #include "ui_serialwidget.h"
 
+#include <QScrollBar>
 #include <functional>
 
 SerialWidget::SerialWidget(QWidget *parent) :
@@ -24,4 +25,6 @@ SerialWidget::~SerialWidget()
 void SerialWidget::send_serial_callback(uint8 data)
 {
     ui->plainTextEdit->insertPlainText( QString(static_cast<char>(data)) );
+
+    ui->plainTextEdit->verticalScrollBar()->setValue(ui->plainTextEdit->verticalScrollBar()->maximum());
 }

@@ -151,6 +151,7 @@ class MCU
     // Friends
 
     friend class Timer;
+    friend class LR35902;
 };
 
 #endif // _MCU_H_

@@ -61,5 +61,4 @@ class Bit
         const T mask = 0x01 << B;
 };
 
-
 #endif // _TYPES_H_

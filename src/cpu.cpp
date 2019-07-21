@@ -3,13 +3,17 @@
 // Constructor/Destructor // 
 
 LR35902::LR35902(MCU* _mcu)
-    : mcu{_mcu},
-      carry{reg.f},
-      half_carry{reg.f},
-      subtraction{reg.f},
-      zero{reg.f}
+    : carry(reg.f),
+      half_carry(reg.f),
+      subtraction(reg.f),
+      zero(reg.f),
+      if_register( _mcu->get_memory_reference(MCU::Addr::if_) ),
+      ie_register( _mcu->get_memory_reference(MCU::Addr::ie) ),
+      mcu(_mcu)
 {
     log = el::Loggers::getLogger("CPU");
+
+    log->debug("%v", if_register);
 
     reset();
 }
@@ -76,53 +80,55 @@ bool LR35902::handle_interrupts()
 {
     if ( interrupt_enable )
     {
-        uint8 ie = mcu->read_8bit(MCU::Addr::ie);
-        uint8 if_ = mcu->read_8bit(MCU::Addr::if_);
+        uint8 ie_if = if_register & ie_register;
 
-        uint8 ie_if = ie & if_;
-
-        if ( ie_if > 0 )
+        if ( ie_if != 0 )
         {
-            if ( get_bit(Interrupt::v_blank, ie_if) )
-            {
-                call( MCU::Addr::interupt_vblank );
-                set_bit(Interrupt::v_blank, if_, false);
-            }
-            else if ( get_bit(Interrupt::lcd, ie_if) )
-            {
-                call( MCU::Addr::interupt_lcd );
-                set_bit(Interrupt::lcd, if_, false);
-            }
-            else if ( get_bit(Interrupt::timer, ie_if) )
-            {
-                call( MCU::Addr::interupt_timer );
-                set_bit(Interrupt::timer, if_, false);
-
-            }
-            else if ( get_bit(Interrupt::serial, ie_if) )
-            {
-                call( MCU::Addr::interupt_serial );
-                set_bit(Interrupt::serial, if_, false);
-
-            }
-            else if ( get_bit(Interrupt::joypad, ie_if) )
-            {
-                call( MCU::Addr::interupt_joypad );
-                set_bit(Interrupt::joypad, if_, false);
-            }
-
-            di();
-
-            mcu->write_8bit(MCU::Addr::if_, if_);
-
             t_cycles += 80;
             m_cycles += 20;
 
             if ( halted )
             {
+                reg.pc++;
                 t_cycles += 4;
                 m_cycles += 16;
+
+                halted = false;
             }
+
+            push(reg.pc);
+
+            if ( get_bit(Interrupt::v_blank, ie_if) )
+            {
+                reg.pc = MCU::Addr::interupt_vblank;
+                set_bit(Interrupt::v_blank, if_register, false);
+            }
+            else if ( get_bit(Interrupt::lcd, ie_if) )
+            {
+                reg.pc =  MCU::Addr::interupt_lcd;
+                set_bit(Interrupt::lcd, if_register, false);
+            }
+            else if ( get_bit(Interrupt::timer, ie_if) )
+            {
+                reg.pc = MCU::Addr::interupt_timer;
+                set_bit(Interrupt::timer, if_register, false);
+
+            }
+            else if ( get_bit(Interrupt::serial, ie_if) )
+            {
+                reg.pc = MCU::Addr::interupt_serial;
+                set_bit(Interrupt::serial, if_register, false);
+
+            }
+            else if ( get_bit(Interrupt::joypad, ie_if) )
+            {
+                reg.pc = MCU::Addr::interupt_joypad;
+                set_bit(Interrupt::joypad, if_register, false);
+            }
+
+            di();
+
+            mcu->write_8bit(MCU::Addr::if_, if_register);
 
             return true;
         }
@@ -211,7 +217,7 @@ void LR35902::stop()
 }
 void LR35902::halt()
 {
-
+    halted = true;
 }
 
 // Bit Opcodes //
@@ -912,7 +918,7 @@ void LR35902::instr_0x22() // LD (HL+),A
 {
     log->trace("%v : 0x22 - LD (HL+),A", reg.pc);
 
-    mcu->write_16bit(reg.hl, reg.a);
+    mcu->write_8bit(reg.hl, reg.a);
     reg.hl++;
 
     reg.pc   += 1;
@@ -1792,7 +1798,12 @@ void LR35902::instr_0x76() // HALT
 
     halt();
 
-    reg.pc   += 1;
+    log->debug("%v - %v", (int) if_register, (int) ie_register);
+    
+    // Exit halt
+    if ( ( if_register & if_register ) != 0 )
+        reg.pc += 1;
+
     t_cycles += 4;
     m_cycles += 1;
 }
