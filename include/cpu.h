@@ -8,7 +8,7 @@
 #include <el/easylogging++.h>
 
 // gbe
-#include "mcu.h"
+#include "memory.h"
 #include "types.h"
 
 struct Registers

@@ -1,4 +1,4 @@
-#include "mcu.h"
+#include "memory.h"
 
 // Constructor
 MCU::MCU(std::unique_ptr<Cartridge>& _cartridge) :

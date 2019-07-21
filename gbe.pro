@@ -37,9 +37,10 @@ SOURCES += \
     src/el/easylogging++.cc \
     src/gameboy.cpp \
     src/main.cpp \
-    src/mcu.cpp \
     src/cartridge.cpp \
-    src/timer.cpp
+    src/memory.cpp \
+    src/timer.cpp \
+    src/video.cpp
 
 HEADERS += \
     Qt/widgets/basegameboywidget.h \
@@ -53,10 +54,11 @@ HEADERS += \
     include/cpu.h \
     include/el/easylogging++.h \
     include/gameboy.h \
-    include/mcu.h \
+    include/memory.h \
     include/timer.h \
     include/types.h \
-    include/cartridge.h
+    include/cartridge.h \
+    include/video.h
 
 FORMS += \
     Qt/widgets/cpuregisterswidget.ui \

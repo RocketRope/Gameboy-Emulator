@@ -6,8 +6,8 @@
 #include "el/easylogging++.h"
 
 #include "cpu.h"
-#include "mcu.h"
 #include "timer.h"
+#include "memory.h"
 #include "cartridge.h"
 
 typedef LR35902 CPU;
