@@ -13,8 +13,6 @@ LR35902::LR35902(MCU* _mcu)
 {
     log = el::Loggers::getLogger("CPU");
 
-    log->debug("%v", if_register);
-
     reset();
 }
 LR35902::~LR35902()
@@ -562,7 +560,7 @@ void LR35902::srl_8bit(uint8& source)
 
 void LR35902::instr_0x00() // NOP
 {
-    log->trace("%v : 0x00 - NOP", reg.pc);
+    // log->trace("%v : 0x00 - NOP", reg.pc);
 
     reg.pc   += 1;
     t_cycles += 4;
@@ -570,7 +568,7 @@ void LR35902::instr_0x00() // NOP
 }
 void LR35902::instr_0x01() // LD BC,d16
 {
-    log->trace("%v : 0x01 - LD BC,%v", reg.pc, mcu->read_16bit(reg.pc + 1));
+    // log->trace("%v : 0x01 - LD BC,%v", reg.pc, mcu->read_16bit(reg.pc + 1));
 
     reg.bc = mcu->read_16bit(reg.pc + 1);
     
@@ -580,7 +578,7 @@ void LR35902::instr_0x01() // LD BC,d16
 }
 void LR35902::instr_0x02() // LD (BC),A
 {
-    log->trace("%v : 0x02 - LD (BC),A", reg.pc);
+    // log->trace("%v : 0x02 - LD (BC),A", reg.pc);
 
     mcu->write_8bit(reg.bc, reg.a);
 
@@ -590,7 +588,7 @@ void LR35902::instr_0x02() // LD (BC),A
 }
 void LR35902::instr_0x03() // INC BC
 {
-    log->trace("%v : 0x03 - INC BC", reg.pc);
+    // log->trace("%v : 0x03 - INC BC", reg.pc);
 
     inc_16bit(reg.bc);
 
@@ -600,7 +598,7 @@ void LR35902::instr_0x03() // INC BC
 }
 void LR35902::instr_0x04() // INC B
 {
-    log->trace("%v : 0x04 - INC B", reg.pc);
+    // log->trace("%v : 0x04 - INC B", reg.pc);
 
     inc_8bit(reg.b);
 
@@ -610,7 +608,7 @@ void LR35902::instr_0x04() // INC B
 }
 void LR35902::instr_0x05() // DEC B
 {
-    log->trace("%v : 0x05 - DEC B", reg.pc);
+    // log->trace("%v : 0x05 - DEC B", reg.pc);
 
     dec_8bit(reg.b);
 
@@ -620,7 +618,7 @@ void LR35902::instr_0x05() // DEC B
 }
 void LR35902::instr_0x06() // LD B,d8
 {
-    log->trace("%v : 0x06 - LD B,d8", reg.pc);
+    // log->trace("%v : 0x06 - LD B,d8", reg.pc);
 
     reg.b = mcu->read_8bit(reg.pc + 1);
 
@@ -630,7 +628,7 @@ void LR35902::instr_0x06() // LD B,d8
 }
 void LR35902::instr_0x07() // RLCA
 {
-    log->trace("%v : 0x07 - RLCA", reg.pc);
+    // log->trace("%v : 0x07 - RLCA", reg.pc);
 
     rlc_8bit(reg.a);
 
@@ -642,7 +640,7 @@ void LR35902::instr_0x07() // RLCA
 }
 void LR35902::instr_0x08() // LD (a16),SP
 {
-    log->trace("%v : 0x08 - LD (a16),SP", reg.pc);
+    // log->trace("%v : 0x08 - LD (a16),SP", reg.pc);
 
     mcu->write_16bit(mcu->read_16bit(reg.pc + 1), reg.sp);
 
@@ -652,7 +650,7 @@ void LR35902::instr_0x08() // LD (a16),SP
 }
 void LR35902::instr_0x09() // ADD HL,BC
 {
-    log->trace("%v : 0x09 - ADD HL,BC", reg.pc);
+    // log->trace("%v : 0x09 - ADD HL,BC", reg.pc);
 
     add_16bit(reg.bc);
 
@@ -662,7 +660,7 @@ void LR35902::instr_0x09() // ADD HL,BC
 }
 void LR35902::instr_0x0A() // LD A,(BC)
 {
-    log->trace("%v : 0x0A - LD A,(BC)", reg.pc);
+    // log->trace("%v : 0x0A - LD A,(BC)", reg.pc);
 
     reg.a = mcu->read_8bit(reg.bc);
 
@@ -672,7 +670,7 @@ void LR35902::instr_0x0A() // LD A,(BC)
 }
 void LR35902::instr_0x0B() // DEC BC
 {
-    log->trace("%v : 0x0B - DEC BC", reg.pc);
+    // log->trace("%v : 0x0B - DEC BC", reg.pc);
 
     dec_16bit(reg.bc);
 
@@ -682,7 +680,7 @@ void LR35902::instr_0x0B() // DEC BC
 }
 void LR35902::instr_0x0C() // INC C
 {
-    log->trace("%v : 0x0C - INC C", reg.pc);
+    // log->trace("%v : 0x0C - INC C", reg.pc);
 
     inc_8bit(reg.c);
 
@@ -692,7 +690,7 @@ void LR35902::instr_0x0C() // INC C
 }
 void LR35902::instr_0x0D() // DEC C
 {
-    log->trace("%v : 0x0D - DEC C", reg.pc);
+    // log->trace("%v : 0x0D - DEC C", reg.pc);
 
     dec_8bit(reg.c);
 
@@ -702,7 +700,7 @@ void LR35902::instr_0x0D() // DEC C
 }
 void LR35902::instr_0x0E() // LD C,d8
 {
-    log->trace("%v : 0x0E - LD C,d8", reg.pc);
+    // log->trace("%v : 0x0E - LD C,d8", reg.pc);
 
     reg.c = mcu->read_8bit(reg.pc + 1);
 
@@ -712,7 +710,7 @@ void LR35902::instr_0x0E() // LD C,d8
 }
 void LR35902::instr_0x0F() // RRCA
 {
-    log->trace("%v : 0x0F - RRCA", reg.pc);
+    // log->trace("%v : 0x0F - RRCA", reg.pc);
 
     rrc_8bit(reg.a);
 
@@ -724,7 +722,7 @@ void LR35902::instr_0x0F() // RRCA
 }
 void LR35902::instr_0x10() // STOP 0
 {
-    log->trace("%v : 0x10 - STOP 0", reg.pc);
+    // log->trace("%v : 0x10 - STOP 0", reg.pc);
 
     stop();
 
@@ -734,7 +732,7 @@ void LR35902::instr_0x10() // STOP 0
 }
 void LR35902::instr_0x11() // LD DE,d16
 {
-    log->trace("%v : 0x11 - LD DE,d16", reg.pc);
+    // log->trace("%v : 0x11 - LD DE,d16", reg.pc);
 
     reg.de = mcu->read_16bit(reg.pc + 1);
 
@@ -744,7 +742,7 @@ void LR35902::instr_0x11() // LD DE,d16
 }
 void LR35902::instr_0x12() // LD (DE),A
 {
-    log->trace("%v : 0x12 - LD (DE),A", reg.pc);
+    // log->trace("%v : 0x12 - LD (DE),A", reg.pc);
 
     mcu->write_8bit(reg.de, reg.a);
 
@@ -754,7 +752,7 @@ void LR35902::instr_0x12() // LD (DE),A
 }
 void LR35902::instr_0x13() // INC DE
 {
-    log->trace("%v : 0x13 - INC DE", reg.pc);
+    // log->trace("%v : 0x13 - INC DE", reg.pc);
 
     inc_16bit(reg.de);
 
@@ -764,7 +762,7 @@ void LR35902::instr_0x13() // INC DE
 }
 void LR35902::instr_0x14() // INC D
 {
-    log->trace("%v : 0x14 - INC D", reg.pc);
+    // log->trace("%v : 0x14 - INC D", reg.pc);
 
     inc_8bit(reg.d);
 
@@ -774,7 +772,7 @@ void LR35902::instr_0x14() // INC D
 }
 void LR35902::instr_0x15() // DEC D
 {
-    log->trace("%v : 0x15 - DEC D", reg.pc);
+    // log->trace("%v : 0x15 - DEC D", reg.pc);
 
     dec_8bit(reg.d);
 
@@ -784,7 +782,7 @@ void LR35902::instr_0x15() // DEC D
 }
 void LR35902::instr_0x16() // LD D,d8
 {
-    log->trace("%v : 0x16 - LD D,d8", reg.pc);
+    // log->trace("%v : 0x16 - LD D,d8", reg.pc);
 
     reg.d = mcu->read_8bit(reg.pc + 1);
 
@@ -794,7 +792,7 @@ void LR35902::instr_0x16() // LD D,d8
 }
 void LR35902::instr_0x17() // RLA
 {
-    log->trace("%v : 0x17 - RLA", reg.pc);
+    // log->trace("%v : 0x17 - RLA", reg.pc);
 
     rl_8bit(reg.a);
 
@@ -806,7 +804,7 @@ void LR35902::instr_0x17() // RLA
 }
 void LR35902::instr_0x18() // JR r8
 {
-    log->trace("%v : 0x18 - JR r8", reg.pc);
+    // log->trace("%v : 0x18 - JR r8", reg.pc);
 
     reg.pc += static_cast<int8>( mcu->read_8bit(reg.pc + 1) );
 
@@ -816,7 +814,7 @@ void LR35902::instr_0x18() // JR r8
 }
 void LR35902::instr_0x19() // ADD HL,DE
 {
-    log->trace("%v : 0x19 - ADD HL,DE", reg.pc);
+    // log->trace("%v : 0x19 - ADD HL,DE", reg.pc);
 
     add_16bit(reg.de);
 
@@ -826,7 +824,7 @@ void LR35902::instr_0x19() // ADD HL,DE
 }
 void LR35902::instr_0x1A() // LD A,(DE)
 {
-    log->trace("%v : 0x1A - LD A,(DE)", reg.pc);
+    // log->trace("%v : 0x1A - LD A,(DE)", reg.pc);
 
     reg.a = mcu->read_8bit(reg.de);
 
@@ -836,7 +834,7 @@ void LR35902::instr_0x1A() // LD A,(DE)
 }
 void LR35902::instr_0x1B() // DEC DE
 {
-    log->trace("%v : 0x1B - DEC DE", reg.pc);
+    // log->trace("%v : 0x1B - DEC DE", reg.pc);
 
     dec_16bit(reg.de);
 
@@ -846,7 +844,7 @@ void LR35902::instr_0x1B() // DEC DE
 }
 void LR35902::instr_0x1C() // INC E
 {
-    log->trace("%v : 0x1C - INC E", reg.pc);
+    // log->trace("%v : 0x1C - INC E", reg.pc);
 
     inc_8bit(reg.e);
 
@@ -856,7 +854,7 @@ void LR35902::instr_0x1C() // INC E
 }
 void LR35902::instr_0x1D() // DEC E
 {
-    log->trace("%v : 0x1D - DEC E", reg.pc);
+    // log->trace("%v : 0x1D - DEC E", reg.pc);
 
     dec_8bit(reg.e);
 
@@ -866,7 +864,7 @@ void LR35902::instr_0x1D() // DEC E
 }
 void LR35902::instr_0x1E() // LD E,d8
 {
-    log->trace("%v : 0x1E - LD E,d8", reg.pc);
+    // log->trace("%v : 0x1E - LD E,d8", reg.pc);
 
     reg.e = mcu->read_8bit(reg.pc + 1);
 
@@ -876,7 +874,7 @@ void LR35902::instr_0x1E() // LD E,d8
 }
 void LR35902::instr_0x1F() // RRA
 {
-    log->trace("%v : 0x1F - RRA", reg.pc);
+    // log->trace("%v : 0x1F - RRA", reg.pc);
 
     rr_8bit(reg.a);
 
@@ -888,7 +886,7 @@ void LR35902::instr_0x1F() // RRA
 }
 void LR35902::instr_0x20() // JR NZ,r8
 {
-    log->trace("%v : 0x20 - JR NZ,r8", reg.pc);
+    // log->trace("%v : 0x20 - JR NZ,r8", reg.pc);
 
     if ( zero == false )
     {
@@ -906,7 +904,7 @@ void LR35902::instr_0x20() // JR NZ,r8
 }
 void LR35902::instr_0x21() // LD HL,d16
 {
-    log->trace("%v : 0x21 - LD HL,d16", reg.pc);
+    // log->trace("%v : 0x21 - LD HL,d16", reg.pc);
 
     reg.hl = mcu->read_16bit(reg.pc + 1);
 
@@ -916,7 +914,7 @@ void LR35902::instr_0x21() // LD HL,d16
 }
 void LR35902::instr_0x22() // LD (HL+),A
 {
-    log->trace("%v : 0x22 - LD (HL+),A", reg.pc);
+    // log->trace("%v : 0x22 - LD (HL+),A", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.a);
     reg.hl++;
@@ -927,7 +925,7 @@ void LR35902::instr_0x22() // LD (HL+),A
 }
 void LR35902::instr_0x23() // INC HL
 {
-    log->trace("%v : 0x23 - INC HL", reg.pc);
+    // log->trace("%v : 0x23 - INC HL", reg.pc);
 
     inc_16bit(reg.hl);
 
@@ -937,7 +935,7 @@ void LR35902::instr_0x23() // INC HL
 }
 void LR35902::instr_0x24() // INC H
 {
-    log->trace("%v : 0x24 - INC H", reg.pc);
+    // log->trace("%v : 0x24 - INC H", reg.pc);
 
     inc_8bit(reg.h);
 
@@ -947,7 +945,7 @@ void LR35902::instr_0x24() // INC H
 }
 void LR35902::instr_0x25() // DEC H
 {
-    log->trace("%v : 0x25 - DEC H", reg.pc);
+    // log->trace("%v : 0x25 - DEC H", reg.pc);
 
     dec_8bit(reg.h);
 
@@ -957,7 +955,7 @@ void LR35902::instr_0x25() // DEC H
 }
 void LR35902::instr_0x26() // LD H,d8
 {
-    log->trace("%v : 0x26 - LD H,d8", reg.pc);
+    // log->trace("%v : 0x26 - LD H,d8", reg.pc);
 
     reg.h = mcu->read_8bit(reg.pc + 1);
 
@@ -967,7 +965,7 @@ void LR35902::instr_0x26() // LD H,d8
 }
 void LR35902::instr_0x27() // DAA
 {
-    log->trace("%v : 0x27 - DAA", reg.pc);
+    // log->trace("%v : 0x27 - DAA", reg.pc);
 
     daa();
 
@@ -977,7 +975,7 @@ void LR35902::instr_0x27() // DAA
 }
 void LR35902::instr_0x28() // JR Z,r8
 {
-    log->trace("%v : 0x28 - JR Z,r8", reg.pc);
+    // log->trace("%v : 0x28 - JR Z,r8", reg.pc);
 
     if ( zero == true )
     {
@@ -997,7 +995,7 @@ void LR35902::instr_0x28() // JR Z,r8
 }
 void LR35902::instr_0x29() // ADD HL,HL
 {
-    log->trace("%v : 0x29 - ADD HL,HL", reg.pc);
+    // log->trace("%v : 0x29 - ADD HL,HL", reg.pc);
 
     add_16bit(reg.hl);
 
@@ -1007,7 +1005,7 @@ void LR35902::instr_0x29() // ADD HL,HL
 }
 void LR35902::instr_0x2A() // LD A,(HL+)
 {
-    log->trace("%v : 0x2A - LD A,(HL+)", reg.pc);
+    // log->trace("%v : 0x2A - LD A,(HL+)", reg.pc);
 
     reg.a = mcu->read_8bit(reg.hl);
     reg.hl++;
@@ -1018,7 +1016,7 @@ void LR35902::instr_0x2A() // LD A,(HL+)
 }
 void LR35902::instr_0x2B() // DEC HL
 {
-    log->trace("%v : 0x2B - DEC HL", reg.pc);
+    // log->trace("%v : 0x2B - DEC HL", reg.pc);
 
     dec_16bit(reg.hl);
 
@@ -1028,7 +1026,7 @@ void LR35902::instr_0x2B() // DEC HL
 }
 void LR35902::instr_0x2C() // INC L
 {
-    log->trace("%v : 0x2C - INC L", reg.pc);
+    // log->trace("%v : 0x2C - INC L", reg.pc);
 
     inc_8bit(reg.l);
 
@@ -1038,7 +1036,7 @@ void LR35902::instr_0x2C() // INC L
 }
 void LR35902::instr_0x2D() // DEC L
 {
-    log->trace("%v : 0x2D - DEC L", reg.pc);
+    // log->trace("%v : 0x2D - DEC L", reg.pc);
 
     dec_8bit(reg.l);
 
@@ -1048,7 +1046,7 @@ void LR35902::instr_0x2D() // DEC L
 }
 void LR35902::instr_0x2E() // LD L,d8
 {
-    log->trace("%v : 0x2E - LD L,d8", reg.pc);
+    // log->trace("%v : 0x2E - LD L,d8", reg.pc);
 
     reg.l = mcu->read_8bit(reg.pc + 1);
 
@@ -1058,7 +1056,7 @@ void LR35902::instr_0x2E() // LD L,d8
 }
 void LR35902::instr_0x2F() // CPL
 {
-    log->trace("%v : 0x2F - CPL", reg.pc);
+    // log->trace("%v : 0x2F - CPL", reg.pc);
 
     cpl();
 
@@ -1068,7 +1066,7 @@ void LR35902::instr_0x2F() // CPL
 }
 void LR35902::instr_0x30() // JR NC,r8
 {
-    log->trace("%v : 0x30 - JR NC,r8", reg.pc);
+    // log->trace("%v : 0x30 - JR NC,r8", reg.pc);
 
     if ( carry == false )
     {
@@ -1086,7 +1084,7 @@ void LR35902::instr_0x30() // JR NC,r8
 }
 void LR35902::instr_0x31() // LD SP,d16
 {
-    log->trace("%v : 0x31 - LD SP,d16", reg.pc);
+    // log->trace("%v : 0x31 - LD SP,d16", reg.pc);
 
     reg.sp = mcu->read_16bit(reg.pc + 1);
 
@@ -1096,7 +1094,7 @@ void LR35902::instr_0x31() // LD SP,d16
 }
 void LR35902::instr_0x32() // LD (HL-),A
 {
-    log->trace("%v : 0x32 - LD (HL-),A", reg.pc);
+    // log->trace("%v : 0x32 - LD (HL-),A", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.a);
     reg.hl--;
@@ -1107,7 +1105,7 @@ void LR35902::instr_0x32() // LD (HL-),A
 }
 void LR35902::instr_0x33() // INC SP
 {
-    log->trace("%v : 0x33 - INC SP", reg.pc);
+    // log->trace("%v : 0x33 - INC SP", reg.pc);
 
     inc_16bit(reg.sp);
 
@@ -1117,7 +1115,7 @@ void LR35902::instr_0x33() // INC SP
 }
 void LR35902::instr_0x34() // INC (HL)
 {
-    log->trace("%v : 0x34 - INC (HL)", reg.pc);
+    // log->trace("%v : 0x34 - INC (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -1131,7 +1129,7 @@ void LR35902::instr_0x34() // INC (HL)
 }
 void LR35902::instr_0x35() // DEC (HL)
 {
-    log->trace("%v : 0x35 - DEC (HL)", reg.pc);
+    // log->trace("%v : 0x35 - DEC (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -1145,7 +1143,7 @@ void LR35902::instr_0x35() // DEC (HL)
 }
 void LR35902::instr_0x36() // LD (HL),d8
 {
-    log->trace("%v : 0x36 - LD (HL),d8", reg.pc);
+    // log->trace("%v : 0x36 - LD (HL),d8", reg.pc);
 
     mcu->write_8bit(reg.hl, mcu->read_8bit(reg.pc + 1));
 
@@ -1155,7 +1153,7 @@ void LR35902::instr_0x36() // LD (HL),d8
 }
 void LR35902::instr_0x37() // SCF
 {
-    log->trace("%v : 0x37 - SCF", reg.pc);
+    // log->trace("%v : 0x37 - SCF", reg.pc);
 
     scf();
 
@@ -1165,7 +1163,7 @@ void LR35902::instr_0x37() // SCF
 }
 void LR35902::instr_0x38() // JR C,r8
 {
-    log->trace("%v : 0x38 - JR C,r8", reg.pc);
+    // log->trace("%v : 0x38 - JR C,r8", reg.pc);
 
     if ( carry == true )
     {
@@ -1183,7 +1181,7 @@ void LR35902::instr_0x38() // JR C,r8
 }
 void LR35902::instr_0x39() // ADD HL,SP
 {
-    log->trace("%v : 0x39 - ADD HL,SP", reg.pc);
+    // log->trace("%v : 0x39 - ADD HL,SP", reg.pc);
 
     add_16bit(reg.sp);
 
@@ -1193,7 +1191,7 @@ void LR35902::instr_0x39() // ADD HL,SP
 }
 void LR35902::instr_0x3A() // LD A,(HL-)
 {
-    log->trace("%v : 0x3A - LD A,(HL-)", reg.pc);
+    // log->trace("%v : 0x3A - LD A,(HL-)", reg.pc);
 
     reg.a = mcu->read_8bit(reg.hl);
     reg.hl--;
@@ -1204,7 +1202,7 @@ void LR35902::instr_0x3A() // LD A,(HL-)
 }
 void LR35902::instr_0x3B() // DEC SP
 {
-    log->trace("%v : 0x3B - DEC SP", reg.pc);
+    // log->trace("%v : 0x3B - DEC SP", reg.pc);
 
     dec_16bit(reg.sp);
 
@@ -1214,7 +1212,7 @@ void LR35902::instr_0x3B() // DEC SP
 }
 void LR35902::instr_0x3C() // INC A
 {
-    log->trace("%v : 0x3C - INC A", reg.pc);
+    // log->trace("%v : 0x3C - INC A", reg.pc);
 
     inc_8bit(reg.a);
 
@@ -1224,7 +1222,7 @@ void LR35902::instr_0x3C() // INC A
 }
 void LR35902::instr_0x3D() // DEC A
 {
-    log->trace("%v : 0x3D - DEC A", reg.pc);
+    // log->trace("%v : 0x3D - DEC A", reg.pc);
 
     dec_8bit(reg.a);
 
@@ -1234,7 +1232,7 @@ void LR35902::instr_0x3D() // DEC A
 }
 void LR35902::instr_0x3E() // LD A,d8
 {
-    log->trace("%v : 0x3E - LD A,d8", reg.pc);
+    // log->trace("%v : 0x3E - LD A,d8", reg.pc);
 
     reg.a = mcu->read_8bit(reg.pc + 1);
 
@@ -1244,7 +1242,7 @@ void LR35902::instr_0x3E() // LD A,d8
 }
 void LR35902::instr_0x3F() // CCF
 {
-    log->trace("%v : 0x3F - CCF", reg.pc);
+    // log->trace("%v : 0x3F - CCF", reg.pc);
 
     ccf();
 
@@ -1254,7 +1252,7 @@ void LR35902::instr_0x3F() // CCF
 }
 void LR35902::instr_0x40() // LD B,B
 {
-    log->trace("%v : 0x40 - LD B,B", reg.pc);
+    // log->trace("%v : 0x40 - LD B,B", reg.pc);
 
     reg.b = reg.b;
 
@@ -1264,7 +1262,7 @@ void LR35902::instr_0x40() // LD B,B
 }
 void LR35902::instr_0x41() // LD B,C
 {
-    log->trace("%v : 0x41 - LD B,C", reg.pc);
+    // log->trace("%v : 0x41 - LD B,C", reg.pc);
 
     reg.b = reg.c;
 
@@ -1274,7 +1272,7 @@ void LR35902::instr_0x41() // LD B,C
 }
 void LR35902::instr_0x42() // LD B,D
 {
-    log->trace("%v : 0x42 - LD B,D", reg.pc);
+    // log->trace("%v : 0x42 - LD B,D", reg.pc);
 
     reg.b = reg.d;
 
@@ -1284,7 +1282,7 @@ void LR35902::instr_0x42() // LD B,D
 }
 void LR35902::instr_0x43() // LD B,E
 {
-    log->trace("%v : 0x43 - LD B,E", reg.pc);
+    // log->trace("%v : 0x43 - LD B,E", reg.pc);
 
     reg.b = reg.e;
 
@@ -1294,7 +1292,7 @@ void LR35902::instr_0x43() // LD B,E
 }
 void LR35902::instr_0x44() // LD B,H
 {
-    log->trace("%v : 0x44 - LD B,H", reg.pc);
+    // log->trace("%v : 0x44 - LD B,H", reg.pc);
 
     reg.b = reg.h;
 
@@ -1304,7 +1302,7 @@ void LR35902::instr_0x44() // LD B,H
 }
 void LR35902::instr_0x45() // LD B,L
 {
-    log->trace("%v : 0x45 - LD B,L", reg.pc);
+    // log->trace("%v : 0x45 - LD B,L", reg.pc);
 
     reg.b = reg.l;
 
@@ -1314,7 +1312,7 @@ void LR35902::instr_0x45() // LD B,L
 }
 void LR35902::instr_0x46() // LD B,(HL)
 {
-    log->trace("%v : 0x46 - LD B,(HL)", reg.pc);
+    // log->trace("%v : 0x46 - LD B,(HL)", reg.pc);
 
     reg.b = mcu->read_8bit(reg.hl);
 
@@ -1324,7 +1322,7 @@ void LR35902::instr_0x46() // LD B,(HL)
 }
 void LR35902::instr_0x47() // LD B,A
 {
-    log->trace("%v : 0x47 - LD B,A", reg.pc);
+    // log->trace("%v : 0x47 - LD B,A", reg.pc);
 
     reg.b = reg.a;
 
@@ -1334,7 +1332,7 @@ void LR35902::instr_0x47() // LD B,A
 }
 void LR35902::instr_0x48() // LD C,B
 {
-    log->trace("%v : 0x48 - LD C,B", reg.pc);
+    // log->trace("%v : 0x48 - LD C,B", reg.pc);
 
     reg.c = reg.b;
 
@@ -1344,7 +1342,7 @@ void LR35902::instr_0x48() // LD C,B
 }
 void LR35902::instr_0x49() // LD C,C
 {
-    log->trace("%v : 0x49 - LD C,C", reg.pc);
+    // log->trace("%v : 0x49 - LD C,C", reg.pc);
 
     reg.c = reg.c;
 
@@ -1354,7 +1352,7 @@ void LR35902::instr_0x49() // LD C,C
 }
 void LR35902::instr_0x4A() // LD C,D
 {
-    log->trace("%v : 0x4A - LD C,D", reg.pc);
+    // log->trace("%v : 0x4A - LD C,D", reg.pc);
 
     reg.c = reg.d;
 
@@ -1364,7 +1362,7 @@ void LR35902::instr_0x4A() // LD C,D
 }
 void LR35902::instr_0x4B() // LD C,E
 {
-    log->trace("%v : 0x4B - LD C,E", reg.pc);
+    // log->trace("%v : 0x4B - LD C,E", reg.pc);
 
     reg.c = reg.e;
 
@@ -1374,7 +1372,7 @@ void LR35902::instr_0x4B() // LD C,E
 }
 void LR35902::instr_0x4C() // LD C,H
 {
-    log->trace("%v : 0x4C - LD C,H", reg.pc);
+    // log->trace("%v : 0x4C - LD C,H", reg.pc);
 
     reg.c = reg.h;
 
@@ -1384,7 +1382,7 @@ void LR35902::instr_0x4C() // LD C,H
 }
 void LR35902::instr_0x4D() // LD C,L
 {
-    log->trace("%v : 0x4D - LD C,L", reg.pc);
+    // log->trace("%v : 0x4D - LD C,L", reg.pc);
 
     reg.c = reg.l;
 
@@ -1394,7 +1392,7 @@ void LR35902::instr_0x4D() // LD C,L
 }
 void LR35902::instr_0x4E() // LD C,(HL)
 {
-    log->trace("%v : 0x4E - LD C,(HL)", reg.pc);
+    // log->trace("%v : 0x4E - LD C,(HL)", reg.pc);
 
     reg.c = mcu->read_8bit(reg.hl);
 
@@ -1404,7 +1402,7 @@ void LR35902::instr_0x4E() // LD C,(HL)
 }
 void LR35902::instr_0x4F() // LD C,A
 {
-    log->trace("%v : 0x4F - LD C,A", reg.pc);
+    // log->trace("%v : 0x4F - LD C,A", reg.pc);
 
     reg.c = reg.a;
 
@@ -1414,7 +1412,7 @@ void LR35902::instr_0x4F() // LD C,A
 }
 void LR35902::instr_0x50() // LD D,B
 {
-    log->trace("%v : 0x50 - LD D,B", reg.pc);
+    // log->trace("%v : 0x50 - LD D,B", reg.pc);
 
     reg.d = reg.b;
 
@@ -1424,7 +1422,7 @@ void LR35902::instr_0x50() // LD D,B
 }
 void LR35902::instr_0x51() // LD D,C
 {
-    log->trace("%v : 0x51 - LD D,C", reg.pc);
+    // log->trace("%v : 0x51 - LD D,C", reg.pc);
 
     reg.d = reg.c;
 
@@ -1434,7 +1432,7 @@ void LR35902::instr_0x51() // LD D,C
 }
 void LR35902::instr_0x52() // LD D,D
 {
-    log->trace("%v : 0x52 - LD D,D", reg.pc);
+    // log->trace("%v : 0x52 - LD D,D", reg.pc);
 
     reg.d = reg.d;
 
@@ -1444,7 +1442,7 @@ void LR35902::instr_0x52() // LD D,D
 }
 void LR35902::instr_0x53() // LD D,E
 {
-    log->trace("%v : 0x53 - LD D,E", reg.pc);
+    // log->trace("%v : 0x53 - LD D,E", reg.pc);
 
     reg.d = reg.e;
 
@@ -1454,7 +1452,7 @@ void LR35902::instr_0x53() // LD D,E
 }
 void LR35902::instr_0x54() // LD D,H
 {
-    log->trace("%v : 0x54 - LD D,H", reg.pc);
+    // log->trace("%v : 0x54 - LD D,H", reg.pc);
 
     reg.d = reg.h;
 
@@ -1464,7 +1462,7 @@ void LR35902::instr_0x54() // LD D,H
 }
 void LR35902::instr_0x55() // LD D,L
 {
-    log->trace("%v : 0x55 - LD D,L", reg.pc);
+    // log->trace("%v : 0x55 - LD D,L", reg.pc);
 
     reg.d = reg.l;
 
@@ -1474,7 +1472,7 @@ void LR35902::instr_0x55() // LD D,L
 }
 void LR35902::instr_0x56() // LD D,(HL)
 {
-    log->trace("%v : 0x56 - LD D,(HL)", reg.pc);
+    // log->trace("%v : 0x56 - LD D,(HL)", reg.pc);
 
     reg.d = mcu->read_8bit(reg.hl);
 
@@ -1484,7 +1482,7 @@ void LR35902::instr_0x56() // LD D,(HL)
 }
 void LR35902::instr_0x57() // LD D,A
 {
-    log->trace("%v : 0x57 - LD D,A", reg.pc);
+    // log->trace("%v : 0x57 - LD D,A", reg.pc);
 
     reg.d = reg.a;
 
@@ -1494,7 +1492,7 @@ void LR35902::instr_0x57() // LD D,A
 }
 void LR35902::instr_0x58() // LD E,B
 {
-    log->trace("%v : 0x58 - LD E,B", reg.pc);
+    // log->trace("%v : 0x58 - LD E,B", reg.pc);
 
     reg.e = reg.b;
 
@@ -1504,7 +1502,7 @@ void LR35902::instr_0x58() // LD E,B
 }
 void LR35902::instr_0x59() // LD E,C
 {
-    log->trace("%v : 0x59 - LD E,C", reg.pc);
+    // log->trace("%v : 0x59 - LD E,C", reg.pc);
 
     reg.e = reg.c;
 
@@ -1514,7 +1512,7 @@ void LR35902::instr_0x59() // LD E,C
 }
 void LR35902::instr_0x5A() // LD E,D
 {
-    log->trace("%v : 0x5A - LD E,D", reg.pc);
+    // log->trace("%v : 0x5A - LD E,D", reg.pc);
 
     reg.e = reg.d;
 
@@ -1524,7 +1522,7 @@ void LR35902::instr_0x5A() // LD E,D
 }
 void LR35902::instr_0x5B() // LD E,E
 {
-    log->trace("%v : 0x5B - LD E,E", reg.pc);
+    // log->trace("%v : 0x5B - LD E,E", reg.pc);
 
     reg.e = reg.e;
 
@@ -1534,7 +1532,7 @@ void LR35902::instr_0x5B() // LD E,E
 }
 void LR35902::instr_0x5C() // LD E,H
 {
-    log->trace("%v : 0x5C - LD E,H", reg.pc);
+    // log->trace("%v : 0x5C - LD E,H", reg.pc);
 
     reg.e = reg.h;
 
@@ -1544,7 +1542,7 @@ void LR35902::instr_0x5C() // LD E,H
 }
 void LR35902::instr_0x5D() // LD E,L
 {
-    log->trace("%v : 0x5D - LD E,L", reg.pc);
+    // log->trace("%v : 0x5D - LD E,L", reg.pc);
 
     reg.e = reg.l;
 
@@ -1554,7 +1552,7 @@ void LR35902::instr_0x5D() // LD E,L
 }
 void LR35902::instr_0x5E() // LD E,(HL)
 {
-    log->trace("%v : 0x5E - LD E,(HL)", reg.pc);
+    // log->trace("%v : 0x5E - LD E,(HL)", reg.pc);
 
     reg.e = mcu->read_8bit(reg.hl);
 
@@ -1564,7 +1562,7 @@ void LR35902::instr_0x5E() // LD E,(HL)
 }
 void LR35902::instr_0x5F() // LD E,A
 {
-    log->trace("%v : 0x5F - LD E,A", reg.pc);
+    // log->trace("%v : 0x5F - LD E,A", reg.pc);
 
     reg.e = reg.a;
 
@@ -1574,7 +1572,7 @@ void LR35902::instr_0x5F() // LD E,A
 }
 void LR35902::instr_0x60() // LD H,B
 {
-    log->trace("%v : 0x60 - LD H,B", reg.pc);
+    // log->trace("%v : 0x60 - LD H,B", reg.pc);
 
     reg.h = reg.b;
 
@@ -1584,7 +1582,7 @@ void LR35902::instr_0x60() // LD H,B
 }
 void LR35902::instr_0x61() // LD H,C
 {
-    log->trace("%v : 0x61 - LD H,C", reg.pc);
+    // log->trace("%v : 0x61 - LD H,C", reg.pc);
 
     reg.h = reg.c;
 
@@ -1594,7 +1592,7 @@ void LR35902::instr_0x61() // LD H,C
 }
 void LR35902::instr_0x62() // LD H,D
 {
-    log->trace("%v : 0x62 - LD H,D", reg.pc);
+    // log->trace("%v : 0x62 - LD H,D", reg.pc);
 
     reg.h = reg.d;
 
@@ -1604,7 +1602,7 @@ void LR35902::instr_0x62() // LD H,D
 }
 void LR35902::instr_0x63() // LD H,E
 {
-    log->trace("%v : 0x63 - LD H,E", reg.pc);
+    // log->trace("%v : 0x63 - LD H,E", reg.pc);
 
     reg.h = reg.e;
 
@@ -1614,7 +1612,7 @@ void LR35902::instr_0x63() // LD H,E
 }
 void LR35902::instr_0x64() // LD H,H
 {
-    log->trace("%v : 0x64 - LD H,H", reg.pc);
+    // log->trace("%v : 0x64 - LD H,H", reg.pc);
 
     reg.h = reg.h;
 
@@ -1624,7 +1622,7 @@ void LR35902::instr_0x64() // LD H,H
 }
 void LR35902::instr_0x65() // LD H,L
 {
-    log->trace("%v : 0x65 - LD H,L", reg.pc);
+    // log->trace("%v : 0x65 - LD H,L", reg.pc);
 
     reg.h = reg.l;
 
@@ -1634,7 +1632,7 @@ void LR35902::instr_0x65() // LD H,L
 }
 void LR35902::instr_0x66() // LD H,(HL)
 {
-    log->trace("%v : 0x66 - LD H,(HL)", reg.pc);
+    // log->trace("%v : 0x66 - LD H,(HL)", reg.pc);
 
     reg.h = mcu->read_8bit(reg.hl);
 
@@ -1644,7 +1642,7 @@ void LR35902::instr_0x66() // LD H,(HL)
 }
 void LR35902::instr_0x67() // LD H,A
 {
-    log->trace("%v : 0x67 - LD H,A", reg.pc);
+    // log->trace("%v : 0x67 - LD H,A", reg.pc);
 
     reg.h = reg.a;
 
@@ -1654,7 +1652,7 @@ void LR35902::instr_0x67() // LD H,A
 }
 void LR35902::instr_0x68() // LD L,B
 {
-    log->trace("%v : 0x68 - LD L,B", reg.pc);
+    // log->trace("%v : 0x68 - LD L,B", reg.pc);
 
     reg.l = reg.b;
 
@@ -1664,7 +1662,7 @@ void LR35902::instr_0x68() // LD L,B
 }
 void LR35902::instr_0x69() // LD L,C
 {
-    log->trace("%v : 0x69 - LD L,C", reg.pc);
+    // log->trace("%v : 0x69 - LD L,C", reg.pc);
 
     reg.l = reg.c;
 
@@ -1674,7 +1672,7 @@ void LR35902::instr_0x69() // LD L,C
 }
 void LR35902::instr_0x6A() // LD L,D
 {
-    log->trace("%v : 0x6A - LD L,D", reg.pc);
+    // log->trace("%v : 0x6A - LD L,D", reg.pc);
 
     reg.l = reg.d;
 
@@ -1684,7 +1682,7 @@ void LR35902::instr_0x6A() // LD L,D
 }
 void LR35902::instr_0x6B() // LD L,E
 {
-    log->trace("%v : 0x6B - LD L,E", reg.pc);
+    // log->trace("%v : 0x6B - LD L,E", reg.pc);
 
     reg.l = reg.e;
 
@@ -1694,7 +1692,7 @@ void LR35902::instr_0x6B() // LD L,E
 }
 void LR35902::instr_0x6C() // LD L,H
 {
-    log->trace("%v : 0x6C - LD L,H", reg.pc);
+    // log->trace("%v : 0x6C - LD L,H", reg.pc);
 
     reg.l = reg.h;
 
@@ -1704,7 +1702,7 @@ void LR35902::instr_0x6C() // LD L,H
 }
 void LR35902::instr_0x6D() // LD L,L
 {
-    log->trace("%v : 0x6D - LD L,L", reg.pc);
+    // log->trace("%v : 0x6D - LD L,L", reg.pc);
 
     reg.l = reg.l;
 
@@ -1714,7 +1712,7 @@ void LR35902::instr_0x6D() // LD L,L
 }
 void LR35902::instr_0x6E() // LD L,(HL)
 {
-    log->trace("%v : 0x6E - LD L,(HL)", reg.pc);
+    // log->trace("%v : 0x6E - LD L,(HL)", reg.pc);
 
     reg.l = mcu->read_8bit(reg.hl);
 
@@ -1724,7 +1722,7 @@ void LR35902::instr_0x6E() // LD L,(HL)
 }
 void LR35902::instr_0x6F() // LD L,A
 {
-    log->trace("%v : 0x6F - LD L,A", reg.pc);
+    // log->trace("%v : 0x6F - LD L,A", reg.pc);
 
     reg.l = reg.a;
 
@@ -1734,7 +1732,7 @@ void LR35902::instr_0x6F() // LD L,A
 }
 void LR35902::instr_0x70() // LD (HL),B
 {
-    log->trace("%v : 0x70 - LD (HL),B", reg.pc);
+    // log->trace("%v : 0x70 - LD (HL),B", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.b);
 
@@ -1744,7 +1742,7 @@ void LR35902::instr_0x70() // LD (HL),B
 }
 void LR35902::instr_0x71() // LD (HL),C
 {
-    log->trace("%v : 0x71 - LD (HL),C", reg.pc);
+    // log->trace("%v : 0x71 - LD (HL),C", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.c);
 
@@ -1754,7 +1752,7 @@ void LR35902::instr_0x71() // LD (HL),C
 }
 void LR35902::instr_0x72() // LD (HL),D
 {
-    log->trace("%v : 0x72 - LD (HL),D", reg.pc);
+    // log->trace("%v : 0x72 - LD (HL),D", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.d);
 
@@ -1764,7 +1762,7 @@ void LR35902::instr_0x72() // LD (HL),D
 }
 void LR35902::instr_0x73() // LD (HL),E
 {
-    log->trace("%v : 0x73 - LD (HL),E", reg.pc);
+    // log->trace("%v : 0x73 - LD (HL),E", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.e);
 
@@ -1774,7 +1772,7 @@ void LR35902::instr_0x73() // LD (HL),E
 }
 void LR35902::instr_0x74() // LD (HL),H
 {
-    log->trace("%v : 0x74 - LD (HL),H", reg.pc);
+    // log->trace("%v : 0x74 - LD (HL),H", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.h);
 
@@ -1784,7 +1782,7 @@ void LR35902::instr_0x74() // LD (HL),H
 }
 void LR35902::instr_0x75() // LD (HL),L
 {
-    log->trace("%v : 0x75 - LD (HL),L", reg.pc);
+    // log->trace("%v : 0x75 - LD (HL),L", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.l);
 
@@ -1794,11 +1792,9 @@ void LR35902::instr_0x75() // LD (HL),L
 }
 void LR35902::instr_0x76() // HALT
 {
-    log->trace("%v : 0x76 - HALT", reg.pc);
+    // log->trace("%v : 0x76 - HALT", reg.pc);
 
     halt();
-
-    log->debug("%v - %v", (int) if_register, (int) ie_register);
     
     // Exit halt
     if ( ( if_register & if_register ) != 0 )
@@ -1809,7 +1805,7 @@ void LR35902::instr_0x76() // HALT
 }
 void LR35902::instr_0x77() // LD (HL),A
 {
-    log->trace("%v : 0x77 - LD (HL),A", reg.pc);
+    // log->trace("%v : 0x77 - LD (HL),A", reg.pc);
 
     mcu->write_8bit(reg.hl, reg.a);
 
@@ -1819,7 +1815,7 @@ void LR35902::instr_0x77() // LD (HL),A
 }
 void LR35902::instr_0x78() // LD A,B
 {
-    log->trace("%v : 0x78 - LD A,B", reg.pc);
+    // log->trace("%v : 0x78 - LD A,B", reg.pc);
 
     reg.a = reg.b;
 
@@ -1829,7 +1825,7 @@ void LR35902::instr_0x78() // LD A,B
 }
 void LR35902::instr_0x79() // LD A,C
 {
-    log->trace("%v : 0x79 - LD A,C", reg.pc);
+    // log->trace("%v : 0x79 - LD A,C", reg.pc);
 
     reg.a = reg.c;
 
@@ -1839,7 +1835,7 @@ void LR35902::instr_0x79() // LD A,C
 }
 void LR35902::instr_0x7A() // LD A,D
 {
-    log->trace("%v : 0x7A - LD A,D", reg.pc);
+    // log->trace("%v : 0x7A - LD A,D", reg.pc);
 
     reg.a = reg.d;
 
@@ -1849,7 +1845,7 @@ void LR35902::instr_0x7A() // LD A,D
 }
 void LR35902::instr_0x7B() // LD A,E
 {
-    log->trace("%v : 0x7B - LD A,E", reg.pc);
+    // log->trace("%v : 0x7B - LD A,E", reg.pc);
 
     reg.a = reg.e;
 
@@ -1859,7 +1855,7 @@ void LR35902::instr_0x7B() // LD A,E
 }
 void LR35902::instr_0x7C() // LD A,H
 {
-    log->trace("%v : 0x7C - LD A,H", reg.pc);
+    // log->trace("%v : 0x7C - LD A,H", reg.pc);
 
     reg.a = reg.h;
 
@@ -1869,7 +1865,7 @@ void LR35902::instr_0x7C() // LD A,H
 }
 void LR35902::instr_0x7D() // LD A,L
 {
-    log->trace("%v : 0x7D - LD A,L", reg.pc);
+    // log->trace("%v : 0x7D - LD A,L", reg.pc);
 
     reg.a = reg.l;
 
@@ -1879,7 +1875,7 @@ void LR35902::instr_0x7D() // LD A,L
 }
 void LR35902::instr_0x7E() // LD A,(HL)
 {
-    log->trace("%v : 0x7E - LD A,(HL)", reg.pc);
+    // log->trace("%v : 0x7E - LD A,(HL)", reg.pc);
 
     reg.a = mcu->read_8bit(reg.hl);
 
@@ -1889,7 +1885,7 @@ void LR35902::instr_0x7E() // LD A,(HL)
 }
 void LR35902::instr_0x7F() // LD A,A
 {
-    log->trace("%v : 0x7F - LD A,A", reg.pc);
+    // log->trace("%v : 0x7F - LD A,A", reg.pc);
 
     reg.a = reg.a;
 
@@ -1899,7 +1895,7 @@ void LR35902::instr_0x7F() // LD A,A
 }
 void LR35902::instr_0x80() // ADD A,B
 {
-    log->trace("%v : 0x80 - ADD A,B", reg.pc);
+    // log->trace("%v : 0x80 - ADD A,B", reg.pc);
 
     add_8bit(reg.b, false);
 
@@ -1909,7 +1905,7 @@ void LR35902::instr_0x80() // ADD A,B
 }
 void LR35902::instr_0x81() // ADD A,C
 {
-    log->trace("%v : 0x81 - ADD A,C", reg.pc);
+    // log->trace("%v : 0x81 - ADD A,C", reg.pc);
 
     add_8bit(reg.c, false);
 
@@ -1919,7 +1915,7 @@ void LR35902::instr_0x81() // ADD A,C
 }
 void LR35902::instr_0x82() // ADD A,D
 {
-    log->trace("%v : 0x82 - ADD A,D", reg.pc);
+    // log->trace("%v : 0x82 - ADD A,D", reg.pc);
 
     add_8bit(reg.d, false);
 
@@ -1929,7 +1925,7 @@ void LR35902::instr_0x82() // ADD A,D
 }
 void LR35902::instr_0x83() // ADD A,E
 {
-    log->trace("%v : 0x83 - ADD A,E", reg.pc);
+    // log->trace("%v : 0x83 - ADD A,E", reg.pc);
 
     add_8bit(reg.e, false);
 
@@ -1939,7 +1935,7 @@ void LR35902::instr_0x83() // ADD A,E
 }
 void LR35902::instr_0x84() // ADD A,H
 {
-    log->trace("%v : 0x84 - ADD A,H", reg.pc);
+    // log->trace("%v : 0x84 - ADD A,H", reg.pc);
 
     add_8bit(reg.h, false);
 
@@ -1949,7 +1945,7 @@ void LR35902::instr_0x84() // ADD A,H
 }
 void LR35902::instr_0x85() // ADD A,L
 {
-    log->trace("%v : 0x85 - ADD A,L", reg.pc);
+    // log->trace("%v : 0x85 - ADD A,L", reg.pc);
 
     add_8bit(reg.l, false);
 
@@ -1959,7 +1955,7 @@ void LR35902::instr_0x85() // ADD A,L
 }
 void LR35902::instr_0x86() // ADD A,(HL)
 {
-    log->trace("%v : 0x86 - ADD A,(HL)", reg.pc);
+    // log->trace("%v : 0x86 - ADD A,(HL)", reg.pc);
 
     add_8bit(mcu->read_8bit(reg.hl), false);
 
@@ -1969,7 +1965,7 @@ void LR35902::instr_0x86() // ADD A,(HL)
 }
 void LR35902::instr_0x87() // ADD A,A
 {
-    log->trace("%v : 0x87 - ADD A,A", reg.pc);
+    // log->trace("%v : 0x87 - ADD A,A", reg.pc);
 
     add_8bit(reg.a, false);
 
@@ -1979,7 +1975,7 @@ void LR35902::instr_0x87() // ADD A,A
 }
 void LR35902::instr_0x88() // ADC A,B
 {
-    log->trace("%v : 0x88 - ADC A,B", reg.pc);
+    // log->trace("%v : 0x88 - ADC A,B", reg.pc);
 
     add_8bit(reg.b, true);
 
@@ -1989,7 +1985,7 @@ void LR35902::instr_0x88() // ADC A,B
 }
 void LR35902::instr_0x89() // ADC A,C
 {
-    log->trace("%v : 0x89 - ADC A,C", reg.pc);
+    // log->trace("%v : 0x89 - ADC A,C", reg.pc);
 
     add_8bit(reg.c, true);
 
@@ -1999,7 +1995,7 @@ void LR35902::instr_0x89() // ADC A,C
 }
 void LR35902::instr_0x8A() // ADC A,D
 {
-    log->trace("%v : 0x8A - ADC A,D", reg.pc);
+    // log->trace("%v : 0x8A - ADC A,D", reg.pc);
 
     add_8bit(reg.d, true);
 
@@ -2009,7 +2005,7 @@ void LR35902::instr_0x8A() // ADC A,D
 }
 void LR35902::instr_0x8B() // ADC A,E
 {
-    log->trace("%v : 0x8B - ADC A,E", reg.pc);
+    // log->trace("%v : 0x8B - ADC A,E", reg.pc);
 
     add_8bit(reg.e, true);
 
@@ -2019,7 +2015,7 @@ void LR35902::instr_0x8B() // ADC A,E
 }
 void LR35902::instr_0x8C() // ADC A,H
 {
-    log->trace("%v : 0x8C - ADC A,H", reg.pc);
+    // log->trace("%v : 0x8C - ADC A,H", reg.pc);
 
     add_8bit(reg.h, true);
 
@@ -2029,7 +2025,7 @@ void LR35902::instr_0x8C() // ADC A,H
 }
 void LR35902::instr_0x8D() // ADC A,L
 {
-    log->trace("%v : 0x8D - ADC A,L", reg.pc);
+    // log->trace("%v : 0x8D - ADC A,L", reg.pc);
 
     add_8bit(reg.l, true);
 
@@ -2039,7 +2035,7 @@ void LR35902::instr_0x8D() // ADC A,L
 }
 void LR35902::instr_0x8E() // ADC A,(HL)
 {
-    log->trace("%v : 0x8E - ADC A,(HL)", reg.pc);
+    // log->trace("%v : 0x8E - ADC A,(HL)", reg.pc);
 
     add_8bit(mcu->read_8bit(reg.hl), true);
 
@@ -2049,7 +2045,7 @@ void LR35902::instr_0x8E() // ADC A,(HL)
 }
 void LR35902::instr_0x8F() // ADC A,A
 {
-    log->trace("%v : 0x8F - ADC A,A", reg.pc);
+    // log->trace("%v : 0x8F - ADC A,A", reg.pc);
 
     add_8bit(reg.a, true);
 
@@ -2059,7 +2055,7 @@ void LR35902::instr_0x8F() // ADC A,A
 }
 void LR35902::instr_0x90() // SUB B
 {
-    log->trace("%v : 0x90 - SUB B", reg.pc);
+    // log->trace("%v : 0x90 - SUB B", reg.pc);
 
     sub_8bit(reg.b, false);
 
@@ -2069,7 +2065,7 @@ void LR35902::instr_0x90() // SUB B
 }
 void LR35902::instr_0x91() // SUB C
 {
-    log->trace("%v : 0x91 - SUB C", reg.pc);
+    // log->trace("%v : 0x91 - SUB C", reg.pc);
 
     sub_8bit(reg.c, false);
 
@@ -2079,7 +2075,7 @@ void LR35902::instr_0x91() // SUB C
 }
 void LR35902::instr_0x92() // SUB D
 {
-    log->trace("%v : 0x92 - SUB D", reg.pc);
+    // log->trace("%v : 0x92 - SUB D", reg.pc);
 
     sub_8bit(reg.d, false);
 
@@ -2089,7 +2085,7 @@ void LR35902::instr_0x92() // SUB D
 }
 void LR35902::instr_0x93() // SUB E
 {
-    log->trace("%v : 0x93 - SUB E", reg.pc);
+    // log->trace("%v : 0x93 - SUB E", reg.pc);
 
     sub_8bit(reg.e, false);
 
@@ -2099,7 +2095,7 @@ void LR35902::instr_0x93() // SUB E
 }
 void LR35902::instr_0x94() // SUB H
 {
-    log->trace("%v : 0x94 - SUB H", reg.pc);
+    // log->trace("%v : 0x94 - SUB H", reg.pc);
 
     sub_8bit(reg.h, false);
 
@@ -2109,7 +2105,7 @@ void LR35902::instr_0x94() // SUB H
 }
 void LR35902::instr_0x95() // SUB L
 {
-    log->trace("%v : 0x95 - SUB L", reg.pc);
+    // log->trace("%v : 0x95 - SUB L", reg.pc);
 
     sub_8bit(reg.l, false);
 
@@ -2119,7 +2115,7 @@ void LR35902::instr_0x95() // SUB L
 }
 void LR35902::instr_0x96() // SUB (HL)
 {
-    log->trace("%v : 0x96 - SUB (HL)", reg.pc);
+    // log->trace("%v : 0x96 - SUB (HL)", reg.pc);
 
     sub_8bit(mcu->read_8bit(reg.hl), false);
 
@@ -2129,7 +2125,7 @@ void LR35902::instr_0x96() // SUB (HL)
 }
 void LR35902::instr_0x97() // SUB A
 {
-    log->trace("%v : 0x97 - SUB A", reg.pc);
+    // log->trace("%v : 0x97 - SUB A", reg.pc);
 
     sub_8bit(reg.a, false);
 
@@ -2139,7 +2135,7 @@ void LR35902::instr_0x97() // SUB A
 }
 void LR35902::instr_0x98() // SBC A,B
 {
-    log->trace("%v : 0x98 - SBC A,B", reg.pc);
+    // log->trace("%v : 0x98 - SBC A,B", reg.pc);
 
     sub_8bit(reg.b, true);
 
@@ -2149,7 +2145,7 @@ void LR35902::instr_0x98() // SBC A,B
 }
 void LR35902::instr_0x99() // SBC A,C
 {
-    log->trace("%v : 0x99 - SBC A,C", reg.pc);
+    // log->trace("%v : 0x99 - SBC A,C", reg.pc);
 
     sub_8bit(reg.c, true);
 
@@ -2159,7 +2155,7 @@ void LR35902::instr_0x99() // SBC A,C
 }
 void LR35902::instr_0x9A() // SBC A,D
 {
-    log->trace("%v : 0x9A - SBC A,D", reg.pc);
+    // log->trace("%v : 0x9A - SBC A,D", reg.pc);
 
     sub_8bit(reg.d, true);
 
@@ -2169,7 +2165,7 @@ void LR35902::instr_0x9A() // SBC A,D
 }
 void LR35902::instr_0x9B() // SBC A,E
 {
-    log->trace("%v : 0x9B - SBC A,E", reg.pc);
+    // log->trace("%v : 0x9B - SBC A,E", reg.pc);
 
     sub_8bit(reg.e, true);
 
@@ -2179,7 +2175,7 @@ void LR35902::instr_0x9B() // SBC A,E
 }
 void LR35902::instr_0x9C() // SBC A,H
 {
-    log->trace("%v : 0x9C - SBC A,H", reg.pc);
+    // log->trace("%v : 0x9C - SBC A,H", reg.pc);
 
     sub_8bit(reg.h, true);
 
@@ -2189,7 +2185,7 @@ void LR35902::instr_0x9C() // SBC A,H
 }
 void LR35902::instr_0x9D() // SBC A,L
 {
-    log->trace("%v : 0x9D - SBC A,L", reg.pc);
+    // log->trace("%v : 0x9D - SBC A,L", reg.pc);
 
     sub_8bit(reg.l, true);
 
@@ -2199,7 +2195,7 @@ void LR35902::instr_0x9D() // SBC A,L
 }
 void LR35902::instr_0x9E() // SBC A,(HL)
 {
-    log->trace("%v : 0x9E - SBC A,(HL)", reg.pc);
+    // log->trace("%v : 0x9E - SBC A,(HL)", reg.pc);
 
     sub_8bit(mcu->read_8bit(reg.hl), true);
 
@@ -2209,7 +2205,7 @@ void LR35902::instr_0x9E() // SBC A,(HL)
 }
 void LR35902::instr_0x9F() // SBC A,A
 {
-    log->trace("%v : 0x9F - SBC A,A", reg.pc);
+    // log->trace("%v : 0x9F - SBC A,A", reg.pc);
 
     sub_8bit(reg.a, true);
 
@@ -2219,7 +2215,7 @@ void LR35902::instr_0x9F() // SBC A,A
 }
 void LR35902::instr_0xA0() // AND B
 {
-    log->trace("%v : 0xA0 - AND B", reg.pc);
+    // log->trace("%v : 0xA0 - AND B", reg.pc);
 
     and_8bit(reg.b);
 
@@ -2229,7 +2225,7 @@ void LR35902::instr_0xA0() // AND B
 }
 void LR35902::instr_0xA1() // AND C
 {
-    log->trace("%v : 0xA1 - AND C", reg.pc);
+    // log->trace("%v : 0xA1 - AND C", reg.pc);
 
     and_8bit(reg.c);
 
@@ -2239,7 +2235,7 @@ void LR35902::instr_0xA1() // AND C
 }
 void LR35902::instr_0xA2() // AND D
 {
-    log->trace("%v : 0xA2 - AND D", reg.pc);
+    // log->trace("%v : 0xA2 - AND D", reg.pc);
 
     and_8bit(reg.d);
 
@@ -2249,7 +2245,7 @@ void LR35902::instr_0xA2() // AND D
 }
 void LR35902::instr_0xA3() // AND E
 {
-    log->trace("%v : 0xA3 - AND E", reg.pc);
+    // log->trace("%v : 0xA3 - AND E", reg.pc);
 
     and_8bit(reg.e);
 
@@ -2259,7 +2255,7 @@ void LR35902::instr_0xA3() // AND E
 }
 void LR35902::instr_0xA4() // AND H
 {
-    log->trace("%v : 0xA4 - AND H", reg.pc);
+    // log->trace("%v : 0xA4 - AND H", reg.pc);
 
     and_8bit(reg.h);
 
@@ -2269,7 +2265,7 @@ void LR35902::instr_0xA4() // AND H
 }
 void LR35902::instr_0xA5() // AND L
 {
-    log->trace("%v : 0xA5 - AND L", reg.pc);
+    // log->trace("%v : 0xA5 - AND L", reg.pc);
 
     and_8bit(reg.l);
 
@@ -2279,7 +2275,7 @@ void LR35902::instr_0xA5() // AND L
 }
 void LR35902::instr_0xA6() // AND (HL)
 {
-    log->trace("%v : 0xA6 - AND (HL)", reg.pc);
+    // log->trace("%v : 0xA6 - AND (HL)", reg.pc);
 
     and_8bit(mcu->read_8bit(reg.hl));
 
@@ -2289,7 +2285,7 @@ void LR35902::instr_0xA6() // AND (HL)
 }
 void LR35902::instr_0xA7() // AND A
 {
-    log->trace("%v : 0xA7 - AND A", reg.pc);
+    // log->trace("%v : 0xA7 - AND A", reg.pc);
 
     and_8bit(reg.a);
 
@@ -2299,7 +2295,7 @@ void LR35902::instr_0xA7() // AND A
 }
 void LR35902::instr_0xA8() // XOR B
 {
-    log->trace("%v : 0xA8 - XOR B", reg.pc);
+    // log->trace("%v : 0xA8 - XOR B", reg.pc);
 
     xor_8bit(reg.b);
 
@@ -2309,7 +2305,7 @@ void LR35902::instr_0xA8() // XOR B
 }
 void LR35902::instr_0xA9() // XOR C
 {
-    log->trace("%v : 0xA9 - XOR C", reg.pc);
+    // log->trace("%v : 0xA9 - XOR C", reg.pc);
 
     xor_8bit(reg.c);
 
@@ -2319,7 +2315,7 @@ void LR35902::instr_0xA9() // XOR C
 }
 void LR35902::instr_0xAA() // XOR D
 {
-    log->trace("%v : 0xAA - XOR D", reg.pc);
+    // log->trace("%v : 0xAA - XOR D", reg.pc);
 
     xor_8bit(reg.d);
 
@@ -2329,7 +2325,7 @@ void LR35902::instr_0xAA() // XOR D
 }
 void LR35902::instr_0xAB() // XOR E
 {
-    log->trace("%v : 0xAB - XOR E", reg.pc);
+    // log->trace("%v : 0xAB - XOR E", reg.pc);
 
     xor_8bit(reg.e);
 
@@ -2339,7 +2335,7 @@ void LR35902::instr_0xAB() // XOR E
 }
 void LR35902::instr_0xAC() // XOR H
 {
-    log->trace("%v : 0xAC - XOR H", reg.pc);
+    // log->trace("%v : 0xAC - XOR H", reg.pc);
 
     xor_8bit(reg.h);
 
@@ -2349,7 +2345,7 @@ void LR35902::instr_0xAC() // XOR H
 }
 void LR35902::instr_0xAD() // XOR L
 {
-    log->trace("%v : 0xAD - XOR L", reg.pc);
+    // log->trace("%v : 0xAD - XOR L", reg.pc);
 
     xor_8bit(reg.l);
 
@@ -2359,7 +2355,7 @@ void LR35902::instr_0xAD() // XOR L
 }
 void LR35902::instr_0xAE() // XOR (HL)
 {
-    log->trace("%v : 0xAE - XOR (HL)", reg.pc);
+    // log->trace("%v : 0xAE - XOR (HL)", reg.pc);
 
     xor_8bit(mcu->read_8bit(reg.hl));
 
@@ -2369,7 +2365,7 @@ void LR35902::instr_0xAE() // XOR (HL)
 }
 void LR35902::instr_0xAF() // XOR A
 {
-    log->trace("%v : 0xAF - XOR A", reg.pc);
+    // log->trace("%v : 0xAF - XOR A", reg.pc);
 
     xor_8bit(reg.a);
 
@@ -2379,7 +2375,7 @@ void LR35902::instr_0xAF() // XOR A
 }
 void LR35902::instr_0xB0() // OR B
 {
-    log->trace("%v : 0xB0 - OR B", reg.pc);
+    // log->trace("%v : 0xB0 - OR B", reg.pc);
 
     or_8bit(reg.b);
 
@@ -2389,7 +2385,7 @@ void LR35902::instr_0xB0() // OR B
 }
 void LR35902::instr_0xB1() // OR C
 {
-    log->trace("%v : 0xB1 - OR C", reg.pc);
+    // log->trace("%v : 0xB1 - OR C", reg.pc);
 
     or_8bit(reg.c);
 
@@ -2399,7 +2395,7 @@ void LR35902::instr_0xB1() // OR C
 }
 void LR35902::instr_0xB2() // OR D
 {
-    log->trace("%v : 0xB2 - OR D", reg.pc);
+    // log->trace("%v : 0xB2 - OR D", reg.pc);
 
     or_8bit(reg.d);
 
@@ -2409,7 +2405,7 @@ void LR35902::instr_0xB2() // OR D
 }
 void LR35902::instr_0xB3() // OR E
 {
-    log->trace("%v : 0xB3 - OR E", reg.pc);
+    // log->trace("%v : 0xB3 - OR E", reg.pc);
 
     or_8bit(reg.e);
 
@@ -2419,7 +2415,7 @@ void LR35902::instr_0xB3() // OR E
 }
 void LR35902::instr_0xB4() // OR H
 {
-    log->trace("%v : 0xB4 - OR H", reg.pc);
+    // log->trace("%v : 0xB4 - OR H", reg.pc);
 
     or_8bit(reg.h);
 
@@ -2429,7 +2425,7 @@ void LR35902::instr_0xB4() // OR H
 }
 void LR35902::instr_0xB5() // OR L
 {
-    log->trace("%v : 0xB5 - OR L", reg.pc);
+    // log->trace("%v : 0xB5 - OR L", reg.pc);
 
     or_8bit(reg.l);
 
@@ -2439,7 +2435,7 @@ void LR35902::instr_0xB5() // OR L
 }
 void LR35902::instr_0xB6() // OR (HL)
 {
-    log->trace("%v : 0xB6 - OR (HL)", reg.pc);
+    // log->trace("%v : 0xB6 - OR (HL)", reg.pc);
 
     or_8bit(mcu->read_8bit(reg.hl));
 
@@ -2449,7 +2445,7 @@ void LR35902::instr_0xB6() // OR (HL)
 }
 void LR35902::instr_0xB7() // OR A
 {
-    log->trace("%v : 0xB7 - OR A", reg.pc);
+    // log->trace("%v : 0xB7 - OR A", reg.pc);
 
     or_8bit(reg.a);
 
@@ -2459,7 +2455,7 @@ void LR35902::instr_0xB7() // OR A
 }
 void LR35902::instr_0xB8() // CP B
 {
-    log->trace("%v : 0xB8 - CP B", reg.pc);
+    // log->trace("%v : 0xB8 - CP B", reg.pc);
 
     cp_8bit(reg.b);
 
@@ -2469,7 +2465,7 @@ void LR35902::instr_0xB8() // CP B
 }
 void LR35902::instr_0xB9() // CP C
 {
-    log->trace("%v : 0xB9 - CP C", reg.pc);
+    // log->trace("%v : 0xB9 - CP C", reg.pc);
 
     cp_8bit(reg.c);
 
@@ -2479,7 +2475,7 @@ void LR35902::instr_0xB9() // CP C
 }
 void LR35902::instr_0xBA() // CP D
 {
-    log->trace("%v : 0xBA - CP D", reg.pc);
+    // log->trace("%v : 0xBA - CP D", reg.pc);
 
     cp_8bit(reg.d);
 
@@ -2489,7 +2485,7 @@ void LR35902::instr_0xBA() // CP D
 }
 void LR35902::instr_0xBB() // CP E
 {
-    log->trace("%v : 0xBB - CP E", reg.pc);
+    // log->trace("%v : 0xBB - CP E", reg.pc);
 
     cp_8bit(reg.e);
 
@@ -2499,7 +2495,7 @@ void LR35902::instr_0xBB() // CP E
 }
 void LR35902::instr_0xBC() // CP H
 {
-    log->trace("%v : 0xBC - CP H", reg.pc);
+    // log->trace("%v : 0xBC - CP H", reg.pc);
 
     cp_8bit(reg.h);
 
@@ -2509,7 +2505,7 @@ void LR35902::instr_0xBC() // CP H
 }
 void LR35902::instr_0xBD() // CP L
 {
-    log->trace("%v : 0xBD - CP L", reg.pc);
+    // log->trace("%v : 0xBD - CP L", reg.pc);
 
     cp_8bit(reg.l);
 
@@ -2519,7 +2515,7 @@ void LR35902::instr_0xBD() // CP L
 }
 void LR35902::instr_0xBE() // CP (HL)
 {
-    log->trace("%v : 0xBE - CP (HL)", reg.pc);
+    // log->trace("%v : 0xBE - CP (HL)", reg.pc);
 
     cp_8bit(mcu->read_8bit(reg.hl));
 
@@ -2529,7 +2525,7 @@ void LR35902::instr_0xBE() // CP (HL)
 }
 void LR35902::instr_0xBF() // CP A
 {
-    log->trace("%v : 0xBF - CP A", reg.pc);
+    // log->trace("%v : 0xBF - CP A", reg.pc);
 
     cp_8bit(reg.a);
 
@@ -2539,7 +2535,7 @@ void LR35902::instr_0xBF() // CP A
 }
 void LR35902::instr_0xC0() // RET NZ
 {
-    log->trace("%v : 0xC0 - RET NZ", reg.pc);
+    // log->trace("%v : 0xC0 - RET NZ", reg.pc);
 
     if ( zero == false )
     {
@@ -2556,7 +2552,7 @@ void LR35902::instr_0xC0() // RET NZ
 }
 void LR35902::instr_0xC1() // POP BC
 {
-    log->trace("%v : 0xC1 - POP BC", reg.pc);
+    // log->trace("%v : 0xC1 - POP BC", reg.pc);
 
     reg.bc = pop();
 
@@ -2566,7 +2562,7 @@ void LR35902::instr_0xC1() // POP BC
 }
 void LR35902::instr_0xC2() // JP NZ,a16
 {
-    log->trace("%v : 0xC2 - JP NZ,a16", reg.pc);
+    // log->trace("%v : 0xC2 - JP NZ,a16", reg.pc);
 
     if ( zero == false )
     {
@@ -2583,7 +2579,7 @@ void LR35902::instr_0xC2() // JP NZ,a16
 }
 void LR35902::instr_0xC3() // JP a16
 {
-    log->trace("%v : 0xC3 - JP a16", reg.pc);
+    // log->trace("%v : 0xC3 - JP a16", reg.pc);
 
     reg.pc = mcu->read_16bit(reg.pc + 1);
 
@@ -2592,7 +2588,7 @@ void LR35902::instr_0xC3() // JP a16
 }
 void LR35902::instr_0xC4() // CALL NZ,a16
 {
-    log->trace("%v : 0xC4 - CALL NZ,a16", reg.pc);
+    // log->trace("%v : 0xC4 - CALL NZ,a16", reg.pc);
 
     if ( zero == false )
     {
@@ -2609,7 +2605,7 @@ void LR35902::instr_0xC4() // CALL NZ,a16
 }
 void LR35902::instr_0xC5() // PUSH BC
 {
-    log->trace("%v : 0xC5 - PUSH BC", reg.pc);
+    // log->trace("%v : 0xC5 - PUSH BC", reg.pc);
 
     push(reg.bc);
 
@@ -2619,7 +2615,7 @@ void LR35902::instr_0xC5() // PUSH BC
 }
 void LR35902::instr_0xC6() // ADD A,d8
 {
-    log->trace("%v : 0xC6 - ADD A,d8", reg.pc);
+    // log->trace("%v : 0xC6 - ADD A,d8", reg.pc);
 
     add_8bit(mcu->read_8bit(reg.pc + 1), false);
 
@@ -2629,7 +2625,7 @@ void LR35902::instr_0xC6() // ADD A,d8
 }
 void LR35902::instr_0xC7() // RST 0x0000
 {
-    log->trace("%v : 0xC7 - RST 0x0000", reg.pc);
+    // log->trace("%v : 0xC7 - RST 0x0000", reg.pc);
 
     rst(MCU::Addr::rst_0x00);
 
@@ -2638,7 +2634,7 @@ void LR35902::instr_0xC7() // RST 0x0000
 }
 void LR35902::instr_0xC8() // RET Z
 {
-    log->trace("%v : 0xC8 - RET Z", reg.pc);
+    // log->trace("%v : 0xC8 - RET Z", reg.pc);
 
     if ( zero == true )
     {
@@ -2656,7 +2652,7 @@ void LR35902::instr_0xC8() // RET Z
 }
 void LR35902::instr_0xC9() // RET
 {
-    log->trace("%v : 0xC9 - RET", reg.pc);
+    // log->trace("%v : 0xC9 - RET", reg.pc);
 
     ret();
 
@@ -2665,7 +2661,7 @@ void LR35902::instr_0xC9() // RET
 }
 void LR35902::instr_0xCA() // JP Z,a16
 {
-    log->trace("%v : 0xCA - JP Z,a16", reg.pc);
+    // log->trace("%v : 0xCA - JP Z,a16", reg.pc);
 
     if ( zero == true )
     {
@@ -2686,7 +2682,7 @@ void LR35902::instr_0xCB() // PREFIX CB
 }
 void LR35902::instr_0xCC() // CALL Z,a16
 {
-    log->trace("%v : 0xCC - CALL Z,a16", reg.pc);
+    // log->trace("%v : 0xCC - CALL Z,a16", reg.pc);
 
     if ( zero == true )
     {
@@ -2703,7 +2699,7 @@ void LR35902::instr_0xCC() // CALL Z,a16
 }
 void LR35902::instr_0xCD() // CALL a16
 {
-    log->trace("%v : 0xCD - CALL a16", reg.pc);
+    // log->trace("%v : 0xCD - CALL a16", reg.pc);
 
     call(mcu->read_16bit(reg.pc + 1));
 
@@ -2712,7 +2708,7 @@ void LR35902::instr_0xCD() // CALL a16
 }
 void LR35902::instr_0xCE() // ADC A,d8
 {
-    log->trace("%v : 0xCE - ADC A,d8", reg.pc);
+    // log->trace("%v : 0xCE - ADC A,d8", reg.pc);
 
     add_8bit(mcu->read_8bit(reg.pc + 1), true);
 
@@ -2722,7 +2718,7 @@ void LR35902::instr_0xCE() // ADC A,d8
 }
 void LR35902::instr_0xCF() // RST 08H
 {
-    log->trace("%v : 0xCF - RST 08H", reg.pc);
+    // log->trace("%v : 0xCF - RST 08H", reg.pc);
 
     rst(MCU::Addr::rst_0x08);
 
@@ -2731,7 +2727,7 @@ void LR35902::instr_0xCF() // RST 08H
 }
 void LR35902::instr_0xD0() // RET NC
 {
-    log->trace("%v : 0xD0 - RET NC", reg.pc);
+    // log->trace("%v : 0xD0 - RET NC", reg.pc);
 
     if ( carry == false )
     {
@@ -2748,7 +2744,7 @@ void LR35902::instr_0xD0() // RET NC
 }
 void LR35902::instr_0xD1() // POP DE
 {
-    log->trace("%v : 0xD1 - POP DE", reg.pc);
+    // log->trace("%v : 0xD1 - POP DE", reg.pc);
 
     reg.de = pop();
 
@@ -2758,7 +2754,7 @@ void LR35902::instr_0xD1() // POP DE
 }
 void LR35902::instr_0xD2() // JP NC,a16
 {
-    log->trace("%v : 0xD2 - JP NC,a16", reg.pc);
+    // log->trace("%v : 0xD2 - JP NC,a16", reg.pc);
 
     if ( carry == false )
     {
@@ -2783,7 +2779,7 @@ void LR35902::instr_0xD3() // Invalid instruction
 }
 void LR35902::instr_0xD4() // CALL NC,a16
 {
-    log->trace("%v : 0xD4 - CALL NC,a16", reg.pc);
+    // log->trace("%v : 0xD4 - CALL NC,a16", reg.pc);
 
     if ( carry == false )
     {
@@ -2800,7 +2796,7 @@ void LR35902::instr_0xD4() // CALL NC,a16
 }
 void LR35902::instr_0xD5() // PUSH DE
 {
-    log->trace("%v : 0xD5 - PUSH DE", reg.pc);
+    // log->trace("%v : 0xD5 - PUSH DE", reg.pc);
 
     push(reg.de);
 
@@ -2810,7 +2806,7 @@ void LR35902::instr_0xD5() // PUSH DE
 }
 void LR35902::instr_0xD6() // SUB d8
 {
-    log->trace("%v : 0xD6 - SUB d8", reg.pc);
+    // log->trace("%v : 0xD6 - SUB d8", reg.pc);
 
     sub_8bit(mcu->read_8bit(reg.pc + 1));
 
@@ -2820,7 +2816,7 @@ void LR35902::instr_0xD6() // SUB d8
 }
 void LR35902::instr_0xD7() // RST 10H
 {
-    log->trace("%v : 0xD7 - RST 10H", reg.pc);
+    // log->trace("%v : 0xD7 - RST 10H", reg.pc);
 
     rst(MCU::Addr::rst_0x10);
 
@@ -2829,7 +2825,7 @@ void LR35902::instr_0xD7() // RST 10H
 }
 void LR35902::instr_0xD8() // RET C
 {
-    log->trace("%v : 0xD8 - RET C", reg.pc);
+    // log->trace("%v : 0xD8 - RET C", reg.pc);
 
     if ( carry == true )
     {
@@ -2846,7 +2842,7 @@ void LR35902::instr_0xD8() // RET C
 }
 void LR35902::instr_0xD9() // RETI
 {
-    log->trace("%v : 0xD9 - RETI", reg.pc);
+    // log->trace("%v : 0xD9 - RETI", reg.pc);
 
     ret();
     ei();
@@ -2856,7 +2852,7 @@ void LR35902::instr_0xD9() // RETI
 }
 void LR35902::instr_0xDA() // JP C,a16
 {
-    log->trace("%v : 0xDA - JP C,a16", reg.pc);
+    // log->trace("%v : 0xDA - JP C,a16", reg.pc);
 
     if ( carry == true )
     {
@@ -2881,7 +2877,7 @@ void LR35902::instr_0xDB() // Invalid instruction
 }
 void LR35902::instr_0xDC() // CALL C,a16
 {
-    log->trace("%v : 0xDC - CALL C,a16", reg.pc);
+    // log->trace("%v : 0xDC - CALL C,a16", reg.pc);
 
     if ( carry == true )
     {
@@ -2906,7 +2902,7 @@ void LR35902::instr_0xDD() // Invalid instruction
 }
 void LR35902::instr_0xDE() // SBC A,d8
 {
-    log->trace("%v : 0xDE - SBC A,d8", reg.pc);
+    // log->trace("%v : 0xDE - SBC A,d8", reg.pc);
 
     sub_8bit(mcu->read_8bit(reg.pc + 1), true);
 
@@ -2916,7 +2912,7 @@ void LR35902::instr_0xDE() // SBC A,d8
 }
 void LR35902::instr_0xDF() // RST 18H
 {
-    log->trace("%v : 0xDF - RST 18H", reg.pc);
+    // log->trace("%v : 0xDF - RST 18H", reg.pc);
 
     rst(MCU::Addr::rst_0x18);
 
@@ -2925,7 +2921,7 @@ void LR35902::instr_0xDF() // RST 18H
 }
 void LR35902::instr_0xE0() // LDH (a8),A
 {
-    log->trace("%v : 0xE0 - LDH (a8),A", reg.pc);
+    // log->trace("%v : 0xE0 - LDH (a8),A", reg.pc);
 
     mcu->write_8bit(0xFF00 + mcu->read_8bit(reg.pc + 1), reg.a);
 
@@ -2935,7 +2931,7 @@ void LR35902::instr_0xE0() // LDH (a8),A
 }
 void LR35902::instr_0xE1() // POP HL
 {
-    log->trace("%v : 0xE1 - POP HL", reg.pc);
+    // log->trace("%v : 0xE1 - POP HL", reg.pc);
 
     reg.hl = pop();
 
@@ -2945,7 +2941,7 @@ void LR35902::instr_0xE1() // POP HL
 }
 void LR35902::instr_0xE2() // LD (C),A
 {
-    log->trace("%v : 0xE2 - LD (C),A", reg.pc);
+    // log->trace("%v : 0xE2 - LD (C),A", reg.pc);
 
     mcu->write_8bit(0xFF00 + reg.c, reg.a);
 
@@ -2971,7 +2967,7 @@ void LR35902::instr_0xE4() // Invalid instruction
 }
 void LR35902::instr_0xE5() // PUSH HL
 {
-    log->trace("%v : 0xE5 - PUSH HL", reg.pc);
+    // log->trace("%v : 0xE5 - PUSH HL", reg.pc);
 
     push(reg.hl);
 
@@ -2981,7 +2977,7 @@ void LR35902::instr_0xE5() // PUSH HL
 }
 void LR35902::instr_0xE6() // AND d8
 {
-    log->trace("%v : 0xE6 - AND d8", reg.pc);
+    // log->trace("%v : 0xE6 - AND d8", reg.pc);
 
     and_8bit(mcu->read_8bit(reg.pc + 1));
 
@@ -2991,7 +2987,7 @@ void LR35902::instr_0xE6() // AND d8
 }
 void LR35902::instr_0xE7() // RST 20H
 {
-    log->trace("%v : 0xE7 - RST 20H", reg.pc);
+    // log->trace("%v : 0xE7 - RST 20H", reg.pc);
 
     rst(MCU::Addr::rst_0x20);
 
@@ -3000,7 +2996,7 @@ void LR35902::instr_0xE7() // RST 20H
 }
 void LR35902::instr_0xE8() // ADD SP,r8
 {
-    log->trace("%v : 0xE8 - ADD SP,r8", reg.pc);
+    // log->trace("%v : 0xE8 - ADD SP,r8", reg.pc);
 
     int8 e = static_cast<int8>( mcu->read_8bit(reg.pc + 1) );
 
@@ -3025,7 +3021,7 @@ void LR35902::instr_0xE8() // ADD SP,r8
 }
 void LR35902::instr_0xE9() // JP (HL)
 {
-    log->trace("%v : 0xE9 - JP (HL)", reg.pc);
+    // log->trace("%v : 0xE9 - JP (HL)", reg.pc);
 
     reg.pc = reg.hl;
 
@@ -3034,7 +3030,7 @@ void LR35902::instr_0xE9() // JP (HL)
 }
 void LR35902::instr_0xEA() // LD (a16),A
 {
-    log->trace("%v : 0xEA - LD (a16),A", reg.pc);
+    // log->trace("%v : 0xEA - LD (a16),A", reg.pc);
 
     mcu->write_8bit(mcu->read_16bit(reg.pc + 1), reg.a);
 
@@ -3070,7 +3066,7 @@ void LR35902::instr_0xED() // Invalid instruction
 }
 void LR35902::instr_0xEE() // XOR d8
 {
-    log->trace("%v : 0xEE - XOR d8", reg.pc);
+    // log->trace("%v : 0xEE - XOR d8", reg.pc);
 
     xor_8bit(mcu->read_8bit(reg.pc + 1));
 
@@ -3080,7 +3076,7 @@ void LR35902::instr_0xEE() // XOR d8
 }
 void LR35902::instr_0xEF() // RST 28H
 {
-    log->trace("%v : 0xEF - RST 28H", reg.pc);
+    // log->trace("%v : 0xEF - RST 28H", reg.pc);
 
     rst(MCU::Addr::rst_0x28);
 
@@ -3089,7 +3085,7 @@ void LR35902::instr_0xEF() // RST 28H
 }
 void LR35902::instr_0xF0() // LDH A,(a8)
 {
-    log->trace("%v : 0xF0 - LDH A,(a8)", reg.pc);
+    // log->trace("%v : 0xF0 - LDH A,(a8)", reg.pc);
 
     reg.a = mcu->read_8bit(0xFF00 + mcu->read_8bit(reg.pc + 1));
 
@@ -3099,7 +3095,7 @@ void LR35902::instr_0xF0() // LDH A,(a8)
 }
 void LR35902::instr_0xF1() // POP AF
 {
-    log->trace("%v : 0xF1 - POP AF", reg.pc);
+    // log->trace("%v : 0xF1 - POP AF", reg.pc);
 
     reg.af = pop();
 
@@ -3112,7 +3108,7 @@ void LR35902::instr_0xF1() // POP AF
 }
 void LR35902::instr_0xF2() // LD A,(C)
 {
-    log->trace("%v : 0xF2 - LD A,(C)", reg.pc);
+    // log->trace("%v : 0xF2 - LD A,(C)", reg.pc);
 
     reg.a = mcu->read_8bit(0xFF00 + reg.c);
 
@@ -3122,7 +3118,7 @@ void LR35902::instr_0xF2() // LD A,(C)
 }
 void LR35902::instr_0xF3() // DI
 {
-    log->trace("%v : 0xF3 - DI", reg.pc);
+    // log->trace("%v : 0xF3 - DI", reg.pc);
 
     di();
 
@@ -3140,7 +3136,7 @@ void LR35902::instr_0xF4() // Invalid instruction
 }
 void LR35902::instr_0xF5() // PUSH AF
 {
-    log->trace("%v : 0xF5 - PUSH AF", reg.pc);
+    // log->trace("%v : 0xF5 - PUSH AF", reg.pc);
 
     push(reg.af);
 
@@ -3150,7 +3146,7 @@ void LR35902::instr_0xF5() // PUSH AF
 }
 void LR35902::instr_0xF6() // OR d8
 {
-    log->trace("%v : 0xF6 - OR d8", reg.pc);
+    // log->trace("%v : 0xF6 - OR d8", reg.pc);
 
     or_8bit(mcu->read_8bit(reg.pc + 1));
 
@@ -3160,7 +3156,7 @@ void LR35902::instr_0xF6() // OR d8
 }
 void LR35902::instr_0xF7() // RST 30H
 {
-    log->trace("%v : 0xF7 - RST 30H", reg.pc);
+    // log->trace("%v : 0xF7 - RST 30H", reg.pc);
 
     rst(MCU::Addr::rst_0x30);
 
@@ -3169,7 +3165,7 @@ void LR35902::instr_0xF7() // RST 30H
 }
 void LR35902::instr_0xF8() // LD HL,SP+r8
 {
-    log->trace("%v : 0xF8 - LD HL,SP+r8", reg.pc);
+    // log->trace("%v : 0xF8 - LD HL,SP+r8", reg.pc);
 
     int8 e = static_cast<int8>( mcu->read_8bit(reg.pc + 1) );
 
@@ -3194,7 +3190,7 @@ void LR35902::instr_0xF8() // LD HL,SP+r8
 }
 void LR35902::instr_0xF9() // LD SP,HL
 {
-    log->trace("%v : 0xF9 - LD SP,HL", reg.pc);
+    // log->trace("%v : 0xF9 - LD SP,HL", reg.pc);
 
     reg.sp = reg.hl;
 
@@ -3204,7 +3200,7 @@ void LR35902::instr_0xF9() // LD SP,HL
 }
 void LR35902::instr_0xFA() // LD A,(a16)
 {
-    log->trace("%v : 0xFA - LD A,(a16)", reg.pc);
+    // log->trace("%v : 0xFA - LD A,(a16)", reg.pc);
 
     reg.a = mcu->read_8bit(mcu->read_16bit(reg.pc + 1));
 
@@ -3214,7 +3210,7 @@ void LR35902::instr_0xFA() // LD A,(a16)
 }
 void LR35902::instr_0xFB() // EI
 {
-    log->trace("%v : 0xFB - EI", reg.pc);
+    // log->trace("%v : 0xFB - EI", reg.pc);
 
     ei();
 
@@ -3240,7 +3236,7 @@ void LR35902::instr_0xFD() // Invalid instruction
 }
 void LR35902::instr_0xFE() // CP d8
 {
-    log->trace("%v : 0xFE - CP d8", reg.pc);
+    // log->trace("%v : 0xFE - CP d8", reg.pc);
 
     cp_8bit(mcu->read_8bit(reg.pc + 1));
 
@@ -3250,7 +3246,7 @@ void LR35902::instr_0xFE() // CP d8
 }
 void LR35902::instr_0xFF() // RST 38H
 {
-    log->trace("%v : 0xFF - RST 38H", reg.pc);
+    // log->trace("%v : 0xFF - RST 38H", reg.pc);
 
     rst(MCU::Addr::rst_0x38);
 
@@ -3260,7 +3256,7 @@ void LR35902::instr_0xFF() // RST 38H
 
 void LR35902::instr_0xCB00() // RLC B
 {
-	log->trace("%v : 0xCB00 - RLC B", reg.pc);
+	// log->trace("%v : 0xCB00 - RLC B", reg.pc);
 
 	rlc_8bit(reg.b);
 
@@ -3270,7 +3266,7 @@ void LR35902::instr_0xCB00() // RLC B
 }
 void LR35902::instr_0xCB01() // RLC C
 {
-	log->trace("%v : 0xCB01 - RLC C", reg.pc);
+	// log->trace("%v : 0xCB01 - RLC C", reg.pc);
 
 	rlc_8bit(reg.c);
     
@@ -3280,7 +3276,7 @@ void LR35902::instr_0xCB01() // RLC C
 }
 void LR35902::instr_0xCB02() // RLC D
 {
-	log->trace("%v : 0xCB02 - RLC D", reg.pc);
+	// log->trace("%v : 0xCB02 - RLC D", reg.pc);
 
 	rlc_8bit(reg.d);
     
@@ -3290,7 +3286,7 @@ void LR35902::instr_0xCB02() // RLC D
 }
 void LR35902::instr_0xCB03() // RLC E
 {
-	log->trace("%v : 0xCB03 - RLC E", reg.pc);
+	// log->trace("%v : 0xCB03 - RLC E", reg.pc);
 
 	rlc_8bit(reg.e);
     
@@ -3300,7 +3296,7 @@ void LR35902::instr_0xCB03() // RLC E
 }
 void LR35902::instr_0xCB04() // RLC H
 {
-	log->trace("%v : 0xCB04 - RLC H", reg.pc);
+	// log->trace("%v : 0xCB04 - RLC H", reg.pc);
 
 	rlc_8bit(reg.h);
     
@@ -3310,7 +3306,7 @@ void LR35902::instr_0xCB04() // RLC H
 }
 void LR35902::instr_0xCB05() // RLC L
 {
-	log->trace("%v : 0xCB05 - RLC L", reg.pc);
+	// log->trace("%v : 0xCB05 - RLC L", reg.pc);
 
 	rlc_8bit(reg.l);
     
@@ -3320,7 +3316,7 @@ void LR35902::instr_0xCB05() // RLC L
 }
 void LR35902::instr_0xCB06() // RLC (HL)
 {
-	log->trace("%v : 0xCB06 - RLC (HL)", reg.pc);
+	// log->trace("%v : 0xCB06 - RLC (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -3334,7 +3330,7 @@ void LR35902::instr_0xCB06() // RLC (HL)
 }
 void LR35902::instr_0xCB07() // RLC A
 {
-	log->trace("%v : 0xCB07 - RLC A", reg.pc);
+	// log->trace("%v : 0xCB07 - RLC A", reg.pc);
 
 	rlc_8bit(reg.a);
 
@@ -3344,7 +3340,7 @@ void LR35902::instr_0xCB07() // RLC A
 }
 void LR35902::instr_0xCB08() // RRC B
 {
-	log->trace("%v : 0xCB08 - RRC B", reg.pc);
+	// log->trace("%v : 0xCB08 - RRC B", reg.pc);
 
 	rrc_8bit(reg.b);
 
@@ -3354,7 +3350,7 @@ void LR35902::instr_0xCB08() // RRC B
 }
 void LR35902::instr_0xCB09() // RRC C
 {
-	log->trace("%v : 0xCB09 - RRC C", reg.pc);
+	// log->trace("%v : 0xCB09 - RRC C", reg.pc);
 
 	rrc_8bit(reg.c);
     
@@ -3364,7 +3360,7 @@ void LR35902::instr_0xCB09() // RRC C
 }
 void LR35902::instr_0xCB0A() // RRC D
 {
-	log->trace("%v : 0xCB0A - RRC D", reg.pc);
+	// log->trace("%v : 0xCB0A - RRC D", reg.pc);
 
 	rrc_8bit(reg.d);
     
@@ -3374,7 +3370,7 @@ void LR35902::instr_0xCB0A() // RRC D
 }
 void LR35902::instr_0xCB0B() // RRC E
 {
-	log->trace("%v : 0xCB0B - RRC E", reg.pc);
+	// log->trace("%v : 0xCB0B - RRC E", reg.pc);
 
 	rrc_8bit(reg.e);
     
@@ -3384,7 +3380,7 @@ void LR35902::instr_0xCB0B() // RRC E
 }
 void LR35902::instr_0xCB0C() // RRC H
 {
-	log->trace("%v : 0xCB0C - RRC H", reg.pc);
+	// log->trace("%v : 0xCB0C - RRC H", reg.pc);
 
 	rrc_8bit(reg.h);
     
@@ -3394,7 +3390,7 @@ void LR35902::instr_0xCB0C() // RRC H
 }
 void LR35902::instr_0xCB0D() // RRC L
 {
-	log->trace("%v : 0xCB0D - RRC L", reg.pc);
+	// log->trace("%v : 0xCB0D - RRC L", reg.pc);
 
 	rrc_8bit(reg.l);
     
@@ -3404,7 +3400,7 @@ void LR35902::instr_0xCB0D() // RRC L
 }
 void LR35902::instr_0xCB0E() // RRC (HL)
 {
-	log->trace("%v : 0xCB0E - RRC (HL)", reg.pc);
+	// log->trace("%v : 0xCB0E - RRC (HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -3418,7 +3414,7 @@ void LR35902::instr_0xCB0E() // RRC (HL)
 }
 void LR35902::instr_0xCB0F() // RRC A
 {
-	log->trace("%v : 0xCB0F - RRC A", reg.pc);
+	// log->trace("%v : 0xCB0F - RRC A", reg.pc);
 
 	rrc_8bit(reg.a);
     
@@ -3428,7 +3424,7 @@ void LR35902::instr_0xCB0F() // RRC A
 }
 void LR35902::instr_0xCB10() // RL B
 {
-	log->trace("%v : 0xCB10 - RL B", reg.pc);
+	// log->trace("%v : 0xCB10 - RL B", reg.pc);
 
 	rl_8bit(reg.b);
 
@@ -3438,7 +3434,7 @@ void LR35902::instr_0xCB10() // RL B
 }
 void LR35902::instr_0xCB11() // RL C
 {
-	log->trace("%v : 0xCB11 - RL C", reg.pc);
+	// log->trace("%v : 0xCB11 - RL C", reg.pc);
 
 	rl_8bit(reg.c);
     
@@ -3448,7 +3444,7 @@ void LR35902::instr_0xCB11() // RL C
 }
 void LR35902::instr_0xCB12() // RL D
 {
-	log->trace("%v : 0xCB12 - RL D", reg.pc);
+	// log->trace("%v : 0xCB12 - RL D", reg.pc);
 
 	rl_8bit(reg.d);
     
@@ -3458,7 +3454,7 @@ void LR35902::instr_0xCB12() // RL D
 }
 void LR35902::instr_0xCB13() // RL E
 {
-	log->trace("%v : 0xCB13 - RL E", reg.pc);
+	// log->trace("%v : 0xCB13 - RL E", reg.pc);
 
 	rl_8bit(reg.e);
     
@@ -3468,7 +3464,7 @@ void LR35902::instr_0xCB13() // RL E
 }
 void LR35902::instr_0xCB14() // RL H
 {
-	log->trace("%v : 0xCB14 - RL H", reg.pc);
+	// log->trace("%v : 0xCB14 - RL H", reg.pc);
 
 	rl_8bit(reg.h);
     
@@ -3478,7 +3474,7 @@ void LR35902::instr_0xCB14() // RL H
 }
 void LR35902::instr_0xCB15() // RL L
 {
-	log->trace("%v : 0xCB15 - RL L", reg.pc);
+	// log->trace("%v : 0xCB15 - RL L", reg.pc);
 
 	rl_8bit(reg.l);
     
@@ -3488,7 +3484,7 @@ void LR35902::instr_0xCB15() // RL L
 }
 void LR35902::instr_0xCB16() // RL (HL)
 {
-	log->trace("%v : 0xCB16 - RL (HL)", reg.pc);
+	// log->trace("%v : 0xCB16 - RL (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -3502,7 +3498,7 @@ void LR35902::instr_0xCB16() // RL (HL)
 }
 void LR35902::instr_0xCB17() // RL A
 {
-	log->trace("%v : 0xCB17 - RL A", reg.pc);
+	// log->trace("%v : 0xCB17 - RL A", reg.pc);
 
 	rl_8bit(reg.a);
     
@@ -3512,7 +3508,7 @@ void LR35902::instr_0xCB17() // RL A
 }
 void LR35902::instr_0xCB18() // RR B
 {
-	log->trace("%v : 0xCB18 - RR B", reg.pc);
+	// log->trace("%v : 0xCB18 - RR B", reg.pc);
 
 	rr_8bit(reg.b);
 
@@ -3522,7 +3518,7 @@ void LR35902::instr_0xCB18() // RR B
 }
 void LR35902::instr_0xCB19() // RR C
 {
-	log->trace("%v : 0xCB19 - RR C", reg.pc);
+	// log->trace("%v : 0xCB19 - RR C", reg.pc);
 
 	rr_8bit(reg.c);
 
@@ -3532,7 +3528,7 @@ void LR35902::instr_0xCB19() // RR C
 }
 void LR35902::instr_0xCB1A() // RR D
 {
-	log->trace("%v : 0xCB1A - RR D", reg.pc);
+	// log->trace("%v : 0xCB1A - RR D", reg.pc);
 
 	rr_8bit(reg.d);
 
@@ -3542,7 +3538,7 @@ void LR35902::instr_0xCB1A() // RR D
 }
 void LR35902::instr_0xCB1B() // RR E
 {
-	log->trace("%v : 0xCB1B - RR E", reg.pc);
+	// log->trace("%v : 0xCB1B - RR E", reg.pc);
 
 	rr_8bit(reg.e);
 
@@ -3552,7 +3548,7 @@ void LR35902::instr_0xCB1B() // RR E
 }
 void LR35902::instr_0xCB1C() // RR H
 {
-	log->trace("%v : 0xCB1C - RR H", reg.pc);
+	// log->trace("%v : 0xCB1C - RR H", reg.pc);
 
 	rr_8bit(reg.h);
 
@@ -3562,7 +3558,7 @@ void LR35902::instr_0xCB1C() // RR H
 }
 void LR35902::instr_0xCB1D() // RR L
 {
-	log->trace("%v : 0xCB1D - RR L", reg.pc);
+	// log->trace("%v : 0xCB1D - RR L", reg.pc);
 
 	rr_8bit(reg.l);
 
@@ -3572,7 +3568,7 @@ void LR35902::instr_0xCB1D() // RR L
 }
 void LR35902::instr_0xCB1E() // RR (HL)
 {
-	log->trace("%v : 0xCB1E - RR (HL)", reg.pc);
+	// log->trace("%v : 0xCB1E - RR (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -3586,7 +3582,7 @@ void LR35902::instr_0xCB1E() // RR (HL)
 }
 void LR35902::instr_0xCB1F() // RR A
 {
-	log->trace("%v : 0xCB1F - RR A", reg.pc);
+	// log->trace("%v : 0xCB1F - RR A", reg.pc);
 
 	rr_8bit(reg.a);
 
@@ -3596,7 +3592,7 @@ void LR35902::instr_0xCB1F() // RR A
 }
 void LR35902::instr_0xCB20() // SLA B
 {
-	log->trace("%v : 0xCB20 - SLA B", reg.pc);
+	// log->trace("%v : 0xCB20 - SLA B", reg.pc);
 
 	sla_8bit(reg.b);
 
@@ -3606,7 +3602,7 @@ void LR35902::instr_0xCB20() // SLA B
 }
 void LR35902::instr_0xCB21() // SLA C
 {
-	log->trace("%v : 0xCB21 - SLA C", reg.pc);
+	// log->trace("%v : 0xCB21 - SLA C", reg.pc);
 
 	sla_8bit(reg.c);
     
@@ -3616,7 +3612,7 @@ void LR35902::instr_0xCB21() // SLA C
 }
 void LR35902::instr_0xCB22() // SLA D
 {
-	log->trace("%v : 0xCB22 - SLA D", reg.pc);
+	// log->trace("%v : 0xCB22 - SLA D", reg.pc);
 
 	sla_8bit(reg.d);
     
@@ -3626,7 +3622,7 @@ void LR35902::instr_0xCB22() // SLA D
 }
 void LR35902::instr_0xCB23() // SLA E
 {
-	log->trace("%v : 0xCB23 - SLA E", reg.pc);
+	// log->trace("%v : 0xCB23 - SLA E", reg.pc);
 
 	sla_8bit(reg.e);
     
@@ -3636,7 +3632,7 @@ void LR35902::instr_0xCB23() // SLA E
 }
 void LR35902::instr_0xCB24() // SLA H
 {
-	log->trace("%v : 0xCB24 - SLA H", reg.pc);
+	// log->trace("%v : 0xCB24 - SLA H", reg.pc);
 
 	sla_8bit(reg.h);
     
@@ -3646,7 +3642,7 @@ void LR35902::instr_0xCB24() // SLA H
 }
 void LR35902::instr_0xCB25() // SLA L
 {
-	log->trace("%v : 0xCB25 - SLA L", reg.pc);
+	// log->trace("%v : 0xCB25 - SLA L", reg.pc);
 
 	sla_8bit(reg.l);
     
@@ -3656,7 +3652,7 @@ void LR35902::instr_0xCB25() // SLA L
 }
 void LR35902::instr_0xCB26() // SLA (HL)
 {
-	log->trace("%v : 0xCB26 - SLA (HL)", reg.pc);
+	// log->trace("%v : 0xCB26 - SLA (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -3670,7 +3666,7 @@ void LR35902::instr_0xCB26() // SLA (HL)
 }
 void LR35902::instr_0xCB27() // SLA A
 {
-	log->trace("%v : 0xCB27 - SLA A", reg.pc);
+	// log->trace("%v : 0xCB27 - SLA A", reg.pc);
 
 	sla_8bit(reg.a);
     
@@ -3680,7 +3676,7 @@ void LR35902::instr_0xCB27() // SLA A
 }
 void LR35902::instr_0xCB28() // SRA B
 {
-	log->trace("%v : 0xCB28 - SRA B", reg.pc);
+	// log->trace("%v : 0xCB28 - SRA B", reg.pc);
 
 	sra_8bit(reg.b);
 
@@ -3690,7 +3686,7 @@ void LR35902::instr_0xCB28() // SRA B
 }
 void LR35902::instr_0xCB29() // SRA C
 {
-	log->trace("%v : 0xCB29 - SRA C", reg.pc);
+	// log->trace("%v : 0xCB29 - SRA C", reg.pc);
 
 	sra_8bit(reg.c);
 
@@ -3700,7 +3696,7 @@ void LR35902::instr_0xCB29() // SRA C
 }
 void LR35902::instr_0xCB2A() // SRA D
 {
-	log->trace("%v : 0xCB2A - SRA D", reg.pc);
+	// log->trace("%v : 0xCB2A - SRA D", reg.pc);
 
 	sra_8bit(reg.d);
 
@@ -3710,7 +3706,7 @@ void LR35902::instr_0xCB2A() // SRA D
 }
 void LR35902::instr_0xCB2B() // SRA E
 {
-	log->trace("%v : 0xCB2B - SRA E", reg.pc);
+	// log->trace("%v : 0xCB2B - SRA E", reg.pc);
 
 	sra_8bit(reg.e);
 
@@ -3720,7 +3716,7 @@ void LR35902::instr_0xCB2B() // SRA E
 }
 void LR35902::instr_0xCB2C() // SRA H
 {
-	log->trace("%v : 0xCB2C - SRA H", reg.pc);
+	// log->trace("%v : 0xCB2C - SRA H", reg.pc);
 
 	sra_8bit(reg.h);
 
@@ -3730,7 +3726,7 @@ void LR35902::instr_0xCB2C() // SRA H
 }
 void LR35902::instr_0xCB2D() // SRA L
 {
-	log->trace("%v : 0xCB2D - SRA L", reg.pc);
+	// log->trace("%v : 0xCB2D - SRA L", reg.pc);
 
 	sra_8bit(reg.l);
 
@@ -3740,7 +3736,7 @@ void LR35902::instr_0xCB2D() // SRA L
 }
 void LR35902::instr_0xCB2E() // SRA (HL)
 {
-	log->trace("%v : 0xCB2E - SRA (HL)", reg.pc);
+	// log->trace("%v : 0xCB2E - SRA (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -3754,7 +3750,7 @@ void LR35902::instr_0xCB2E() // SRA (HL)
 }
 void LR35902::instr_0xCB2F() // SRA A
 {
-	log->trace("%v : 0xCB2F - SRA A", reg.pc);
+	// log->trace("%v : 0xCB2F - SRA A", reg.pc);
 
 	sra_8bit(reg.a);
 
@@ -3764,7 +3760,7 @@ void LR35902::instr_0xCB2F() // SRA A
 }
 void LR35902::instr_0xCB30() // SWAP B
 {
-	log->trace("%v : 0xCB30 - SWAP B", reg.pc);
+	// log->trace("%v : 0xCB30 - SWAP B", reg.pc);
 
 	swap(reg.b);
 
@@ -3774,7 +3770,7 @@ void LR35902::instr_0xCB30() // SWAP B
 }
 void LR35902::instr_0xCB31() // SWAP C
 {
-	log->trace("%v : 0xCB31 - SWAP C", reg.pc);
+	// log->trace("%v : 0xCB31 - SWAP C", reg.pc);
 
 	swap(reg.c);
 
@@ -3784,7 +3780,7 @@ void LR35902::instr_0xCB31() // SWAP C
 }
 void LR35902::instr_0xCB32() // SWAP D
 {
-	log->trace("%v : 0xCB32 - SWAP D", reg.pc);
+	// log->trace("%v : 0xCB32 - SWAP D", reg.pc);
 
 	swap(reg.d);
 
@@ -3794,7 +3790,7 @@ void LR35902::instr_0xCB32() // SWAP D
 }
 void LR35902::instr_0xCB33() // SWAP E
 {
-	log->trace("%v : 0xCB33 - SWAP E", reg.pc);
+	// log->trace("%v : 0xCB33 - SWAP E", reg.pc);
 
 	swap(reg.e);
 
@@ -3804,7 +3800,7 @@ void LR35902::instr_0xCB33() // SWAP E
 }
 void LR35902::instr_0xCB34() // SWAP H
 {
-	log->trace("%v : 0xCB34 - SWAP H", reg.pc);
+	// log->trace("%v : 0xCB34 - SWAP H", reg.pc);
 
 	swap(reg.h);
 
@@ -3814,7 +3810,7 @@ void LR35902::instr_0xCB34() // SWAP H
 }
 void LR35902::instr_0xCB35() // SWAP L
 {
-	log->trace("%v : 0xCB35 - SWAP L", reg.pc);
+	// log->trace("%v : 0xCB35 - SWAP L", reg.pc);
 
 	swap(reg.l);
 
@@ -3824,7 +3820,7 @@ void LR35902::instr_0xCB35() // SWAP L
 }
 void LR35902::instr_0xCB36() // SWAP (HL)
 {
-	log->trace("%v : 0xCB36 - SWAP (HL)", reg.pc);
+	// log->trace("%v : 0xCB36 - SWAP (HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
 
@@ -3838,7 +3834,7 @@ void LR35902::instr_0xCB36() // SWAP (HL)
 }
 void LR35902::instr_0xCB37() // SWAP A
 {
-	log->trace("%v : 0xCB37 - SWAP A", reg.pc);
+	// log->trace("%v : 0xCB37 - SWAP A", reg.pc);
 
 	swap(reg.a);
 
@@ -3848,7 +3844,7 @@ void LR35902::instr_0xCB37() // SWAP A
 }
 void LR35902::instr_0xCB38() // SRL B
 {
-	log->trace("%v : 0xCB38 - SRL B", reg.pc);
+	// log->trace("%v : 0xCB38 - SRL B", reg.pc);
 
 	srl_8bit(reg.b);
 
@@ -3858,7 +3854,7 @@ void LR35902::instr_0xCB38() // SRL B
 }
 void LR35902::instr_0xCB39() // SRL C
 {
-	log->trace("%v : 0xCB39 - SRL C", reg.pc);
+	// log->trace("%v : 0xCB39 - SRL C", reg.pc);
 
 	srl_8bit(reg.c);
 
@@ -3868,7 +3864,7 @@ void LR35902::instr_0xCB39() // SRL C
 }
 void LR35902::instr_0xCB3A() // SRL D
 {
-	log->trace("%v : 0xCB3A - SRL D", reg.pc);
+	// log->trace("%v : 0xCB3A - SRL D", reg.pc);
 
 	srl_8bit(reg.d);
 
@@ -3878,7 +3874,7 @@ void LR35902::instr_0xCB3A() // SRL D
 }
 void LR35902::instr_0xCB3B() // SRL E
 {
-	log->trace("%v : 0xCB3B - SRL E", reg.pc);
+	// log->trace("%v : 0xCB3B - SRL E", reg.pc);
 
 	srl_8bit(reg.e);
 
@@ -3888,7 +3884,7 @@ void LR35902::instr_0xCB3B() // SRL E
 }
 void LR35902::instr_0xCB3C() // SRL H
 {
-	log->trace("%v : 0xCB3C - SRL H", reg.pc);
+	// log->trace("%v : 0xCB3C - SRL H", reg.pc);
 
 	srl_8bit(reg.h);
 
@@ -3898,7 +3894,7 @@ void LR35902::instr_0xCB3C() // SRL H
 }
 void LR35902::instr_0xCB3D() // SRL L
 {
-	log->trace("%v : 0xCB3D - SRL L", reg.pc);
+	// log->trace("%v : 0xCB3D - SRL L", reg.pc);
 
 	srl_8bit(reg.l);
 
@@ -3908,7 +3904,7 @@ void LR35902::instr_0xCB3D() // SRL L
 }
 void LR35902::instr_0xCB3E() // SRL (HL)
 {
-	log->trace("%v : 0xCB3E - SRL (HL)", reg.pc);
+	// log->trace("%v : 0xCB3E - SRL (HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -3922,7 +3918,7 @@ void LR35902::instr_0xCB3E() // SRL (HL)
 }
 void LR35902::instr_0xCB3F() // SRL A
 {
-	log->trace("%v : 0xCB3F - SRL A", reg.pc);
+	// log->trace("%v : 0xCB3F - SRL A", reg.pc);
 
 	srl_8bit(reg.a);
 
@@ -3932,7 +3928,7 @@ void LR35902::instr_0xCB3F() // SRL A
 }
 void LR35902::instr_0xCB40() // BIT 0,B
 {
-	log->trace("%v : 0xCB40 - BIT 0,B", reg.pc);
+	// log->trace("%v : 0xCB40 - BIT 0,B", reg.pc);
 
 	bit(0, reg.b);
     
@@ -3942,7 +3938,7 @@ void LR35902::instr_0xCB40() // BIT 0,B
 }
 void LR35902::instr_0xCB41() // BIT 0,C
 {
-	log->trace("%v : 0xCB41 - BIT 0,C", reg.pc);
+	// log->trace("%v : 0xCB41 - BIT 0,C", reg.pc);
 
 	bit(0, reg.c);
 
@@ -3952,7 +3948,7 @@ void LR35902::instr_0xCB41() // BIT 0,C
 }
 void LR35902::instr_0xCB42() // BIT 0,D
 {
-	log->trace("%v : 0xCB42 - BIT 0,D", reg.pc);
+	// log->trace("%v : 0xCB42 - BIT 0,D", reg.pc);
 
 	bit(0, reg.d);
     
@@ -3962,7 +3958,7 @@ void LR35902::instr_0xCB42() // BIT 0,D
 }
 void LR35902::instr_0xCB43() // BIT 0,E
 {
-	log->trace("%v : 0xCB43 - BIT 0,E", reg.pc);
+	// log->trace("%v : 0xCB43 - BIT 0,E", reg.pc);
 
 	bit(0, reg.e);
     
@@ -3972,7 +3968,7 @@ void LR35902::instr_0xCB43() // BIT 0,E
 }
 void LR35902::instr_0xCB44() // BIT 0,H
 {
-	log->trace("%v : 0xCB44 - BIT 0,H", reg.pc);
+	// log->trace("%v : 0xCB44 - BIT 0,H", reg.pc);
 
 	bit(0, reg.h);
     
@@ -3982,7 +3978,7 @@ void LR35902::instr_0xCB44() // BIT 0,H
 }
 void LR35902::instr_0xCB45() // BIT 0,L
 {
-	log->trace("%v : 0xCB45 - BIT 0,L", reg.pc);
+	// log->trace("%v : 0xCB45 - BIT 0,L", reg.pc);
 
 	bit(0, reg.l);
     
@@ -3992,7 +3988,7 @@ void LR35902::instr_0xCB45() // BIT 0,L
 }
 void LR35902::instr_0xCB46() // BIT 0,(HL)
 {
-	log->trace("%v : 0xCB46 - BIT 0,(HL)", reg.pc);
+	// log->trace("%v : 0xCB46 - BIT 0,(HL)", reg.pc);
 
     bit(0, mcu->read_8bit(reg.hl));
 
@@ -4002,7 +3998,7 @@ void LR35902::instr_0xCB46() // BIT 0,(HL)
 }
 void LR35902::instr_0xCB47() // BIT 0,A
 {
-	log->trace("%v : 0xCB47 - BIT 0,A", reg.pc);
+	// log->trace("%v : 0xCB47 - BIT 0,A", reg.pc);
 
 	bit(0, reg.a);
     
@@ -4012,7 +4008,7 @@ void LR35902::instr_0xCB47() // BIT 0,A
 }
 void LR35902::instr_0xCB48() // BIT 1,B
 {
-	log->trace("%v : 0xCB48 - BIT 1,B", reg.pc);
+	// log->trace("%v : 0xCB48 - BIT 1,B", reg.pc);
 
 	bit(1, reg.b);
     
@@ -4022,7 +4018,7 @@ void LR35902::instr_0xCB48() // BIT 1,B
 }
 void LR35902::instr_0xCB49() // BIT 1,C
 {
-	log->trace("%v : 0xCB49 - BIT 1,C", reg.pc);
+	// log->trace("%v : 0xCB49 - BIT 1,C", reg.pc);
 
 	bit(1, reg.c);
     
@@ -4032,7 +4028,7 @@ void LR35902::instr_0xCB49() // BIT 1,C
 }
 void LR35902::instr_0xCB4A() // BIT 1,D
 {
-	log->trace("%v : 0xCB4A - BIT 1,D", reg.pc);
+	// log->trace("%v : 0xCB4A - BIT 1,D", reg.pc);
 
 	bit(1, reg.d);
     
@@ -4042,7 +4038,7 @@ void LR35902::instr_0xCB4A() // BIT 1,D
 }
 void LR35902::instr_0xCB4B() // BIT 1,E
 {
-	log->trace("%v : 0xCB4B - BIT 1,E", reg.pc);
+	// log->trace("%v : 0xCB4B - BIT 1,E", reg.pc);
 
 	bit(1, reg.e);
     
@@ -4052,7 +4048,7 @@ void LR35902::instr_0xCB4B() // BIT 1,E
 }
 void LR35902::instr_0xCB4C() // BIT 1,H
 {
-	log->trace("%v : 0xCB4C - BIT 1,H", reg.pc);
+	// log->trace("%v : 0xCB4C - BIT 1,H", reg.pc);
 
 	bit(1, reg.h);
     
@@ -4062,7 +4058,7 @@ void LR35902::instr_0xCB4C() // BIT 1,H
 }
 void LR35902::instr_0xCB4D() // BIT 1,L
 {
-	log->trace("%v : 0xCB4D - BIT 1,L", reg.pc);
+	// log->trace("%v : 0xCB4D - BIT 1,L", reg.pc);
 
 	bit(1, reg.l);
     
@@ -4072,7 +4068,7 @@ void LR35902::instr_0xCB4D() // BIT 1,L
 }
 void LR35902::instr_0xCB4E() // BIT 1,(HL)
 {
-	log->trace("%v : 0xCB4E - BIT 1,(HL)", reg.pc);
+	// log->trace("%v : 0xCB4E - BIT 1,(HL)", reg.pc);
 
 	bit(1, mcu->read_8bit(reg.hl));
     
@@ -4082,7 +4078,7 @@ void LR35902::instr_0xCB4E() // BIT 1,(HL)
 }
 void LR35902::instr_0xCB4F() // BIT 1,A
 {
-	log->trace("%v : 0xCB4F - BIT 1,A", reg.pc);
+	// log->trace("%v : 0xCB4F - BIT 1,A", reg.pc);
 
 	bit(1, reg.a);
     
@@ -4092,7 +4088,7 @@ void LR35902::instr_0xCB4F() // BIT 1,A
 }
 void LR35902::instr_0xCB50() // BIT 2,B
 {
-	log->trace("%v : 0xCB50 - BIT 2,B", reg.pc);
+	// log->trace("%v : 0xCB50 - BIT 2,B", reg.pc);
 
 	bit(2, reg.b);
     
@@ -4102,7 +4098,7 @@ void LR35902::instr_0xCB50() // BIT 2,B
 }
 void LR35902::instr_0xCB51() // BIT 2,C
 {
-	log->trace("%v : 0xCB51 - BIT 2,C", reg.pc);
+	// log->trace("%v : 0xCB51 - BIT 2,C", reg.pc);
 
 	bit(2, reg.c);
     
@@ -4112,7 +4108,7 @@ void LR35902::instr_0xCB51() // BIT 2,C
 }
 void LR35902::instr_0xCB52() // BIT 2,D
 {
-	log->trace("%v : 0xCB52 - BIT 2,D", reg.pc);
+	// log->trace("%v : 0xCB52 - BIT 2,D", reg.pc);
 
 	bit(2, reg.d);
     
@@ -4122,7 +4118,7 @@ void LR35902::instr_0xCB52() // BIT 2,D
 }
 void LR35902::instr_0xCB53() // BIT 2,E
 {
-	log->trace("%v : 0xCB53 - BIT 2,E", reg.pc);
+	// log->trace("%v : 0xCB53 - BIT 2,E", reg.pc);
 
 	bit(2, reg.e);
     
@@ -4132,7 +4128,7 @@ void LR35902::instr_0xCB53() // BIT 2,E
 }
 void LR35902::instr_0xCB54() // BIT 2,H
 {
-	log->trace("%v : 0xCB54 - BIT 2,H", reg.pc);
+	// log->trace("%v : 0xCB54 - BIT 2,H", reg.pc);
 
 	bit(2, reg.h);
     
@@ -4142,7 +4138,7 @@ void LR35902::instr_0xCB54() // BIT 2,H
 }
 void LR35902::instr_0xCB55() // BIT 2,L
 {
-	log->trace("%v : 0xCB55 - BIT 2,L", reg.pc);
+	// log->trace("%v : 0xCB55 - BIT 2,L", reg.pc);
 
 	bit(2, reg.l);
     
@@ -4152,7 +4148,7 @@ void LR35902::instr_0xCB55() // BIT 2,L
 }
 void LR35902::instr_0xCB56() // BIT 2,(HL)
 {
-	log->trace("%v : 0xCB56 - BIT 2,(HL)", reg.pc);
+	// log->trace("%v : 0xCB56 - BIT 2,(HL)", reg.pc);
 
 	bit(2, mcu->read_8bit(reg.hl));
     
@@ -4162,7 +4158,7 @@ void LR35902::instr_0xCB56() // BIT 2,(HL)
 }
 void LR35902::instr_0xCB57() // BIT 2,A
 {
-	log->trace("%v : 0xCB57 - BIT 2,A", reg.pc);
+	// log->trace("%v : 0xCB57 - BIT 2,A", reg.pc);
 
 	bit(2, reg.a);
     
@@ -4172,7 +4168,7 @@ void LR35902::instr_0xCB57() // BIT 2,A
 }
 void LR35902::instr_0xCB58() // BIT 3,B
 {
-	log->trace("%v : 0xCB58 - BIT 3,B", reg.pc);
+	// log->trace("%v : 0xCB58 - BIT 3,B", reg.pc);
 
 	bit(3, reg.b);
     
@@ -4182,7 +4178,7 @@ void LR35902::instr_0xCB58() // BIT 3,B
 }
 void LR35902::instr_0xCB59() // BIT 3,C
 {
-	log->trace("%v : 0xCB59 - BIT 3,C", reg.pc);
+	// log->trace("%v : 0xCB59 - BIT 3,C", reg.pc);
 
 	bit(3, reg.c);
     
@@ -4192,7 +4188,7 @@ void LR35902::instr_0xCB59() // BIT 3,C
 }
 void LR35902::instr_0xCB5A() // BIT 3,D
 {
-	log->trace("%v : 0xCB5A - BIT 3,D", reg.pc);
+	// log->trace("%v : 0xCB5A - BIT 3,D", reg.pc);
 
 	bit(3, reg.d);
     
@@ -4202,7 +4198,7 @@ void LR35902::instr_0xCB5A() // BIT 3,D
 }
 void LR35902::instr_0xCB5B() // BIT 3,E
 {
-	log->trace("%v : 0xCB5B - BIT 3,E", reg.pc);
+	// log->trace("%v : 0xCB5B - BIT 3,E", reg.pc);
 
 	bit(3, reg.e);
     
@@ -4212,7 +4208,7 @@ void LR35902::instr_0xCB5B() // BIT 3,E
 }
 void LR35902::instr_0xCB5C() // BIT 3,H
 {
-	log->trace("%v : 0xCB5C - BIT 3,H", reg.pc);
+	// log->trace("%v : 0xCB5C - BIT 3,H", reg.pc);
 
 	bit(3, reg.h);
     
@@ -4222,7 +4218,7 @@ void LR35902::instr_0xCB5C() // BIT 3,H
 }
 void LR35902::instr_0xCB5D() // BIT 3,L
 {
-	log->trace("%v : 0xCB5D - BIT 3,L", reg.pc);
+	// log->trace("%v : 0xCB5D - BIT 3,L", reg.pc);
 
 	bit(3, reg.l);
     
@@ -4232,7 +4228,7 @@ void LR35902::instr_0xCB5D() // BIT 3,L
 }
 void LR35902::instr_0xCB5E() // BIT 3,(HL)
 {
-	log->trace("%v : 0xCB5E - BIT 3,(HL)", reg.pc);
+	// log->trace("%v : 0xCB5E - BIT 3,(HL)", reg.pc);
 
 	bit(3, mcu->read_8bit(reg.hl));
     
@@ -4242,7 +4238,7 @@ void LR35902::instr_0xCB5E() // BIT 3,(HL)
 }
 void LR35902::instr_0xCB5F() // BIT 3,A
 {
-	log->trace("%v : 0xCB5F - BIT 3,A", reg.pc);
+	// log->trace("%v : 0xCB5F - BIT 3,A", reg.pc);
 
 	bit(3, reg.a);
     
@@ -4252,7 +4248,7 @@ void LR35902::instr_0xCB5F() // BIT 3,A
 }
 void LR35902::instr_0xCB60() // BIT 4,B
 {
-	log->trace("%v : 0xCB60 - BIT 4,B", reg.pc);
+	// log->trace("%v : 0xCB60 - BIT 4,B", reg.pc);
 
 	bit(4, reg.b);
     
@@ -4262,7 +4258,7 @@ void LR35902::instr_0xCB60() // BIT 4,B
 }
 void LR35902::instr_0xCB61() // BIT 4,C
 {
-	log->trace("%v : 0xCB61 - BIT 4,C", reg.pc);
+	// log->trace("%v : 0xCB61 - BIT 4,C", reg.pc);
 
 	bit(4, reg.c);
     
@@ -4272,7 +4268,7 @@ void LR35902::instr_0xCB61() // BIT 4,C
 }
 void LR35902::instr_0xCB62() // BIT 4,D
 {
-	log->trace("%v : 0xCB62 - BIT 4,D", reg.pc);
+	// log->trace("%v : 0xCB62 - BIT 4,D", reg.pc);
 
 	bit(4, reg.d);
     
@@ -4282,7 +4278,7 @@ void LR35902::instr_0xCB62() // BIT 4,D
 }
 void LR35902::instr_0xCB63() // BIT 4,E
 {
-	log->trace("%v : 0xCB63 - BIT 4,E", reg.pc);
+	// log->trace("%v : 0xCB63 - BIT 4,E", reg.pc);
 
 	bit(4, reg.e);
     
@@ -4292,7 +4288,7 @@ void LR35902::instr_0xCB63() // BIT 4,E
 }
 void LR35902::instr_0xCB64() // BIT 4,H
 {
-	log->trace("%v : 0xCB64 - BIT 4,H", reg.pc);
+	// log->trace("%v : 0xCB64 - BIT 4,H", reg.pc);
 
 	bit(4, reg.h);
     
@@ -4302,7 +4298,7 @@ void LR35902::instr_0xCB64() // BIT 4,H
 }
 void LR35902::instr_0xCB65() // BIT 4,L
 {
-	log->trace("%v : 0xCB65 - BIT 4,L", reg.pc);
+	// log->trace("%v : 0xCB65 - BIT 4,L", reg.pc);
 
 	bit(4, reg.l);
     
@@ -4312,7 +4308,7 @@ void LR35902::instr_0xCB65() // BIT 4,L
 }
 void LR35902::instr_0xCB66() // BIT 4,(HL)
 {
-	log->trace("%v : 0xCB66 - BIT 4,(HL)", reg.pc);
+	// log->trace("%v : 0xCB66 - BIT 4,(HL)", reg.pc);
 
 	bit(4, mcu->read_8bit(reg.hl));
     
@@ -4322,7 +4318,7 @@ void LR35902::instr_0xCB66() // BIT 4,(HL)
 }
 void LR35902::instr_0xCB67() // BIT 4,A
 {
-	log->trace("%v : 0xCB67 - BIT 4,A", reg.pc);
+	// log->trace("%v : 0xCB67 - BIT 4,A", reg.pc);
 
 	bit(4, reg.a);
     
@@ -4332,7 +4328,7 @@ void LR35902::instr_0xCB67() // BIT 4,A
 }
 void LR35902::instr_0xCB68() // BIT 5,B
 {
-	log->trace("%v : 0xCB68 - BIT 5,B", reg.pc);
+	// log->trace("%v : 0xCB68 - BIT 5,B", reg.pc);
 
 	bit(5, reg.b);
     
@@ -4342,7 +4338,7 @@ void LR35902::instr_0xCB68() // BIT 5,B
 }
 void LR35902::instr_0xCB69() // BIT 5,C
 {
-	log->trace("%v : 0xCB69 - BIT 5,C", reg.pc);
+	// log->trace("%v : 0xCB69 - BIT 5,C", reg.pc);
 
 	bit(5, reg.c);
     
@@ -4352,7 +4348,7 @@ void LR35902::instr_0xCB69() // BIT 5,C
 }
 void LR35902::instr_0xCB6A() // BIT 5,D
 {
-	log->trace("%v : 0xCB6A - BIT 5,D", reg.pc);
+	// log->trace("%v : 0xCB6A - BIT 5,D", reg.pc);
 
 	bit(5, reg.d);
     
@@ -4362,7 +4358,7 @@ void LR35902::instr_0xCB6A() // BIT 5,D
 }
 void LR35902::instr_0xCB6B() // BIT 5,E
 {
-	log->trace("%v : 0xCB6B - BIT 5,E", reg.pc);
+	// log->trace("%v : 0xCB6B - BIT 5,E", reg.pc);
 
 	bit(5, reg.e);
     
@@ -4372,7 +4368,7 @@ void LR35902::instr_0xCB6B() // BIT 5,E
 }
 void LR35902::instr_0xCB6C() // BIT 5,H
 {
-	log->trace("%v : 0xCB6C - BIT 5,H", reg.pc);
+	// log->trace("%v : 0xCB6C - BIT 5,H", reg.pc);
 
 	bit(5, reg.h);
     
@@ -4382,7 +4378,7 @@ void LR35902::instr_0xCB6C() // BIT 5,H
 }
 void LR35902::instr_0xCB6D() // BIT 5,L
 {
-	log->trace("%v : 0xCB6D - BIT 5,L", reg.pc);
+	// log->trace("%v : 0xCB6D - BIT 5,L", reg.pc);
 
 	bit(5, reg.l);
     
@@ -4392,7 +4388,7 @@ void LR35902::instr_0xCB6D() // BIT 5,L
 }
 void LR35902::instr_0xCB6E() // BIT 5,(HL)
 {
-	log->trace("%v : 0xCB6E - BIT 5,(HL)", reg.pc);
+	// log->trace("%v : 0xCB6E - BIT 5,(HL)", reg.pc);
 
 	bit(5, mcu->read_8bit(reg.hl));
     
@@ -4402,7 +4398,7 @@ void LR35902::instr_0xCB6E() // BIT 5,(HL)
 }
 void LR35902::instr_0xCB6F() // BIT 5,A
 {
-	log->trace("%v : 0xCB6F - BIT 5,A", reg.pc);
+	// log->trace("%v : 0xCB6F - BIT 5,A", reg.pc);
 
 	bit(5, reg.a);
     
@@ -4412,7 +4408,7 @@ void LR35902::instr_0xCB6F() // BIT 5,A
 }
 void LR35902::instr_0xCB70() // BIT 6,B
 {
-	log->trace("%v : 0xCB70 - BIT 6,B", reg.pc);
+	// log->trace("%v : 0xCB70 - BIT 6,B", reg.pc);
 
 	bit(6, reg.b);
     
@@ -4422,7 +4418,7 @@ void LR35902::instr_0xCB70() // BIT 6,B
 }
 void LR35902::instr_0xCB71() // BIT 6,C
 {
-	log->trace("%v : 0xCB71 - BIT 6,C", reg.pc);
+	// log->trace("%v : 0xCB71 - BIT 6,C", reg.pc);
 
 	bit(6, reg.c);
     
@@ -4432,7 +4428,7 @@ void LR35902::instr_0xCB71() // BIT 6,C
 }
 void LR35902::instr_0xCB72() // BIT 6,D
 {
-	log->trace("%v : 0xCB72 - BIT 6,D", reg.pc);
+	// log->trace("%v : 0xCB72 - BIT 6,D", reg.pc);
 
 	bit(6, reg.d);
     
@@ -4442,7 +4438,7 @@ void LR35902::instr_0xCB72() // BIT 6,D
 }
 void LR35902::instr_0xCB73() // BIT 6,E
 {
-	log->trace("%v : 0xCB73 - BIT 6,E", reg.pc);
+	// log->trace("%v : 0xCB73 - BIT 6,E", reg.pc);
 
 	bit(6, reg.e);
     
@@ -4452,7 +4448,7 @@ void LR35902::instr_0xCB73() // BIT 6,E
 }
 void LR35902::instr_0xCB74() // BIT 6,H
 {
-	log->trace("%v : 0xCB74 - BIT 6,H", reg.pc);
+	// log->trace("%v : 0xCB74 - BIT 6,H", reg.pc);
 
 	bit(6, reg.h);
     
@@ -4462,7 +4458,7 @@ void LR35902::instr_0xCB74() // BIT 6,H
 }
 void LR35902::instr_0xCB75() // BIT 6,L
 {
-	log->trace("%v : 0xCB75 - BIT 6,L", reg.pc);
+	// log->trace("%v : 0xCB75 - BIT 6,L", reg.pc);
 
 	bit(6, reg.l);
     
@@ -4472,7 +4468,7 @@ void LR35902::instr_0xCB75() // BIT 6,L
 }
 void LR35902::instr_0xCB76() // BIT 6,(HL)
 {
-	log->trace("%v : 0xCB76 - BIT 6,(HL)", reg.pc);
+	// log->trace("%v : 0xCB76 - BIT 6,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -4486,7 +4482,7 @@ void LR35902::instr_0xCB76() // BIT 6,(HL)
 }
 void LR35902::instr_0xCB77() // BIT 6,A
 {
-	log->trace("%v : 0xCB77 - BIT 6,A", reg.pc);
+	// log->trace("%v : 0xCB77 - BIT 6,A", reg.pc);
 
 	bit(6, reg.a);
     
@@ -4496,7 +4492,7 @@ void LR35902::instr_0xCB77() // BIT 6,A
 }
 void LR35902::instr_0xCB78() // BIT 7,B
 {
-	log->trace("%v : 0xCB78 - BIT 7,B", reg.pc);
+	// log->trace("%v : 0xCB78 - BIT 7,B", reg.pc);
 
 	bit(7, reg.b);
     
@@ -4506,7 +4502,7 @@ void LR35902::instr_0xCB78() // BIT 7,B
 }
 void LR35902::instr_0xCB79() // BIT 7,C
 {
-	log->trace("%v : 0xCB79 - BIT 7,C", reg.pc);
+	// log->trace("%v : 0xCB79 - BIT 7,C", reg.pc);
 
 	bit(7, reg.c);
     
@@ -4516,7 +4512,7 @@ void LR35902::instr_0xCB79() // BIT 7,C
 }
 void LR35902::instr_0xCB7A() // BIT 7,D
 {
-	log->trace("%v : 0xCB7A - BIT 7,D", reg.pc);
+	// log->trace("%v : 0xCB7A - BIT 7,D", reg.pc);
 
 	bit(7, reg.d);
     
@@ -4526,7 +4522,7 @@ void LR35902::instr_0xCB7A() // BIT 7,D
 }
 void LR35902::instr_0xCB7B() // BIT 7,E
 {
-	log->trace("%v : 0xCB7B - BIT 7,E", reg.pc);
+	// log->trace("%v : 0xCB7B - BIT 7,E", reg.pc);
 
 	bit(7, reg.e);
     
@@ -4536,7 +4532,7 @@ void LR35902::instr_0xCB7B() // BIT 7,E
 }
 void LR35902::instr_0xCB7C() // BIT 7,H
 {
-	log->trace("%v : 0xCB7C - BIT 7,H", reg.pc);
+	// log->trace("%v : 0xCB7C - BIT 7,H", reg.pc);
 
 	bit(7, reg.h);
     
@@ -4546,7 +4542,7 @@ void LR35902::instr_0xCB7C() // BIT 7,H
 }
 void LR35902::instr_0xCB7D() // BIT 7,L
 {
-	log->trace("%v : 0xCB7D - BIT 7,L", reg.pc);
+	// log->trace("%v : 0xCB7D - BIT 7,L", reg.pc);
 
 	bit(7, reg.l);
     
@@ -4556,7 +4552,7 @@ void LR35902::instr_0xCB7D() // BIT 7,L
 }
 void LR35902::instr_0xCB7E() // BIT 7,(HL)
 {
-	log->trace("%v : 0xCB7E - BIT 7,(HL)", reg.pc);
+	// log->trace("%v : 0xCB7E - BIT 7,(HL)", reg.pc);
 
 	bit(7, mcu->read_8bit(reg.hl));
     
@@ -4566,7 +4562,7 @@ void LR35902::instr_0xCB7E() // BIT 7,(HL)
 }
 void LR35902::instr_0xCB7F() // BIT 7,A
 {
-	log->trace("%v : 0xCB7F - BIT 7,A", reg.pc);
+	// log->trace("%v : 0xCB7F - BIT 7,A", reg.pc);
 
 	bit(7, reg.a);
     
@@ -4576,7 +4572,7 @@ void LR35902::instr_0xCB7F() // BIT 7,A
 }
 void LR35902::instr_0xCB80() // RES 0,B
 {
-	log->trace("%v : 0xCB80 - RES 0,B", reg.pc);
+	// log->trace("%v : 0xCB80 - RES 0,B", reg.pc);
 
 	res(0, reg.b);
     
@@ -4586,7 +4582,7 @@ void LR35902::instr_0xCB80() // RES 0,B
 }
 void LR35902::instr_0xCB81() // RES 0,C
 {
-	log->trace("%v : 0xCB81 - RES 0,C", reg.pc);
+	// log->trace("%v : 0xCB81 - RES 0,C", reg.pc);
 
 	res(0, reg.c);
     
@@ -4596,7 +4592,7 @@ void LR35902::instr_0xCB81() // RES 0,C
 }
 void LR35902::instr_0xCB82() // RES 0,D
 {
-	log->trace("%v : 0xCB82 - RES 0,D", reg.pc);
+	// log->trace("%v : 0xCB82 - RES 0,D", reg.pc);
 
 	res(0, reg.d);
     
@@ -4606,7 +4602,7 @@ void LR35902::instr_0xCB82() // RES 0,D
 }
 void LR35902::instr_0xCB83() // RES 0,E
 {
-	log->trace("%v : 0xCB83 - RES 0,E", reg.pc);
+	// log->trace("%v : 0xCB83 - RES 0,E", reg.pc);
 
 	res(0, reg.e);
     
@@ -4616,7 +4612,7 @@ void LR35902::instr_0xCB83() // RES 0,E
 }
 void LR35902::instr_0xCB84() // RES 0,H
 {
-	log->trace("%v : 0xCB84 - RES 0,H", reg.pc);
+	// log->trace("%v : 0xCB84 - RES 0,H", reg.pc);
 
 	res(0, reg.h);
     
@@ -4626,7 +4622,7 @@ void LR35902::instr_0xCB84() // RES 0,H
 }
 void LR35902::instr_0xCB85() // RES 0,L
 {
-	log->trace("%v : 0xCB85 - RES 0,L", reg.pc);
+	// log->trace("%v : 0xCB85 - RES 0,L", reg.pc);
 
 	res(0, reg.l);
     
@@ -4636,7 +4632,7 @@ void LR35902::instr_0xCB85() // RES 0,L
 }
 void LR35902::instr_0xCB86() // RES 0,(HL)
 {
-	log->trace("%v : 0xCB86 - RES 0,(HL)", reg.pc);
+	// log->trace("%v : 0xCB86 - RES 0,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -4650,7 +4646,7 @@ void LR35902::instr_0xCB86() // RES 0,(HL)
 }
 void LR35902::instr_0xCB87() // RES 0,A
 {
-	log->trace("%v : 0xCB87 - RES 0,A", reg.pc);
+	// log->trace("%v : 0xCB87 - RES 0,A", reg.pc);
 
 	res(0, reg.a);
     
@@ -4660,7 +4656,7 @@ void LR35902::instr_0xCB87() // RES 0,A
 }
 void LR35902::instr_0xCB88() // RES 1,B
 {
-	log->trace("%v : 0xCB88 - RES 1,B", reg.pc);
+	// log->trace("%v : 0xCB88 - RES 1,B", reg.pc);
 
 	res(1, reg.b);
     
@@ -4670,7 +4666,7 @@ void LR35902::instr_0xCB88() // RES 1,B
 }
 void LR35902::instr_0xCB89() // RES 1,C
 {
-	log->trace("%v : 0xCB89 - RES 1,C", reg.pc);
+	// log->trace("%v : 0xCB89 - RES 1,C", reg.pc);
 
 	res(1, reg.c);
     
@@ -4680,7 +4676,7 @@ void LR35902::instr_0xCB89() // RES 1,C
 }
 void LR35902::instr_0xCB8A() // RES 1,D
 {
-	log->trace("%v : 0xCB8A - RES 1,D", reg.pc);
+	// log->trace("%v : 0xCB8A - RES 1,D", reg.pc);
 
 	res(1, reg.d);
     
@@ -4690,7 +4686,7 @@ void LR35902::instr_0xCB8A() // RES 1,D
 }
 void LR35902::instr_0xCB8B() // RES 1,E
 {
-	log->trace("%v : 0xCB8B - RES 1,E", reg.pc);
+	// log->trace("%v : 0xCB8B - RES 1,E", reg.pc);
 
 	res(1, reg.e);
     
@@ -4700,7 +4696,7 @@ void LR35902::instr_0xCB8B() // RES 1,E
 }
 void LR35902::instr_0xCB8C() // RES 1,H
 {
-	log->trace("%v : 0xCB8C - RES 1,H", reg.pc);
+	// log->trace("%v : 0xCB8C - RES 1,H", reg.pc);
 
 	res(1, reg.h);
     
@@ -4710,7 +4706,7 @@ void LR35902::instr_0xCB8C() // RES 1,H
 }
 void LR35902::instr_0xCB8D() // RES 1,L
 {
-	log->trace("%v : 0xCB8D - RES 1,L", reg.pc);
+	// log->trace("%v : 0xCB8D - RES 1,L", reg.pc);
 
 	res(1, reg.l);
     
@@ -4720,7 +4716,7 @@ void LR35902::instr_0xCB8D() // RES 1,L
 }
 void LR35902::instr_0xCB8E() // RES 1,(HL)
 {
-	log->trace("%v : 0xCB8E - RES 1,(HL)", reg.pc);
+	// log->trace("%v : 0xCB8E - RES 1,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
 
@@ -4734,7 +4730,7 @@ void LR35902::instr_0xCB8E() // RES 1,(HL)
 }
 void LR35902::instr_0xCB8F() // RES 1,A
 {
-	log->trace("%v : 0xCB8F - RES 1,A", reg.pc);
+	// log->trace("%v : 0xCB8F - RES 1,A", reg.pc);
 
 	res(1, reg.a);
     
@@ -4744,7 +4740,7 @@ void LR35902::instr_0xCB8F() // RES 1,A
 }
 void LR35902::instr_0xCB90() // RES 2,B
 {
-	log->trace("%v : 0xCB90 - RES 2,B", reg.pc);
+	// log->trace("%v : 0xCB90 - RES 2,B", reg.pc);
 
 	res(2, reg.b);
     
@@ -4754,7 +4750,7 @@ void LR35902::instr_0xCB90() // RES 2,B
 }
 void LR35902::instr_0xCB91() // RES 2,C
 {
-	log->trace("%v : 0xCB91 - RES 2,C", reg.pc);
+	// log->trace("%v : 0xCB91 - RES 2,C", reg.pc);
 
 	res(2, reg.c);
     
@@ -4764,7 +4760,7 @@ void LR35902::instr_0xCB91() // RES 2,C
 }
 void LR35902::instr_0xCB92() // RES 2,D
 {
-	log->trace("%v : 0xCB92 - RES 2,D", reg.pc);
+	// log->trace("%v : 0xCB92 - RES 2,D", reg.pc);
 
 	res(2, reg.d);
     
@@ -4774,7 +4770,7 @@ void LR35902::instr_0xCB92() // RES 2,D
 }
 void LR35902::instr_0xCB93() // RES 2,E
 {
-	log->trace("%v : 0xCB93 - RES 2,E", reg.pc);
+	// log->trace("%v : 0xCB93 - RES 2,E", reg.pc);
 
 	res(2, reg.e);
     
@@ -4784,7 +4780,7 @@ void LR35902::instr_0xCB93() // RES 2,E
 }
 void LR35902::instr_0xCB94() // RES 2,H
 {
-	log->trace("%v : 0xCB94 - RES 2,H", reg.pc);
+	// log->trace("%v : 0xCB94 - RES 2,H", reg.pc);
 
 	res(2, reg.h);
     
@@ -4794,7 +4790,7 @@ void LR35902::instr_0xCB94() // RES 2,H
 }
 void LR35902::instr_0xCB95() // RES 2,L
 {
-	log->trace("%v : 0xCB95 - RES 2,L", reg.pc);
+	// log->trace("%v : 0xCB95 - RES 2,L", reg.pc);
 
 	res(2, reg.l);
     
@@ -4804,7 +4800,7 @@ void LR35902::instr_0xCB95() // RES 2,L
 }
 void LR35902::instr_0xCB96() // RES 2,(HL)
 {
-	log->trace("%v : 0xCB96 - RES 2,(HL)", reg.pc);
+	// log->trace("%v : 0xCB96 - RES 2,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -4818,7 +4814,7 @@ void LR35902::instr_0xCB96() // RES 2,(HL)
 }
 void LR35902::instr_0xCB97() // RES 2,A
 {
-	log->trace("%v : 0xCB97 - RES 2,A", reg.pc);
+	// log->trace("%v : 0xCB97 - RES 2,A", reg.pc);
 
 	res(2, reg.a);
     
@@ -4828,7 +4824,7 @@ void LR35902::instr_0xCB97() // RES 2,A
 }
 void LR35902::instr_0xCB98() // RES 3,B
 {
-	log->trace("%v : 0xCB98 - RES 3,B", reg.pc);
+	// log->trace("%v : 0xCB98 - RES 3,B", reg.pc);
 
 	res(3, reg.b);
     
@@ -4838,7 +4834,7 @@ void LR35902::instr_0xCB98() // RES 3,B
 }
 void LR35902::instr_0xCB99() // RES 3,C
 {
-	log->trace("%v : 0xCB99 - RES 3,C", reg.pc);
+	// log->trace("%v : 0xCB99 - RES 3,C", reg.pc);
 
 	res(3, reg.c);
     
@@ -4848,7 +4844,7 @@ void LR35902::instr_0xCB99() // RES 3,C
 }
 void LR35902::instr_0xCB9A() // RES 3,D
 {
-	log->trace("%v : 0xCB9A - RES 3,D", reg.pc);
+	// log->trace("%v : 0xCB9A - RES 3,D", reg.pc);
 
 	res(3, reg.d);
     
@@ -4858,7 +4854,7 @@ void LR35902::instr_0xCB9A() // RES 3,D
 }
 void LR35902::instr_0xCB9B() // RES 3,E
 {
-	log->trace("%v : 0xCB9B - RES 3,E", reg.pc);
+	// log->trace("%v : 0xCB9B - RES 3,E", reg.pc);
 
 	res(3, reg.e);
     
@@ -4868,7 +4864,7 @@ void LR35902::instr_0xCB9B() // RES 3,E
 }
 void LR35902::instr_0xCB9C() // RES 3,H
 {
-	log->trace("%v : 0xCB9C - RES 3,H", reg.pc);
+	// log->trace("%v : 0xCB9C - RES 3,H", reg.pc);
 
 	res(3, reg.h);
     
@@ -4878,7 +4874,7 @@ void LR35902::instr_0xCB9C() // RES 3,H
 }
 void LR35902::instr_0xCB9D() // RES 3,L
 {
-	log->trace("%v : 0xCB9D - RES 3,L", reg.pc);
+	// log->trace("%v : 0xCB9D - RES 3,L", reg.pc);
 
 	res(3, reg.l);
     
@@ -4888,7 +4884,7 @@ void LR35902::instr_0xCB9D() // RES 3,L
 }
 void LR35902::instr_0xCB9E() // RES 3,(HL)
 {
-	log->trace("%v : 0xCB9E - RES 3,(HL)", reg.pc);
+	// log->trace("%v : 0xCB9E - RES 3,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -4902,7 +4898,7 @@ void LR35902::instr_0xCB9E() // RES 3,(HL)
 }
 void LR35902::instr_0xCB9F() // RES 3,A
 {
-	log->trace("%v : 0xCB9F - RES 3,A", reg.pc);
+	// log->trace("%v : 0xCB9F - RES 3,A", reg.pc);
 
 	res(3, reg.a);
     
@@ -4912,7 +4908,7 @@ void LR35902::instr_0xCB9F() // RES 3,A
 }
 void LR35902::instr_0xCBA0() // RES 4,B
 {
-	log->trace("%v : 0xCBA0 - RES 4,B", reg.pc);
+	// log->trace("%v : 0xCBA0 - RES 4,B", reg.pc);
 
 	res(4, reg.b);
     
@@ -4922,7 +4918,7 @@ void LR35902::instr_0xCBA0() // RES 4,B
 }
 void LR35902::instr_0xCBA1() // RES 4,C
 {
-	log->trace("%v : 0xCBA1 - RES 4,C", reg.pc);
+	// log->trace("%v : 0xCBA1 - RES 4,C", reg.pc);
 
 	res(4, reg.c);
     
@@ -4932,7 +4928,7 @@ void LR35902::instr_0xCBA1() // RES 4,C
 }
 void LR35902::instr_0xCBA2() // RES 4,D
 {
-	log->trace("%v : 0xCBA2 - RES 4,D", reg.pc);
+	// log->trace("%v : 0xCBA2 - RES 4,D", reg.pc);
 
 	res(4, reg.d);
     
@@ -4942,7 +4938,7 @@ void LR35902::instr_0xCBA2() // RES 4,D
 }
 void LR35902::instr_0xCBA3() // RES 4,E
 {
-	log->trace("%v : 0xCBA3 - RES 4,E", reg.pc);
+	// log->trace("%v : 0xCBA3 - RES 4,E", reg.pc);
 
 	res(4, reg.e);
     
@@ -4952,7 +4948,7 @@ void LR35902::instr_0xCBA3() // RES 4,E
 }
 void LR35902::instr_0xCBA4() // RES 4,H
 {
-	log->trace("%v : 0xCBA4 - RES 4,H", reg.pc);
+	// log->trace("%v : 0xCBA4 - RES 4,H", reg.pc);
 
 	res(4, reg.h);
     
@@ -4962,7 +4958,7 @@ void LR35902::instr_0xCBA4() // RES 4,H
 }
 void LR35902::instr_0xCBA5() // RES 4,L
 {
-	log->trace("%v : 0xCBA5 - RES 4,L", reg.pc);
+	// log->trace("%v : 0xCBA5 - RES 4,L", reg.pc);
 
 	res(4, reg.l);
     
@@ -4972,7 +4968,7 @@ void LR35902::instr_0xCBA5() // RES 4,L
 }
 void LR35902::instr_0xCBA6() // RES 4,(HL)
 {
-	log->trace("%v : 0xCBA6 - RES 4,(HL)", reg.pc);
+	// log->trace("%v : 0xCBA6 - RES 4,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
 
@@ -4986,7 +4982,7 @@ void LR35902::instr_0xCBA6() // RES 4,(HL)
 }
 void LR35902::instr_0xCBA7() // RES 4,A
 {
-	log->trace("%v : 0xCBA7 - RES 4,A", reg.pc);
+	// log->trace("%v : 0xCBA7 - RES 4,A", reg.pc);
 
 	res(4, reg.a);
     
@@ -4996,7 +4992,7 @@ void LR35902::instr_0xCBA7() // RES 4,A
 }
 void LR35902::instr_0xCBA8() // RES 5,B
 {
-	log->trace("%v : 0xCBA8 - RES 5,B", reg.pc);
+	// log->trace("%v : 0xCBA8 - RES 5,B", reg.pc);
 
 	res(5, reg.b);
     
@@ -5006,7 +5002,7 @@ void LR35902::instr_0xCBA8() // RES 5,B
 }
 void LR35902::instr_0xCBA9() // RES 5,C
 {
-	log->trace("%v : 0xCBA9 - RES 5,C", reg.pc);
+	// log->trace("%v : 0xCBA9 - RES 5,C", reg.pc);
 
 	res(5, reg.c);
     
@@ -5016,7 +5012,7 @@ void LR35902::instr_0xCBA9() // RES 5,C
 }
 void LR35902::instr_0xCBAA() // RES 5,D
 {
-	log->trace("%v : 0xCBAA - RES 5,D", reg.pc);
+	// log->trace("%v : 0xCBAA - RES 5,D", reg.pc);
 
 	res(5, reg.d);
     
@@ -5026,7 +5022,7 @@ void LR35902::instr_0xCBAA() // RES 5,D
 }
 void LR35902::instr_0xCBAB() // RES 5,E
 {
-	log->trace("%v : 0xCBAB - RES 5,E", reg.pc);
+	// log->trace("%v : 0xCBAB - RES 5,E", reg.pc);
 
 	res(5, reg.e);
     
@@ -5036,7 +5032,7 @@ void LR35902::instr_0xCBAB() // RES 5,E
 }
 void LR35902::instr_0xCBAC() // RES 5,H
 {
-	log->trace("%v : 0xCBAC - RES 5,H", reg.pc);
+	// log->trace("%v : 0xCBAC - RES 5,H", reg.pc);
 
 	res(5, reg.h);
     
@@ -5046,7 +5042,7 @@ void LR35902::instr_0xCBAC() // RES 5,H
 }
 void LR35902::instr_0xCBAD() // RES 5,L
 {
-	log->trace("%v : 0xCBAD - RES 5,L", reg.pc);
+	// log->trace("%v : 0xCBAD - RES 5,L", reg.pc);
 
 	res(5, reg.l);
     
@@ -5056,7 +5052,7 @@ void LR35902::instr_0xCBAD() // RES 5,L
 }
 void LR35902::instr_0xCBAE() // RES 5,(HL)
 {
-	log->trace("%v : 0xCBAE - RES 5,(HL)", reg.pc);
+	// log->trace("%v : 0xCBAE - RES 5,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -5070,7 +5066,7 @@ void LR35902::instr_0xCBAE() // RES 5,(HL)
 }
 void LR35902::instr_0xCBAF() // RES 5,A
 {
-	log->trace("%v : 0xCBAF - RES 5,A", reg.pc);
+	// log->trace("%v : 0xCBAF - RES 5,A", reg.pc);
 
 	res(5, reg.a);
     
@@ -5080,7 +5076,7 @@ void LR35902::instr_0xCBAF() // RES 5,A
 }
 void LR35902::instr_0xCBB0() // RES 6,B
 {
-	log->trace("%v : 0xCBB0 - RES 6,B", reg.pc);
+	// log->trace("%v : 0xCBB0 - RES 6,B", reg.pc);
 
 	res(6, reg.b);
     
@@ -5090,7 +5086,7 @@ void LR35902::instr_0xCBB0() // RES 6,B
 }
 void LR35902::instr_0xCBB1() // RES 6,C
 {
-	log->trace("%v : 0xCBB1 - RES 6,C", reg.pc);
+	// log->trace("%v : 0xCBB1 - RES 6,C", reg.pc);
 
 	res(6, reg.c);
     
@@ -5100,7 +5096,7 @@ void LR35902::instr_0xCBB1() // RES 6,C
 }
 void LR35902::instr_0xCBB2() // RES 6,D
 {
-	log->trace("%v : 0xCBB2 - RES 6,D", reg.pc);
+	// log->trace("%v : 0xCBB2 - RES 6,D", reg.pc);
 
 	res(6, reg.d);
     
@@ -5110,7 +5106,7 @@ void LR35902::instr_0xCBB2() // RES 6,D
 }
 void LR35902::instr_0xCBB3() // RES 6,E
 {
-	log->trace("%v : 0xCBB3 - RES 6,E", reg.pc);
+	// log->trace("%v : 0xCBB3 - RES 6,E", reg.pc);
 
 	res(6, reg.e);
     
@@ -5120,7 +5116,7 @@ void LR35902::instr_0xCBB3() // RES 6,E
 }
 void LR35902::instr_0xCBB4() // RES 6,H
 {
-	log->trace("%v : 0xCBB4 - RES 6,H", reg.pc);
+	// log->trace("%v : 0xCBB4 - RES 6,H", reg.pc);
 
 	res(6, reg.h);
     
@@ -5130,7 +5126,7 @@ void LR35902::instr_0xCBB4() // RES 6,H
 }
 void LR35902::instr_0xCBB5() // RES 6,L
 {
-	log->trace("%v : 0xCBB5 - RES 6,L", reg.pc);
+	// log->trace("%v : 0xCBB5 - RES 6,L", reg.pc);
 
 	res(6, reg.l);
     
@@ -5140,7 +5136,7 @@ void LR35902::instr_0xCBB5() // RES 6,L
 }
 void LR35902::instr_0xCBB6() // RES 6,(HL)
 {
-	log->trace("%v : 0xCBB6 - RES 6,(HL)", reg.pc);
+	// log->trace("%v : 0xCBB6 - RES 6,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -5154,7 +5150,7 @@ void LR35902::instr_0xCBB6() // RES 6,(HL)
 }
 void LR35902::instr_0xCBB7() // RES 6,A
 {
-	log->trace("%v : 0xCBB7 - RES 6,A", reg.pc);
+	// log->trace("%v : 0xCBB7 - RES 6,A", reg.pc);
 
 	res(6, reg.a);
     
@@ -5164,7 +5160,7 @@ void LR35902::instr_0xCBB7() // RES 6,A
 }
 void LR35902::instr_0xCBB8() // RES 7,B
 {
-	log->trace("%v : 0xCBB8 - RES 7,B", reg.pc);
+	// log->trace("%v : 0xCBB8 - RES 7,B", reg.pc);
 
 	res(7, reg.b);
     
@@ -5174,7 +5170,7 @@ void LR35902::instr_0xCBB8() // RES 7,B
 }
 void LR35902::instr_0xCBB9() // RES 7,C
 {
-	log->trace("%v : 0xCBB9 - RES 7,C", reg.pc);
+	// log->trace("%v : 0xCBB9 - RES 7,C", reg.pc);
 
 	res(7, reg.c);
     
@@ -5184,7 +5180,7 @@ void LR35902::instr_0xCBB9() // RES 7,C
 }
 void LR35902::instr_0xCBBA() // RES 7,D
 {
-	log->trace("%v : 0xCBBA - RES 7,D", reg.pc);
+	// log->trace("%v : 0xCBBA - RES 7,D", reg.pc);
 
 	res(7, reg.d);
     
@@ -5194,7 +5190,7 @@ void LR35902::instr_0xCBBA() // RES 7,D
 }
 void LR35902::instr_0xCBBB() // RES 7,E
 {
-	log->trace("%v : 0xCBBB - RES 7,E", reg.pc);
+	// log->trace("%v : 0xCBBB - RES 7,E", reg.pc);
 
 	res(7, reg.e);
     
@@ -5204,7 +5200,7 @@ void LR35902::instr_0xCBBB() // RES 7,E
 }
 void LR35902::instr_0xCBBC() // RES 7,H
 {
-	log->trace("%v : 0xCBBC - RES 7,H", reg.pc);
+	// log->trace("%v : 0xCBBC - RES 7,H", reg.pc);
 
 	res(7, reg.h);
     
@@ -5214,7 +5210,7 @@ void LR35902::instr_0xCBBC() // RES 7,H
 }
 void LR35902::instr_0xCBBD() // RES 7,L
 {
-	log->trace("%v : 0xCBBD - RES 7,L", reg.pc);
+	// log->trace("%v : 0xCBBD - RES 7,L", reg.pc);
 
 	res(7, reg.l);
     
@@ -5224,7 +5220,7 @@ void LR35902::instr_0xCBBD() // RES 7,L
 }
 void LR35902::instr_0xCBBE() // RES 7,(HL)
 {
-	log->trace("%v : 0xCBBE - RES 7,(HL)", reg.pc);
+	// log->trace("%v : 0xCBBE - RES 7,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -5238,7 +5234,7 @@ void LR35902::instr_0xCBBE() // RES 7,(HL)
 }
 void LR35902::instr_0xCBBF() // RES 7,A
 {
-	log->trace("%v : 0xCBBF - RES 7,A", reg.pc);
+	// log->trace("%v : 0xCBBF - RES 7,A", reg.pc);
 
 	res(7, reg.a);
     
@@ -5248,7 +5244,7 @@ void LR35902::instr_0xCBBF() // RES 7,A
 }
 void LR35902::instr_0xCBC0() // SET 0,B
 {
-	log->trace("%v : 0xCBC0 - SET 0,B", reg.pc);
+	// log->trace("%v : 0xCBC0 - SET 0,B", reg.pc);
 
 	set(0, reg.b);
 
@@ -5258,7 +5254,7 @@ void LR35902::instr_0xCBC0() // SET 0,B
 }
 void LR35902::instr_0xCBC1() // SET 0,C
 {
-	log->trace("%v : 0xCBC1 - SET 0,C", reg.pc);
+	// log->trace("%v : 0xCBC1 - SET 0,C", reg.pc);
 
 	set(0, reg.c);
 
@@ -5268,7 +5264,7 @@ void LR35902::instr_0xCBC1() // SET 0,C
 }
 void LR35902::instr_0xCBC2() // SET 0,D
 {
-	log->trace("%v : 0xCBC2 - SET 0,D", reg.pc);
+	// log->trace("%v : 0xCBC2 - SET 0,D", reg.pc);
 
 	set(0, reg.d);
 
@@ -5278,7 +5274,7 @@ void LR35902::instr_0xCBC2() // SET 0,D
 }
 void LR35902::instr_0xCBC3() // SET 0,E
 {
-	log->trace("%v : 0xCBC3 - SET 0,E", reg.pc);
+	// log->trace("%v : 0xCBC3 - SET 0,E", reg.pc);
 
 	set(0, reg.e);
 
@@ -5288,7 +5284,7 @@ void LR35902::instr_0xCBC3() // SET 0,E
 }
 void LR35902::instr_0xCBC4() // SET 0,H
 {
-	log->trace("%v : 0xCBC4 - SET 0,H", reg.pc);
+	// log->trace("%v : 0xCBC4 - SET 0,H", reg.pc);
 
 	set(0, reg.h);
 
@@ -5298,7 +5294,7 @@ void LR35902::instr_0xCBC4() // SET 0,H
 }
 void LR35902::instr_0xCBC5() // SET 0,L
 {
-	log->trace("%v : 0xCBC5 - SET 0,L", reg.pc);
+	// log->trace("%v : 0xCBC5 - SET 0,L", reg.pc);
 
 	set(0, reg.l);
 
@@ -5308,7 +5304,7 @@ void LR35902::instr_0xCBC5() // SET 0,L
 }
 void LR35902::instr_0xCBC6() // SET 0,(HL)
 {
-	log->trace("%v : 0xCBC6 - SET 0,(HL)", reg.pc);
+	// log->trace("%v : 0xCBC6 - SET 0,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -5322,7 +5318,7 @@ void LR35902::instr_0xCBC6() // SET 0,(HL)
 }
 void LR35902::instr_0xCBC7() // SET 0,A
 {
-	log->trace("%v : 0xCBC7 - SET 0,A", reg.pc);
+	// log->trace("%v : 0xCBC7 - SET 0,A", reg.pc);
 
 	set(0, reg.a);
 
@@ -5332,7 +5328,7 @@ void LR35902::instr_0xCBC7() // SET 0,A
 }
 void LR35902::instr_0xCBC8() // SET 1,B
 {
-	log->trace("%v : 0xCBC8 - SET 1,B", reg.pc);
+	// log->trace("%v : 0xCBC8 - SET 1,B", reg.pc);
 
 	set(1, reg.b);
 
@@ -5342,7 +5338,7 @@ void LR35902::instr_0xCBC8() // SET 1,B
 }
 void LR35902::instr_0xCBC9() // SET 1,C
 {
-	log->trace("%v : 0xCBC9 - SET 1,C", reg.pc);
+	// log->trace("%v : 0xCBC9 - SET 1,C", reg.pc);
 
 	set(1, reg.c);
 
@@ -5352,7 +5348,7 @@ void LR35902::instr_0xCBC9() // SET 1,C
 }
 void LR35902::instr_0xCBCA() // SET 1,D
 {
-	log->trace("%v : 0xCBCA - SET 1,D", reg.pc);
+	// log->trace("%v : 0xCBCA - SET 1,D", reg.pc);
 
 	set(1, reg.d);
 
@@ -5362,7 +5358,7 @@ void LR35902::instr_0xCBCA() // SET 1,D
 }
 void LR35902::instr_0xCBCB() // SET 1,E
 {
-	log->trace("%v : 0xCBCB - SET 1,E", reg.pc);
+	// log->trace("%v : 0xCBCB - SET 1,E", reg.pc);
 
 	set(1, reg.e);
 
@@ -5372,7 +5368,7 @@ void LR35902::instr_0xCBCB() // SET 1,E
 }
 void LR35902::instr_0xCBCC() // SET 1,H
 {
-	log->trace("%v : 0xCBCC - SET 1,H", reg.pc);
+	// log->trace("%v : 0xCBCC - SET 1,H", reg.pc);
 
 	set(1, reg.h);
 
@@ -5382,7 +5378,7 @@ void LR35902::instr_0xCBCC() // SET 1,H
 }
 void LR35902::instr_0xCBCD() // SET 1,L
 {
-	log->trace("%v : 0xCBCD - SET 1,L", reg.pc);
+	// log->trace("%v : 0xCBCD - SET 1,L", reg.pc);
 
 	set(1, reg.l);
 
@@ -5392,7 +5388,7 @@ void LR35902::instr_0xCBCD() // SET 1,L
 }
 void LR35902::instr_0xCBCE() // SET 1,(HL)
 {
-	log->trace("%v : 0xCBCE - SET 1,(HL)", reg.pc);
+	// log->trace("%v : 0xCBCE - SET 1,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -5406,7 +5402,7 @@ void LR35902::instr_0xCBCE() // SET 1,(HL)
 }
 void LR35902::instr_0xCBCF() // SET 1,A
 {
-	log->trace("%v : 0xCBCF - SET 1,A", reg.pc);
+	// log->trace("%v : 0xCBCF - SET 1,A", reg.pc);
 
 	set(1, reg.a);
 
@@ -5416,7 +5412,7 @@ void LR35902::instr_0xCBCF() // SET 1,A
 }
 void LR35902::instr_0xCBD0() // SET 2,B
 {
-	log->trace("%v : 0xCBD0 - SET 2,B", reg.pc);
+	// log->trace("%v : 0xCBD0 - SET 2,B", reg.pc);
 
 	set(2, reg.b);
 
@@ -5426,7 +5422,7 @@ void LR35902::instr_0xCBD0() // SET 2,B
 }
 void LR35902::instr_0xCBD1() // SET 2,C
 {
-	log->trace("%v : 0xCBD1 - SET 2,C", reg.pc);
+	// log->trace("%v : 0xCBD1 - SET 2,C", reg.pc);
 
 	set(2, reg.c);
 
@@ -5436,7 +5432,7 @@ void LR35902::instr_0xCBD1() // SET 2,C
 }
 void LR35902::instr_0xCBD2() // SET 2,D
 {
-	log->trace("%v : 0xCBD2 - SET 2,D", reg.pc);
+	// log->trace("%v : 0xCBD2 - SET 2,D", reg.pc);
 
 	set(2, reg.d);
 
@@ -5446,7 +5442,7 @@ void LR35902::instr_0xCBD2() // SET 2,D
 }
 void LR35902::instr_0xCBD3() // SET 2,E
 {
-	log->trace("%v : 0xCBD3 - SET 2,E", reg.pc);
+	// log->trace("%v : 0xCBD3 - SET 2,E", reg.pc);
 
 	set(2, reg.e);
 
@@ -5456,7 +5452,7 @@ void LR35902::instr_0xCBD3() // SET 2,E
 }
 void LR35902::instr_0xCBD4() // SET 2,H
 {
-	log->trace("%v : 0xCBD4 - SET 2,H", reg.pc);
+	// log->trace("%v : 0xCBD4 - SET 2,H", reg.pc);
 
 	set(2, reg.h);
 
@@ -5466,7 +5462,7 @@ void LR35902::instr_0xCBD4() // SET 2,H
 }
 void LR35902::instr_0xCBD5() // SET 2,L
 {
-	log->trace("%v : 0xCBD5 - SET 2,L", reg.pc);
+	// log->trace("%v : 0xCBD5 - SET 2,L", reg.pc);
 
 	set(2, reg.l);
 
@@ -5476,7 +5472,7 @@ void LR35902::instr_0xCBD5() // SET 2,L
 }
 void LR35902::instr_0xCBD6() // SET 2,(HL)
 {
-	log->trace("%v : 0xCBD6 - SET 2,(HL)", reg.pc);
+	// log->trace("%v : 0xCBD6 - SET 2,(HL)", reg.pc);
 
     uint8 value = mcu->read_8bit(reg.hl);
 
@@ -5490,7 +5486,7 @@ void LR35902::instr_0xCBD6() // SET 2,(HL)
 }
 void LR35902::instr_0xCBD7() // SET 2,A
 {
-	log->trace("%v : 0xCBD7 - SET 2,A", reg.pc);
+	// log->trace("%v : 0xCBD7 - SET 2,A", reg.pc);
 
 	set(2, reg.a);
 
@@ -5500,7 +5496,7 @@ void LR35902::instr_0xCBD7() // SET 2,A
 }
 void LR35902::instr_0xCBD8() // SET 3,B
 {
-	log->trace("%v : 0xCBD8 - SET 3,B", reg.pc);
+	// log->trace("%v : 0xCBD8 - SET 3,B", reg.pc);
 
 	set(3, reg.b);
 
@@ -5510,7 +5506,7 @@ void LR35902::instr_0xCBD8() // SET 3,B
 }
 void LR35902::instr_0xCBD9() // SET 3,C
 {
-	log->trace("%v : 0xCBD9 - SET 3,C", reg.pc);
+	// log->trace("%v : 0xCBD9 - SET 3,C", reg.pc);
 
 	set(3, reg.c);
 
@@ -5520,7 +5516,7 @@ void LR35902::instr_0xCBD9() // SET 3,C
 }
 void LR35902::instr_0xCBDA() // SET 3,D
 {
-	log->trace("%v : 0xCBDA - SET 3,D", reg.pc);
+	// log->trace("%v : 0xCBDA - SET 3,D", reg.pc);
 
 	set(3, reg.d);
 
@@ -5530,7 +5526,7 @@ void LR35902::instr_0xCBDA() // SET 3,D
 }
 void LR35902::instr_0xCBDB() // SET 3,E
 {
-	log->trace("%v : 0xCBDB - SET 3,E", reg.pc);
+	// log->trace("%v : 0xCBDB - SET 3,E", reg.pc);
 
 	set(3, reg.e);
 
@@ -5540,7 +5536,7 @@ void LR35902::instr_0xCBDB() // SET 3,E
 }
 void LR35902::instr_0xCBDC() // SET 3,H
 {
-	log->trace("%v : 0xCBDC - SET 3,H", reg.pc);
+	// log->trace("%v : 0xCBDC - SET 3,H", reg.pc);
 
 	set(3, reg.h);
 
@@ -5550,7 +5546,7 @@ void LR35902::instr_0xCBDC() // SET 3,H
 }
 void LR35902::instr_0xCBDD() // SET 3,L
 {
-	log->trace("%v : 0xCBDD - SET 3,L", reg.pc);
+	// log->trace("%v : 0xCBDD - SET 3,L", reg.pc);
 
 	set(3, reg.l);
 
@@ -5560,7 +5556,7 @@ void LR35902::instr_0xCBDD() // SET 3,L
 }
 void LR35902::instr_0xCBDE() // SET 3,(HL)
 {
-	log->trace("%v : 0xCBDE - SET 3,(HL)", reg.pc);
+	// log->trace("%v : 0xCBDE - SET 3,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -5574,7 +5570,7 @@ void LR35902::instr_0xCBDE() // SET 3,(HL)
 }
 void LR35902::instr_0xCBDF() // SET 3,A
 {
-	log->trace("%v : 0xCBDF - SET 3,A", reg.pc);
+	// log->trace("%v : 0xCBDF - SET 3,A", reg.pc);
 
 	set(3, reg.a);
 
@@ -5584,7 +5580,7 @@ void LR35902::instr_0xCBDF() // SET 3,A
 }
 void LR35902::instr_0xCBE0() // SET 4,B
 {
-	log->trace("%v : 0xCBE0 - SET 4,B", reg.pc);
+	// log->trace("%v : 0xCBE0 - SET 4,B", reg.pc);
 
 	set(4, reg.b);
 
@@ -5594,7 +5590,7 @@ void LR35902::instr_0xCBE0() // SET 4,B
 }
 void LR35902::instr_0xCBE1() // SET 4,C
 {
-	log->trace("%v : 0xCBE1 - SET 4,C", reg.pc);
+	// log->trace("%v : 0xCBE1 - SET 4,C", reg.pc);
 
 	set(4, reg.c);
 
@@ -5604,7 +5600,7 @@ void LR35902::instr_0xCBE1() // SET 4,C
 }
 void LR35902::instr_0xCBE2() // SET 4,D
 {
-	log->trace("%v : 0xCBE2 - SET 4,D", reg.pc);
+	// log->trace("%v : 0xCBE2 - SET 4,D", reg.pc);
 
 	set(4, reg.d);
 
@@ -5614,7 +5610,7 @@ void LR35902::instr_0xCBE2() // SET 4,D
 }
 void LR35902::instr_0xCBE3() // SET 4,E
 {
-	log->trace("%v : 0xCBE3 - SET 4,E", reg.pc);
+	// log->trace("%v : 0xCBE3 - SET 4,E", reg.pc);
 
 	set(4, reg.e);
 
@@ -5624,7 +5620,7 @@ void LR35902::instr_0xCBE3() // SET 4,E
 }
 void LR35902::instr_0xCBE4() // SET 4,H
 {
-	log->trace("%v : 0xCBE4 - SET 4,H", reg.pc);
+	// log->trace("%v : 0xCBE4 - SET 4,H", reg.pc);
 
 	set(4, reg.h);
 
@@ -5634,7 +5630,7 @@ void LR35902::instr_0xCBE4() // SET 4,H
 }
 void LR35902::instr_0xCBE5() // SET 4,L
 {
-	log->trace("%v : 0xCBE5 - SET 4,L", reg.pc);
+	// log->trace("%v : 0xCBE5 - SET 4,L", reg.pc);
 
 	set(4, reg.l);
 
@@ -5644,7 +5640,7 @@ void LR35902::instr_0xCBE5() // SET 4,L
 }
 void LR35902::instr_0xCBE6() // SET 4,(HL)
 {
-	log->trace("%v : 0xCBE6 - SET 4,(HL)", reg.pc);
+	// log->trace("%v : 0xCBE6 - SET 4,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -5658,7 +5654,7 @@ void LR35902::instr_0xCBE6() // SET 4,(HL)
 }
 void LR35902::instr_0xCBE7() // SET 4,A
 {
-	log->trace("%v : 0xCBE7 - SET 4,A", reg.pc);
+	// log->trace("%v : 0xCBE7 - SET 4,A", reg.pc);
 
 	set(4, reg.a);
 
@@ -5668,7 +5664,7 @@ void LR35902::instr_0xCBE7() // SET 4,A
 }
 void LR35902::instr_0xCBE8() // SET 5,B
 {
-	log->trace("%v : 0xCBE8 - SET 5,B", reg.pc);
+	// log->trace("%v : 0xCBE8 - SET 5,B", reg.pc);
 
 	set(5, reg.b);
 
@@ -5678,7 +5674,7 @@ void LR35902::instr_0xCBE8() // SET 5,B
 }
 void LR35902::instr_0xCBE9() // SET 5,C
 {
-	log->trace("%v : 0xCBE9 - SET 5,C", reg.pc);
+	// log->trace("%v : 0xCBE9 - SET 5,C", reg.pc);
 
 	set(5, reg.c);
 
@@ -5688,7 +5684,7 @@ void LR35902::instr_0xCBE9() // SET 5,C
 }
 void LR35902::instr_0xCBEA() // SET 5,D
 {
-	log->trace("%v : 0xCBEA - SET 5,D", reg.pc);
+	// log->trace("%v : 0xCBEA - SET 5,D", reg.pc);
 
 	set(5, reg.d);
 
@@ -5698,7 +5694,7 @@ void LR35902::instr_0xCBEA() // SET 5,D
 }
 void LR35902::instr_0xCBEB() // SET 5,E
 {
-	log->trace("%v : 0xCBEB - SET 5,E", reg.pc);
+	// log->trace("%v : 0xCBEB - SET 5,E", reg.pc);
 
 	set(5, reg.e);
 
@@ -5708,7 +5704,7 @@ void LR35902::instr_0xCBEB() // SET 5,E
 }
 void LR35902::instr_0xCBEC() // SET 5,H
 {
-	log->trace("%v : 0xCBEC - SET 5,H", reg.pc);
+	// log->trace("%v : 0xCBEC - SET 5,H", reg.pc);
 
 	set(5, reg.h);
 
@@ -5718,7 +5714,7 @@ void LR35902::instr_0xCBEC() // SET 5,H
 }
 void LR35902::instr_0xCBED() // SET 5,L
 {
-	log->trace("%v : 0xCBED - SET 5,L", reg.pc);
+	// log->trace("%v : 0xCBED - SET 5,L", reg.pc);
 
 	set(5, reg.l);
 
@@ -5728,7 +5724,7 @@ void LR35902::instr_0xCBED() // SET 5,L
 }
 void LR35902::instr_0xCBEE() // SET 5,(HL)
 {
-	log->trace("%v : 0xCBEE - SET 5,(HL)", reg.pc);
+	// log->trace("%v : 0xCBEE - SET 5,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -5742,7 +5738,7 @@ void LR35902::instr_0xCBEE() // SET 5,(HL)
 }
 void LR35902::instr_0xCBEF() // SET 5,A
 {
-	log->trace("%v : 0xCBEF - SET 5,A", reg.pc);
+	// log->trace("%v : 0xCBEF - SET 5,A", reg.pc);
 
 	set(5, reg.a);
 
@@ -5752,7 +5748,7 @@ void LR35902::instr_0xCBEF() // SET 5,A
 }
 void LR35902::instr_0xCBF0() // SET 6,B
 {
-	log->trace("%v : 0xCBF0 - SET 6,B", reg.pc);
+	// log->trace("%v : 0xCBF0 - SET 6,B", reg.pc);
 
 	set(6, reg.b);
 
@@ -5762,7 +5758,7 @@ void LR35902::instr_0xCBF0() // SET 6,B
 }
 void LR35902::instr_0xCBF1() // SET 6,C
 {
-	log->trace("%v : 0xCBF1 - SET 6,C", reg.pc);
+	// log->trace("%v : 0xCBF1 - SET 6,C", reg.pc);
 
 	set(6, reg.c);
 
@@ -5772,7 +5768,7 @@ void LR35902::instr_0xCBF1() // SET 6,C
 }
 void LR35902::instr_0xCBF2() // SET 6,D
 {
-	log->trace("%v : 0xCBF2 - SET 6,D", reg.pc);
+	// log->trace("%v : 0xCBF2 - SET 6,D", reg.pc);
 
 	set(6, reg.d);
 
@@ -5782,7 +5778,7 @@ void LR35902::instr_0xCBF2() // SET 6,D
 }
 void LR35902::instr_0xCBF3() // SET 6,E
 {
-	log->trace("%v : 0xCBF3 - SET 6,E", reg.pc);
+	// log->trace("%v : 0xCBF3 - SET 6,E", reg.pc);
 
 	set(6, reg.e);
 
@@ -5792,7 +5788,7 @@ void LR35902::instr_0xCBF3() // SET 6,E
 }
 void LR35902::instr_0xCBF4() // SET 6,H
 {
-	log->trace("%v : 0xCBF4 - SET 6,H", reg.pc);
+	// log->trace("%v : 0xCBF4 - SET 6,H", reg.pc);
 
 	set(6, reg.h);
 
@@ -5802,7 +5798,7 @@ void LR35902::instr_0xCBF4() // SET 6,H
 }
 void LR35902::instr_0xCBF5() // SET 6,L
 {
-	log->trace("%v : 0xCBF5 - SET 6,L", reg.pc);
+	// log->trace("%v : 0xCBF5 - SET 6,L", reg.pc);
 
 	set(6, reg.l);
 
@@ -5812,7 +5808,7 @@ void LR35902::instr_0xCBF5() // SET 6,L
 }
 void LR35902::instr_0xCBF6() // SET 6,(HL)
 {
-	log->trace("%v : 0xCBF6 - SET 6,(HL)", reg.pc);
+	// log->trace("%v : 0xCBF6 - SET 6,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -5826,7 +5822,7 @@ void LR35902::instr_0xCBF6() // SET 6,(HL)
 }
 void LR35902::instr_0xCBF7() // SET 6,A
 {
-	log->trace("%v : 0xCBF7 - SET 6,A", reg.pc);
+	// log->trace("%v : 0xCBF7 - SET 6,A", reg.pc);
 
 	set(6, reg.a);
 
@@ -5836,7 +5832,7 @@ void LR35902::instr_0xCBF7() // SET 6,A
 }
 void LR35902::instr_0xCBF8() // SET 7,B
 {
-	log->trace("%v : 0xCBF8 - SET 7,B", reg.pc);
+	// log->trace("%v : 0xCBF8 - SET 7,B", reg.pc);
 
 	set(7, reg.b);
 
@@ -5846,7 +5842,7 @@ void LR35902::instr_0xCBF8() // SET 7,B
 }
 void LR35902::instr_0xCBF9() // SET 7,C
 {
-	log->trace("%v : 0xCBF9 - SET 7,C", reg.pc);
+	// log->trace("%v : 0xCBF9 - SET 7,C", reg.pc);
 
 	set(7, reg.c);
 
@@ -5856,7 +5852,7 @@ void LR35902::instr_0xCBF9() // SET 7,C
 }
 void LR35902::instr_0xCBFA() // SET 7,D
 {
-	log->trace("%v : 0xCBFA - SET 7,D", reg.pc);
+	// log->trace("%v : 0xCBFA - SET 7,D", reg.pc);
 
 	set(7, reg.d);
 
@@ -5866,7 +5862,7 @@ void LR35902::instr_0xCBFA() // SET 7,D
 }
 void LR35902::instr_0xCBFB() // SET 7,E
 {
-	log->trace("%v : 0xCBFB - SET 7,E", reg.pc);
+	// log->trace("%v : 0xCBFB - SET 7,E", reg.pc);
 
 	set(7, reg.e);
 
@@ -5876,7 +5872,7 @@ void LR35902::instr_0xCBFB() // SET 7,E
 }
 void LR35902::instr_0xCBFC() // SET 7,H
 {
-	log->trace("%v : 0xCBFC - SET 7,H", reg.pc);
+	// log->trace("%v : 0xCBFC - SET 7,H", reg.pc);
 
 	set(7, reg.h);
 
@@ -5886,7 +5882,7 @@ void LR35902::instr_0xCBFC() // SET 7,H
 }
 void LR35902::instr_0xCBFD() // SET 7,L
 {
-	log->trace("%v : 0xCBFD - SET 7,L", reg.pc);
+	// log->trace("%v : 0xCBFD - SET 7,L", reg.pc);
 
 	set(7, reg.l);
 
@@ -5896,7 +5892,7 @@ void LR35902::instr_0xCBFD() // SET 7,L
 }
 void LR35902::instr_0xCBFE() // SET 7,(HL)
 {
-	log->trace("%v : 0xCBFE - SET 7,(HL)", reg.pc);
+	// log->trace("%v : 0xCBFE - SET 7,(HL)", reg.pc);
 
 	uint8 value = mcu->read_8bit(reg.hl);
     
@@ -5910,7 +5906,7 @@ void LR35902::instr_0xCBFE() // SET 7,(HL)
 }
 void LR35902::instr_0xCBFF() // SET 7,A
 {
-	log->trace("%v : 0xCBFF - SET 7,A", reg.pc);
+	// log->trace("%v : 0xCBFF - SET 7,A", reg.pc);
 
 	set(7, reg.a);
 

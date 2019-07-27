@@ -1,4 +1,6 @@
 #include "debugwindow.h"
+#include "vramwindow.h"
+#include "basegameboywidget.h"
 #include <QApplication>
 
 #include "gameboy.h"
@@ -15,14 +17,15 @@ int main(int argc, char *argv[])
 
     Gameboy gameboy;
 
-
+    BaseGameboyWidget::setGameboyPtr(&gameboy);
 
     QApplication a(argc, argv);
 
+    DebugWindow debug_window(&gameboy);
+    VramWindow vram_window(&gameboy);
 
-    DebugWindow w(&gameboy);
-
-    w.show();
+    debug_window.show();
+    vram_window.show();
 
     return a.exec();
 }

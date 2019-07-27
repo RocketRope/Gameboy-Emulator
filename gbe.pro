@@ -31,8 +31,10 @@ SOURCES += \
     Qt/widgets/interruptwidget.cpp \
     Qt/widgets/memorywidget.cpp \
     Qt/widgets/serialwidget.cpp \
+    Qt/widgets/tilemapwidget.cpp \
     Qt/widgets/timerwidget.cpp \
     Qt/windows/debugwindow.cpp \
+    Qt/windows/vramwindow.cpp \
     src/cpu.cpp \
     src/el/easylogging++.cc \
     src/gameboy.cpp \
@@ -40,6 +42,7 @@ SOURCES += \
     src/cartridge.cpp \
     src/memory.cpp \
     src/timer.cpp \
+    src/types.cpp \
     src/video.cpp
 
 HEADERS += \
@@ -49,8 +52,10 @@ HEADERS += \
     Qt/widgets/interruptwidget.h \
     Qt/widgets/memorywidget.h \
     Qt/widgets/serialwidget.h \
+    Qt/widgets/tilemapwidget.h \
     Qt/widgets/timerwidget.h \
     Qt/windows/debugwindow.h \
+    Qt/windows/vramwindow.h \
     include/cpu.h \
     include/el/easylogging++.h \
     include/gameboy.h \
@@ -66,8 +71,10 @@ FORMS += \
     Qt/widgets/interruptwidget.ui \
     Qt/widgets/memorywidget.ui \
     Qt/widgets/serialwidget.ui \
+    Qt/widgets/tilemapwidget.ui \
     Qt/widgets/timerwidget.ui \
-    Qt/windows/debugwindow.ui
+    Qt/windows/debugwindow.ui \
+    Qt/windows/vramwindow.ui
 
 INCLUDEPATH = \
     include \

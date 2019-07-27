@@ -17,9 +17,9 @@ Cartridge::~Cartridge()
 
 // Virtual Read/Write functions //
 
-uint8 Cartridge::read_8bit(uint16 /*address*/)
+uint8& Cartridge::read_8bit(uint16 /*address*/)
 {
-    return 0x00;
+    return rom[0x000];
 }
 bool Cartridge::write_8bit(uint16 /*address*/, uint8 /*data*/)
 {
@@ -80,18 +80,22 @@ No_MBC::No_MBC(Header _header, std::ifstream& ifs) :
 
 // Override Read/Write functions //
 
-uint8 No_MBC::read_8bit(uint16 address)
+uint8& No_MBC::read_8bit(uint16 address)
 {
+    // Rom
     if ( address < 0x8000 )
         return rom[address];
 
+    // Invalid cartridge address
     if ( address < 0xA000 )
-        return 0x00;
+        return rom[0x000];
         
+    // Ram
     if ( address < 0xC000 )
         return ram[address - 0xA000];
 
-    return 0x00;
+    // Invalid cartridge address
+    return rom[0x000];
 }
 bool  No_MBC::write_8bit(uint16 address, uint8 data)
 {

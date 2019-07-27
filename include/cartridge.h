@@ -77,8 +77,8 @@ class Cartridge
 
         // Virtual Read/Write functions //
 
-        virtual uint8 read_8bit(uint16 address);
-        virtual bool  write_8bit(uint16 address, uint8 data);
+        virtual uint8& read_8bit(uint16 address);
+        virtual bool   write_8bit(uint16 address, uint8 data);
 
         // Get functions //
         Header get_header();
@@ -105,8 +105,8 @@ class No_MBC : public Cartridge
 
         // Override Read/Write functions //
         
-        uint8 read_8bit(uint16 address) override;
-        bool  write_8bit(uint16 address, uint8 data) override;
+        uint8& read_8bit(uint16 address) override;
+        bool   write_8bit(uint16 address, uint8 data) override;
 
     private:
 };

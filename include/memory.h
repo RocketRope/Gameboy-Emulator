@@ -127,7 +127,7 @@ class MCU
         bool write_8bit( uint16 address, uint8  data);
         bool write_16bit(uint16 address, uint16 data);
 
-        // Callback functions 
+        // Callback register functions 
         void register_serial_send_callback(std::function<void(uint8)> callback);
         void register_input_read_callback(std::function<void(void)> callback);
 
@@ -135,9 +135,27 @@ class MCU
 
         el::Logger* log;
 
+        // Cartridge Rom (0x0000 - 0x7FFF) + Ram (0xA000 - 0xBFFF)
         std::unique_ptr<Cartridge>& cartridge;
 
-        std::array<uint8, 0xFFFF> ram;
+        // Video ram (Tile + BG maps), 2 banks in cgb mode. 0x8000 - 0x9FFF
+        uint8 vram[2][0x2000] = {0};
+
+        uint8 current_vram_bank = 0;
+
+        // Work ram, 8 banks in cgb mode 0xC000 - 0xDFFF
+        uint8 wram[8][0x1000] = {0};
+
+        uint8 current_wram_bank = 1;
+
+        // Sprite Attribute Table (OAM) ram 0xFE00 - 0xFE9F
+        uint8 oam[0x00A0] = {0};
+
+        // IO registers. 0xFF00 - 0xFF7F
+        uint8 io_registers[0x0080] = {0};
+
+        // High ram + ie register. 0xFF80 - 0xFFFF 
+        uint8 hram[0x0080] = {0};
 
         // Callback functions variables
         std::function<void(uint8)> serial_send_callback;
@@ -145,8 +163,6 @@ class MCU
 
         // 
         uint8&  get_memory_reference(uint16 address);
-        //uint16& get_memory_reference(uint16 address);
-
 
     // Friends
 

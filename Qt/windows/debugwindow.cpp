@@ -11,8 +11,6 @@ DebugWindow::DebugWindow(Gameboy* _gameboy, QWidget *parent) :
     ui(new Ui::DebugWindow),
     gameboy(_gameboy)
 {
-    BaseGameboyWidget::setGameboyPtr(gameboy);
-
     ui->setupUi(this);
 }
 

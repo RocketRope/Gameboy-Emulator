@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "gameboy.h"
+
 namespace Ui {
 class VramWindow;
 }
@@ -12,11 +14,13 @@ class VramWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit VramWindow(QWidget *parent = nullptr);
+    explicit VramWindow(Gameboy* _gameboy, QWidget *parent = nullptr);
     ~VramWindow();
 
 private:
     Ui::VramWindow *ui;
+
+    Gameboy* gameboy;
 };
 
 #endif // VRAMWINDOW_H

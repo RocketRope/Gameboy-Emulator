@@ -1,9 +1,10 @@
 #include "vramwindow.h"
 #include "ui_vramwindow.h"
 
-VramWindow::VramWindow(QWidget *parent) :
+VramWindow::VramWindow(Gameboy* _gameboy, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::VramWindow)
+    ui(new Ui::VramWindow),
+    gameboy(_gameboy)
 {
     ui->setupUi(this);
 }
