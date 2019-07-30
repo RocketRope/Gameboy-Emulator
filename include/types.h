@@ -65,48 +65,85 @@ class Bit
 };
 
 
+struct Color
+{
+    uint8 red;
+    uint8 green;
+    uint8 blue;
+
+    explicit  Color(uint8 r = 0x00, uint8 g = 0x00, uint8 b = 0x00) :
+        red(r),
+        green(g),
+        blue(b)
+    {
+
+    }
+
+    Color(uint32 hex)
+    {
+        uint8* p_hex = (uint8*) &hex;
+
+        red   = p_hex[2];
+        green = p_hex[1];
+        blue  = p_hex[0];
+    }
+
+    Color( const Color& color) = default;
+
+    static const Color WHITE;
+    static const Color LIGHT_GREY;
+    static const Color GREY;
+    static const Color DARK_GREY;
+    static const Color BLACK;
+
+    static const Color GB_WHITE;
+    static const Color GB_LIGHT_GREY;
+    static const Color GB_DARK_GREY;
+    static const Color GB_BLACK;
+};
+
+
 struct RGB_Palette
 {
     public:
 
-        static const RGB_Palette BLACK_AND_WHITE;
+        RGB_Palette(const RGB_Palette& rgb_palette) = default;
 
-        RGB_Palette(const RGB_Palette& rhs) = default;
-
-        explicit RGB_Palette(uint8 white, uint8 light_grey, uint8 dark_grey, uint8 black) :
+        explicit RGB_Palette(Color white, Color  light_grey, Color dark_grey, Color black) :
             color{white, light_grey, dark_grey, black}
         {
 
         }
         
-        const uint8& operator [] (size_t index) const
+        const Color& operator [] (size_t index) const
         {
-            return color[index];       
+            return color[index];
         }
+
+        static const RGB_Palette BLACK_AND_WHITE;
+        static const RGB_Palette GB_ORIGINAL_GREEN;
 
     private:
 
-        uint8 color[4];
+        Color color[4];
 };
 
-
+typedef std::array<Color, 64> PixelArray;
 
 struct Tile
 {
     public:
 
-        std::array<uint8, 64> toRGB(uint8 gb_palette = 0xE4, const RGB_Palette& rgb_palette = RGB_Palette::BLACK_AND_WHITE )
+        PixelArray toRGB(uint8 gb_palette = 0xE4, const RGB_Palette& rgb_palette = RGB_Palette::BLACK_AND_WHITE ) const
         {
             size_t index = 0;
-            std::array<uint8, 64> pixel_array;
+            PixelArray pixel_array;
 
             for( int i = 0 ; i < 16 ; i += 2)
             {
-                uint8 mask = 0x80;
-
                 for( int j = 0 ; j < 8 ; j++ )
                 {
-                    mask = mask >> j;
+                    uint8 mask = 0x80 >> j;
 
                     uint8 pixel_color = 0;
 

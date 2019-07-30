@@ -25,12 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 
 SOURCES += \
+    Qt/widgets/backgroundmapwidget.cpp \
     Qt/widgets/basegameboywidget.cpp \
     Qt/widgets/cpuregisterswidget.cpp \
     Qt/widgets/cpuflagswidget.cpp \
     Qt/widgets/interruptwidget.cpp \
     Qt/widgets/memorywidget.cpp \
     Qt/widgets/serialwidget.cpp \
+    Qt/widgets/tilegraphicsitem.cpp \
     Qt/widgets/tilemapwidget.cpp \
     Qt/widgets/timerwidget.cpp \
     Qt/windows/debugwindow.cpp \
@@ -46,12 +48,14 @@ SOURCES += \
     src/video.cpp
 
 HEADERS += \
+    Qt/widgets/backgroundmapwidget.h \
     Qt/widgets/basegameboywidget.h \
     Qt/widgets/cpuregisterswidget.h \
     Qt/widgets/cpuflagswidget.h \
     Qt/widgets/interruptwidget.h \
     Qt/widgets/memorywidget.h \
     Qt/widgets/serialwidget.h \
+    Qt/widgets/tilegraphicsitem.h \
     Qt/widgets/tilemapwidget.h \
     Qt/widgets/timerwidget.h \
     Qt/windows/debugwindow.h \
@@ -66,6 +70,7 @@ HEADERS += \
     include/video.h
 
 FORMS += \
+    Qt/widgets/backgroundmapwidget.ui \
     Qt/widgets/cpuregisterswidget.ui \
     Qt/widgets/cpuflagswidget.ui \
     Qt/widgets/interruptwidget.ui \

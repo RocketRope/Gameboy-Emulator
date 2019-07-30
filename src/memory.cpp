@@ -121,10 +121,6 @@ bool MCU::write_8bit( uint16 address, uint8  data)
         return true;
     }
 
-    // Unused memory
-    if ( address < 0xFF00 )
-        return false;
-
     // IO registers
     if ( address < 0xFF80 )
     {
@@ -132,7 +128,7 @@ bool MCU::write_8bit( uint16 address, uint8  data)
         if ( (address == MCU::Addr::sc) && (data == 0x81) )
         {
             if ( serial_send_callback )
-                serial_send_callback( io_registers[MCU::Addr::sb - 0xFF00] );
+                serial_send_callback( io_registers[MCU::Addr::sb - 0xFEA0] );
 
             return true;
         }
@@ -140,13 +136,13 @@ bool MCU::write_8bit( uint16 address, uint8  data)
         // Clear DIV
         if ( address == MCU::Addr::div )
         {
-            io_registers[MCU::Addr::div - 0xFF00] = 0x00;
-            io_registers[(MCU::Addr::div - 1) - 0xFF00] = 0x00;
+            io_registers[MCU::Addr::div - 0xFEA0] = 0x00;
+            io_registers[(MCU::Addr::div - 1) - 0xFEA0] = 0x00;
 
             return true;
         }
 
-        io_registers[address - 0xFF00] = data;
+        io_registers[address - 0xFEA0] = data;
 
         return true;
     }
@@ -210,13 +206,9 @@ uint8&  MCU::get_memory_reference(uint16 address)
     if ( address < 0xFEA0 )
         return oam[address - 0xFE00];
 
-    // Unused memory
-    if ( address < 0xFF00 )
-        throw "Error: Unable to get reference to unused memory";
-
     // IO registers
     if ( address < 0xFF80 )
-        return io_registers[address - 0xFF00];
+        return io_registers[address - 0xFEA0];
 
     // High ram
     if ( address <= 0xFFFF )

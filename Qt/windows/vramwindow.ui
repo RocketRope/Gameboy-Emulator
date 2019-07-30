@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>205</width>
+    <height>408</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QWidget" name="background_widget" native="true"/>
+       <widget class="BackgroundMapWidget" name="background_widget" native="true"/>
       </item>
       <item>
        <widget class="TileMapWidget" name="tilemap_widget" native="true"/>
@@ -35,7 +35,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>205</width>
      <height>21</height>
     </rect>
    </property>
@@ -46,6 +46,12 @@
    <class>TileMapWidget</class>
    <extends>QWidget</extends>
    <header>tilemapwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BackgroundMapWidget</class>
+   <extends>QWidget</extends>
+   <header>backgroundmapwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
