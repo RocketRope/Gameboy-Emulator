@@ -14,6 +14,9 @@ typedef unsigned int        uint32;
 typedef unsigned long long  uint64;
 
 
+// Bit manipulation helper functions //
+
+
 template <typename T>
 bool get_bit(uint8 n, T source)
 {
@@ -31,6 +34,8 @@ void set_bit(uint8 n, T& source, bool value = true)
     else
         source &= ~(0x01 << n);
 }
+
+// Bit manipulation class //
 
 template <int B, class T = uint8>
 class Bit
@@ -64,14 +69,15 @@ class Bit
         const T mask = 0x01 << B;
 };
 
+// 24bit RGB Color struct //
 
-struct Color
+struct RGB_Color
 {
     uint8 red;
     uint8 green;
     uint8 blue;
 
-    explicit  Color(uint8 r = 0x00, uint8 g = 0x00, uint8 b = 0x00) :
+    explicit  RGB_Color(uint8 r = 0x00, uint8 g = 0x00, uint8 b = 0x00) :
         red(r),
         green(g),
         blue(b)
@@ -79,7 +85,7 @@ struct Color
 
     }
 
-    Color(uint32 hex)
+    RGB_Color(uint32 hex)
     {
         uint8* p_hex = (uint8*) &hex;
 
@@ -88,20 +94,21 @@ struct Color
         blue  = p_hex[0];
     }
 
-    Color( const Color& color) = default;
+    RGB_Color( const RGB_Color& color) = default;
 
-    static const Color WHITE;
-    static const Color LIGHT_GREY;
-    static const Color GREY;
-    static const Color DARK_GREY;
-    static const Color BLACK;
+    static const RGB_Color WHITE;
+    static const RGB_Color LIGHT_GREY;
+    static const RGB_Color GREY;
+    static const RGB_Color DARK_GREY;
+    static const RGB_Color BLACK;
 
-    static const Color GB_WHITE;
-    static const Color GB_LIGHT_GREY;
-    static const Color GB_DARK_GREY;
-    static const Color GB_BLACK;
+    static const RGB_Color GB_WHITE;
+    static const RGB_Color GB_LIGHT_GREY;
+    static const RGB_Color GB_DARK_GREY;
+    static const RGB_Color GB_BLACK;
 };
 
+// 24bit RGB Palette struct //
 
 struct RGB_Palette
 {
@@ -109,13 +116,13 @@ struct RGB_Palette
 
         RGB_Palette(const RGB_Palette& rgb_palette) = default;
 
-        explicit RGB_Palette(Color white, Color  light_grey, Color dark_grey, Color black) :
+        explicit RGB_Palette(RGB_Color white, RGB_Color  light_grey, RGB_Color dark_grey, RGB_Color black) :
             color{white, light_grey, dark_grey, black}
         {
 
         }
         
-        const Color& operator [] (size_t index) const
+        const RGB_Color& operator [] (size_t index) const
         {
             return color[index];
         }
@@ -125,62 +132,72 @@ struct RGB_Palette
 
     private:
 
-        Color color[4];
+        RGB_Color color[4];
 };
 
-typedef std::array<Color, 64> PixelArray;
+// Tile helper class //
+
+typedef std::array<RGB_Color, 64> Tile_RGB_Pixel_Array;
 
 struct Tile
 {
     public:
 
-        PixelArray toRGB(uint8 gb_palette = 0xE4, const RGB_Palette& rgb_palette = RGB_Palette::BLACK_AND_WHITE ) const
-        {
-            size_t index = 0;
-            PixelArray pixel_array;
+        uint8 getPixel(uint8 x, uint8 y);
 
-            for( int i = 0 ; i < 16 ; i += 2)
-            {
-                for( int j = 0 ; j < 8 ; j++ )
-                {
-                    uint8 mask = 0x80 >> j;
-
-                    uint8 pixel_color = 0;
-
-                    // Least significant bit of current pixel
-                    if ( (data[i] & mask) > 0 )
-                        pixel_color += 1;
-
-                    // Most significant bit of current pixel
-                    if ( (data[i + 1] & mask) > 0 )
-                        pixel_color += 2;
-
-                    /*
-                    if ( gb_palette != 0xE4 )
-                    {
-                        if ( pixel_color == 0 )
-                            pixel_array[index] = rgb_palette[gb_palette & 0x03];
-                        if ( pixel_color == 1 )
-                            pixel_array[index] = rgb_palette[(gb_palette >> 2) & 0x03];
-                        if ( pixle_color == 2)
-                            pixel_array[index] = rgb_palette[(gb_palette >> 4) & 0x03];
-                        if ( pixel_color == 3 )
-                            pixel_array[index] = rgb_palette[(gb_palette >> 6) & 0x03];
-                    }
-                    */
-
-                    pixel_array[index] = rgb_palette[pixel_color];
-
-                    index++;
-                }
-            }
-
-            return pixel_array;
-        }
+        Tile_RGB_Pixel_Array toRGB( uint8 gb_palette = 0xE4, 
+                                    const RGB_Palette& rgb_palette = RGB_Palette::BLACK_AND_WHITE 
+                                  ) const;
 
     private:
 
         uint8 data[16]; 
 };
+
+// Sprite (OBJ - Object) helper class //
+
+struct Sprite
+{
+    public:
+
+        enum ATTRIBUTE : uint8
+        {
+            Priority   = 7,
+            Y_FLIP     = 6,
+            X_FLIP     = 5,
+            GB_PALETTE = 4,
+            TILE_BANK  = 3
+        };
+
+        bool get_attribute(ATTRIBUTE bit)
+        {
+            return get_bit(bit, attributes);
+        }
+
+        void set_attribute(ATTRIBUTE bit, bool value)
+        {
+            set_bit(bit, attributes, value);
+        }
+
+        uint8 get_cgb_palette()
+        {
+            return attributes & 0x07;
+        }
+
+        void set_cgb_palette(uint8 palette)
+        {
+            attributes &= ( palette | 0xF8 );
+        }
+
+        uint8 pos_y;
+        uint8 pos_x;
+        uint8 tile_number;
+
+    private:
+
+        uint8 attributes;
+};
+
+typedef Sprite Object;
 
 #endif // _TYPES_H_

@@ -22,6 +22,6 @@ private:
     const Tile* tile;
 
     QPixmap pixmap;
-    PixelArray pixels;
+    Tile_RGB_Pixel_Array pixels;
 };
 #endif // TILEGRAPHICSITEM_H
