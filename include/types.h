@@ -3,6 +3,8 @@
 
 #include <array>
 
+// Typedef of regular integer types //
+
 typedef char    int8;
 typedef short   int16;
 typedef int     int32;
@@ -13,9 +15,7 @@ typedef unsigned short      uint16;
 typedef unsigned int        uint32;
 typedef unsigned long long  uint64;
 
-
 // Bit manipulation helper functions //
-
 
 template <typename T>
 bool get_bit(uint8 n, T source)
@@ -116,7 +116,10 @@ struct RGB_Palette
 
         RGB_Palette(const RGB_Palette& rgb_palette) = default;
 
-        explicit RGB_Palette(RGB_Color white, RGB_Color  light_grey, RGB_Color dark_grey, RGB_Color black) :
+        explicit RGB_Palette( RGB_Color white,
+                              RGB_Color light_grey, 
+                              RGB_Color dark_grey, 
+                              RGB_Color black) :
             color{white, light_grey, dark_grey, black}
         {
 
