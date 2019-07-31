@@ -26,8 +26,8 @@ BackgroundMapWidget::BackgroundMapWidget(QWidget *parent) :
 
     // View lines
 
-    uint8 scx = mcu->get_memory_reference(MCU::Addr::scx);
-    uint8 scy = mcu->get_memory_reference(MCU::Addr::scy);
+    uint8 scx = mcu->get_memory_reference(MCU::ADDRESS::SCX);
+    uint8 scy = mcu->get_memory_reference(MCU::ADDRESS::SCY);
 
     scene.addLine(scx, scy, scx + screen_width, scy + screen_height);
 

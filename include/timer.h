@@ -8,12 +8,12 @@ class Timer
     public:
         Timer(MCU* _mcu);
 
-        enum Speed : uint8
+        enum SPEED : uint8
         {
-            freq_262KHz = 0x01,
-            freq_65KHz  = 0x02,
-            freq_16KHz  = 0x03,
-            freq_4KHz   = 0x00
+            FREQ_262kHz = 0x01,
+            FREQ_65kHz  = 0x02,
+            FREQ_16kHz  = 0x03,
+            FREQ_4kHz   = 0x00
         };
 
         void step(uint16 elapsed_cycles);

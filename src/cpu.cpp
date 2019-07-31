@@ -7,8 +7,8 @@ LR35902::LR35902(MCU* _mcu)
       half_carry(reg.f),
       subtraction(reg.f),
       zero(reg.f),
-      if_register( _mcu->get_memory_reference(MCU::Addr::if_) ),
-      ie_register( _mcu->get_memory_reference(MCU::Addr::ie) ),
+      if_register( _mcu->get_memory_reference(MCU::ADDRESS::IF) ),
+      ie_register( _mcu->get_memory_reference(MCU::ADDRESS::IE) ),
       mcu(_mcu)
 {
     log = el::Loggers::getLogger("CPU");
@@ -65,11 +65,11 @@ uint64 LR35902::step()
 
 void LR35902::requests_interupt(Interrupt interrupt)
 {
-    uint8 if_ = mcu->read_8bit(MCU::Addr::if_);
+    uint8 if_ = mcu->read_8bit(MCU::ADDRESS::IF);
 
     set_bit(interrupt, if_, true);
 
-    mcu->write_8bit(MCU::Addr::if_, if_);
+    mcu->write_8bit(MCU::ADDRESS::IF, if_);
 }
 
 // 
@@ -98,35 +98,35 @@ bool LR35902::handle_interrupts()
 
             if ( get_bit(Interrupt::v_blank, ie_if) )
             {
-                reg.pc = MCU::Addr::interupt_vblank;
+                reg.pc = MCU::ADDRESS::INTERUPT_VBLANK;
                 set_bit(Interrupt::v_blank, if_register, false);
             }
             else if ( get_bit(Interrupt::lcd, ie_if) )
             {
-                reg.pc =  MCU::Addr::interupt_lcd;
+                reg.pc =  MCU::ADDRESS::INTERUPT_LCD;
                 set_bit(Interrupt::lcd, if_register, false);
             }
             else if ( get_bit(Interrupt::timer, ie_if) )
             {
-                reg.pc = MCU::Addr::interupt_timer;
+                reg.pc = MCU::ADDRESS::INTERUPT_TIMER;
                 set_bit(Interrupt::timer, if_register, false);
 
             }
             else if ( get_bit(Interrupt::serial, ie_if) )
             {
-                reg.pc = MCU::Addr::interupt_serial;
+                reg.pc = MCU::ADDRESS::INTERUPT_SERIAL;
                 set_bit(Interrupt::serial, if_register, false);
 
             }
             else if ( get_bit(Interrupt::joypad, ie_if) )
             {
-                reg.pc = MCU::Addr::interupt_joypad;
+                reg.pc = MCU::ADDRESS::INTERUPT_JOYPAD;
                 set_bit(Interrupt::joypad, if_register, false);
             }
 
             di();
 
-            mcu->write_8bit(MCU::Addr::if_, if_register);
+            mcu->write_8bit(MCU::ADDRESS::IF, if_register);
 
             return true;
         }
@@ -2627,7 +2627,7 @@ void LR35902::instr_0xC7() // RST 0x0000
 {
     // log->trace("%v : 0xC7 - RST 0x0000", reg.pc);
 
-    rst(MCU::Addr::rst_0x00);
+    rst(MCU::ADDRESS::RST_00);
 
     t_cycles += 16;
     m_cycles += 4;
@@ -2720,7 +2720,7 @@ void LR35902::instr_0xCF() // RST 08H
 {
     // log->trace("%v : 0xCF - RST 08H", reg.pc);
 
-    rst(MCU::Addr::rst_0x08);
+    rst(MCU::ADDRESS::RST_08);
 
     t_cycles += 16;
     m_cycles += 4;
@@ -2818,7 +2818,7 @@ void LR35902::instr_0xD7() // RST 10H
 {
     // log->trace("%v : 0xD7 - RST 10H", reg.pc);
 
-    rst(MCU::Addr::rst_0x10);
+    rst(MCU::ADDRESS::RST_10);
 
     t_cycles += 16;
     m_cycles += 4;
@@ -2914,7 +2914,7 @@ void LR35902::instr_0xDF() // RST 18H
 {
     // log->trace("%v : 0xDF - RST 18H", reg.pc);
 
-    rst(MCU::Addr::rst_0x18);
+    rst(MCU::ADDRESS::RST_18);
 
     t_cycles += 16;
     m_cycles += 4;
@@ -2989,7 +2989,7 @@ void LR35902::instr_0xE7() // RST 20H
 {
     // log->trace("%v : 0xE7 - RST 20H", reg.pc);
 
-    rst(MCU::Addr::rst_0x20);
+    rst(MCU::ADDRESS::RST_20);
 
     t_cycles += 16;
     m_cycles += 4;
@@ -3078,7 +3078,7 @@ void LR35902::instr_0xEF() // RST 28H
 {
     // log->trace("%v : 0xEF - RST 28H", reg.pc);
 
-    rst(MCU::Addr::rst_0x28);
+    rst(MCU::ADDRESS::RST_28);
 
     t_cycles += 16;
     m_cycles += 4;
@@ -3158,7 +3158,7 @@ void LR35902::instr_0xF7() // RST 30H
 {
     // log->trace("%v : 0xF7 - RST 30H", reg.pc);
 
-    rst(MCU::Addr::rst_0x30);
+    rst(MCU::ADDRESS::RST_30);
 
     t_cycles += 16;
     m_cycles += 4;
@@ -3248,7 +3248,7 @@ void LR35902::instr_0xFF() // RST 38H
 {
     // log->trace("%v : 0xFF - RST 38H", reg.pc);
 
-    rst(MCU::Addr::rst_0x38);
+    rst(MCU::ADDRESS::RST_38);
 
     t_cycles += 16;
     m_cycles += 4;

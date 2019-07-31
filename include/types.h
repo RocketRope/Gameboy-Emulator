@@ -165,7 +165,7 @@ struct Sprite
 
         enum ATTRIBUTE : uint8
         {
-            Priority   = 7,
+            PRIORITY   = 7,
             Y_FLIP     = 6,
             X_FLIP     = 5,
             GB_PALETTE = 4,

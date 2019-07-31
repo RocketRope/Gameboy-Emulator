@@ -2,13 +2,13 @@
 
 Timer::Timer(MCU* _mcu) :
     mcu(_mcu),
-    div( *((uint16*) (&(mcu->get_memory_reference(MCU::Addr::div - 1)))) ),
+    div( *((uint16*) (&(mcu->get_memory_reference(MCU::ADDRESS::DIV - 1)))) ),
     div_low( mcu->get_memory_reference(0xFF03) ),
-    div_high( mcu->get_memory_reference(MCU::Addr::div) ),
-    tima( mcu->get_memory_reference(MCU::Addr::tima) ),
-    tma( mcu->get_memory_reference(MCU::Addr::tma) ),
-    tac( mcu->get_memory_reference(MCU::Addr::tac) ),
-    if_timer_flag( mcu->get_memory_reference(MCU::Addr::if_) )
+    div_high( mcu->get_memory_reference(MCU::ADDRESS::DIV) ),
+    tima( mcu->get_memory_reference(MCU::ADDRESS::TIMA) ),
+    tma( mcu->get_memory_reference(MCU::ADDRESS::TMA) ),
+    tac( mcu->get_memory_reference(MCU::ADDRESS::TAC) ),
+    if_timer_flag( mcu->get_memory_reference(MCU::ADDRESS::IF) )
 {
 
 }
@@ -30,13 +30,13 @@ void Timer::step(uint16 elapsed_cycles)
             bool curr_edge;
             uint8 tima_speed = tac & 0x03;
 
-            if ( tima_speed == Speed::freq_262KHz )
+            if ( tima_speed == SPEED::FREQ_262kHz )
                 curr_edge = get_bit(3, div);
-            else if ( tima_speed == Speed::freq_65KHz )
+            else if ( tima_speed == SPEED::FREQ_65kHz )
                 curr_edge = get_bit(5, div);
-            else if ( tima_speed == Speed::freq_16KHz )
+            else if ( tima_speed == SPEED::FREQ_16kHz )
                 curr_edge = get_bit(7, div);
-            else // if ( tima_speed == Speed::freq_4KHz )
+            else // if ( tima_speed == SPEED::FREQ_4kHz )
                 curr_edge = get_bit(9, div);
 
             if ( (prev_edge == true) && (curr_edge == false) )

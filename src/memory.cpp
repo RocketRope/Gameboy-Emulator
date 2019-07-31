@@ -17,42 +17,42 @@ MCU::~MCU()
 //
 void MCU::reset()
 {
-    get_memory_reference(Addr::tima) = 0x00;   // TIMA
-    get_memory_reference(Addr::tma)  = 0x00;   // TMA
-    get_memory_reference(Addr::tac)  = 0x00;   // TAC
-    get_memory_reference(Addr::nr10) = 0x80;   // NR10
-    get_memory_reference(Addr::nr11) = 0xBF;   // NR11
-    get_memory_reference(Addr::nr12) = 0xF3;   // NR12
-    get_memory_reference(Addr::nr14) = 0xBF;   // NR14
-    get_memory_reference(Addr::nr21) = 0x3F;   // NR21
-    get_memory_reference(Addr::nr22) = 0x00;   // NR22
-    get_memory_reference(Addr::nr24) = 0xBF;   // NR24
-    get_memory_reference(Addr::nr30) = 0x7F;   // NR30
-    get_memory_reference(Addr::nr31) = 0xFF;   // NR31
-    get_memory_reference(Addr::nr32) = 0x9F;   // NR32
-    get_memory_reference(Addr::nr33) = 0xBF;   // NR33
-    get_memory_reference(Addr::nr41) = 0xFF;   // NR41
-    get_memory_reference(Addr::nr42) = 0x00;   // NR42
-    get_memory_reference(Addr::nr43) = 0x00;   // NR43
-    get_memory_reference(Addr::nr44) = 0xBF;   // NR44
-    get_memory_reference(Addr::nr50) = 0x77;   // NR50
-    get_memory_reference(Addr::nr51) = 0xF3;   // NR51
-    get_memory_reference(Addr::nr52) = 0xF1;   // 0xF1-GB 0xF0-SGB // NR52
-    get_memory_reference(Addr::lcdc) = 0x91;   // LCDC
-    get_memory_reference(Addr::scy)  = 0x00;   // SCY
-    get_memory_reference(Addr::scx)  = 0x00;   // SCX
-    get_memory_reference(Addr::lyc)  = 0x00;   // LYC
-    get_memory_reference(Addr::bgp)  = 0xFC;   // BGP
-    get_memory_reference(Addr::obp0) = 0xFF;   // OBP0
-    get_memory_reference(Addr::obp1) = 0xFF;   // OBP1
-    get_memory_reference(Addr::wy)   = 0x00;   // WY
-    get_memory_reference(Addr::wx)   = 0x00;   // WX
-    get_memory_reference(Addr::ie)   = 0x00;   // IE
+    get_memory_reference(ADDRESS::TIMA) = 0x00;   // TIMA
+    get_memory_reference(ADDRESS::TMA)  = 0x00;   // TMA
+    get_memory_reference(ADDRESS::TAC)  = 0x00;   // TAC
+    get_memory_reference(ADDRESS::NR10) = 0x80;   // NR10
+    get_memory_reference(ADDRESS::NR11) = 0xBF;   // NR11
+    get_memory_reference(ADDRESS::NR12) = 0xF3;   // NR12
+    get_memory_reference(ADDRESS::NR14) = 0xBF;   // NR14
+    get_memory_reference(ADDRESS::NR21) = 0x3F;   // NR21
+    get_memory_reference(ADDRESS::NR22) = 0x00;   // NR22
+    get_memory_reference(ADDRESS::NR24) = 0xBF;   // NR24
+    get_memory_reference(ADDRESS::NR30) = 0x7F;   // NR30
+    get_memory_reference(ADDRESS::NR31) = 0xFF;   // NR31
+    get_memory_reference(ADDRESS::NR32) = 0x9F;   // NR32
+    get_memory_reference(ADDRESS::NR33) = 0xBF;   // NR33
+    get_memory_reference(ADDRESS::NR41) = 0xFF;   // NR41
+    get_memory_reference(ADDRESS::NR42) = 0x00;   // NR42
+    get_memory_reference(ADDRESS::NR43) = 0x00;   // NR43
+    get_memory_reference(ADDRESS::NR44) = 0xBF;   // NR44
+    get_memory_reference(ADDRESS::NR50) = 0x77;   // NR50
+    get_memory_reference(ADDRESS::NR51) = 0xF3;   // NR51
+    get_memory_reference(ADDRESS::NR52) = 0xF1;   // 0XF1-GB 0xF0-SGB // NR52
+    get_memory_reference(ADDRESS::LCDC) = 0x91;   // LCDC
+    get_memory_reference(ADDRESS::SCY)  = 0x00;   // SCY
+    get_memory_reference(ADDRESS::SCX)  = 0x00;   // SCX
+    get_memory_reference(ADDRESS::LYC)  = 0x00;   // LYC
+    get_memory_reference(ADDRESS::BGP)  = 0xFC;   // BGP
+    get_memory_reference(ADDRESS::OBP0) = 0xFF;   // OBP0
+    get_memory_reference(ADDRESS::OBP1) = 0xFF;   // OBP1
+    get_memory_reference(ADDRESS::WY)   = 0x00;   // WY
+    get_memory_reference(ADDRESS::WX)   = 0x00;   // WX
+    get_memory_reference(ADDRESS::IE)   = 0x00;   // IE
 
-    // Temp???
-    get_memory_reference(Addr::ly)      = 0x90; // LY
-    get_memory_reference(Addr::div)     = 0x1E;   // DIV High
-    get_memory_reference(Addr::div - 1) = 0xA0;  // DIV low
+    // TEMP???
+    get_memory_reference(ADDRESS::LY)      = 0x90; // LY
+    get_memory_reference(ADDRESS::DIV)     = 0x1E;   // DIV High
+    get_memory_reference(ADDRESS::DIV - 1) = 0xA0;  // DIV low
 }
 
 
@@ -125,19 +125,19 @@ bool MCU::write_8bit( uint16 address, uint8  data)
     if ( address < 0xFF80 )
     {
         // Send serial
-        if ( (address == MCU::Addr::sc) && (data == 0x81) )
+        if ( (address == MCU::ADDRESS::SC) && (data == 0x81) )
         {
             if ( serial_send_callback )
-                serial_send_callback( io_registers[MCU::Addr::sb - 0xFEA0] );
+                serial_send_callback( io_registers[MCU::ADDRESS::SB - 0xFEA0] );
 
             return true;
         }
 
         // Clear DIV
-        if ( address == MCU::Addr::div )
+        if ( address == MCU::ADDRESS::DIV )
         {
-            io_registers[MCU::Addr::div - 0xFEA0] = 0x00;
-            io_registers[(MCU::Addr::div - 1) - 0xFEA0] = 0x00;
+            io_registers[MCU::ADDRESS::DIV - 0xFEA0] = 0x00;
+            io_registers[(MCU::ADDRESS::DIV - 1) - 0xFEA0] = 0x00;
 
             return true;
         }
