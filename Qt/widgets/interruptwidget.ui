@@ -37,6 +37,9 @@
      <property name="title">
       <string>Interrupt Registers</string>
      </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QCheckBox" name="master_interrupt_enable_checkBox">

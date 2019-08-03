@@ -40,6 +40,9 @@
      <property name="title">
       <string>Flags</string>
      </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QCheckBox" name="zero_checkBox">

@@ -11,11 +11,9 @@ OAMWidget::OAMWidget(QWidget *parent) :
 
     for ( size_t i = 0 ; i < 40 ; i++ )
     {
-        objects.push_back( new ObjectWidget(&mcu->objects[i], this) );
+        objects.push_back( new ObjectWidget(&mcu->objects[i], i + 1,  this) );
 
         ui->layout->addWidget(objects[i]);
-
-        ui->layout->addSpacing(5);
     }
 
 }

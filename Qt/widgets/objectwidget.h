@@ -16,7 +16,7 @@ class ObjectWidget : public BaseGameboyWidget
     Q_OBJECT
 
 public:
-    explicit ObjectWidget(Object* _object, QWidget *parent = nullptr);
+    explicit ObjectWidget(Object* _object, unsigned int number, QWidget *parent = nullptr);
     ~ObjectWidget();
 
     void update();

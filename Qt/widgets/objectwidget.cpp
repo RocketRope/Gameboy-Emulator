@@ -1,17 +1,21 @@
 #include "objectwidget.h"
 #include "ui_objectwidget.h"
 
-ObjectWidget::ObjectWidget(Object* _object, QWidget *parent) :
+ObjectWidget::ObjectWidget(Object* _object, unsigned int number, QWidget *parent) :
     BaseGameboyWidget(parent),
     ui(new Ui::ObjectWidget),
     object(_object)
 {
     ui->setupUi(this);
 
+    // Groupbox title
+    ui->groupBox->setTitle(QString::number(number,10) + " ");
+
     // GrphicsView
-    ui->tile_graphicsView->setScene(&scene);
     ui->tile_graphicsView->setSceneRect(0,0, 8,8);
     ui->tile_graphicsView->scale(6.0, 6.0);
+    ui->tile_graphicsView->setScene(&scene);
+
 
     scene.addItem(&tile);
 
@@ -22,6 +26,8 @@ ObjectWidget::ObjectWidget(Object* _object, QWidget *parent) :
     //
     ui->tile_bank_comboBox->addItem("VRAM Bank 0");
     ui->tile_bank_comboBox->addItem("VRAM Bank 1");
+
+    ui->tile_bank_comboBox->setEnabled(false);
 
     //
     ui->dmg_palette_comboBox->addItem("OBP0");
@@ -37,6 +43,8 @@ ObjectWidget::ObjectWidget(Object* _object, QWidget *parent) :
     ui->cgb_palette_comboBox->addItem("OBP5");
     ui->cgb_palette_comboBox->addItem("OBP6");
     ui->cgb_palette_comboBox->addItem("OBP7");
+
+    ui->cgb_palette_comboBox->setEnabled(false);
 
     update();
 }
