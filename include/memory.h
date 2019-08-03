@@ -112,7 +112,7 @@ class MCU
         };
 
         // Video ram (Tile + BG maps), 2 banks in cgb mode. 0x8000 - 0x9FFF
-        uint8 vram[2][0x2000] = {0};
+        uint8 vram[2][0x2000] = {{0},{0}};
 
         const Tile*  tile_map_0 = (Tile*) &vram[0][0];
         const Tile*  tile_map_1 = (Tile*) &vram[1][0];
@@ -121,10 +121,12 @@ class MCU
         uint8* bg_map_1 = &vram[0][0x1C00];
 
         // Work ram, 8 banks in cgb mode 0xC000 - 0xDFFF
-        uint8 wram[8][0x1000] = {0};
+        uint8 wram[8][0x1000] = {{0},{0},{0},{0},{0},{0},{0},{0}};
 
         // Sprite Attribute Table (OAM) ram 0xFE00 - 0xFE9F
         uint8 oam[0x00A0] = {0};
+
+        Object* objects = (Object*) oam;
 
         // IO registers + Unused memory. 0xFEA0 - 0xFF7F
         uint8 io_registers[0x00E0] = {0};

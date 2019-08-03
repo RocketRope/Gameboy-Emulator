@@ -3,25 +3,31 @@
 
 #include "types.h"
 
-#include <QGraphicsPixmapItem>
-#include <QGraphicsScene>
-#include <QGraphicsSceneHoverEvent>
-#include <QPixmap>
+#include <QGraphicsItem>
+#include <QPainter>
+#include <QImage>
 
-class TileGraphicsItem : public QGraphicsPixmapItem
+class TileGraphicsItem : public QGraphicsItem
 {
 public:
+
     explicit TileGraphicsItem(const Tile* _tile = nullptr, QGraphicsItem *parent = nullptr);
 
     void setTilePtr(const Tile* _tile);
-
     void update();
+
+    QRectF boundingRect() const override;
+
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 private:
 
     const Tile* tile;
 
-    QPixmap pixmap;
-    Tile_RGB_Pixel_Array pixels;
+    static const QRectF bounding_rect;
+
+    QImage image;
+    Tile_Pixel_Array pixels;
+
 };
 #endif // TILEGRAPHICSITEM_H

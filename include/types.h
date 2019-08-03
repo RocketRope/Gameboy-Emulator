@@ -73,39 +73,41 @@ class Bit
 
 struct RGB_Color
 {
-    uint8 red;
-    uint8 green;
-    uint8 blue;
+    public:
 
-    explicit  RGB_Color(uint8 r = 0x00, uint8 g = 0x00, uint8 b = 0x00) :
-        red(r),
-        green(g),
-        blue(b)
-    {
+        uint8 red;
+        uint8 green;
+        uint8 blue;
 
-    }
+        explicit  RGB_Color(uint8 r = 0x00, uint8 g = 0x00, uint8 b = 0x00) :
+            red(r),
+            green(g),
+            blue(b)
+        {
 
-    RGB_Color(uint32 hex)
-    {
-        uint8* p_hex = (uint8*) &hex;
+        }
 
-        red   = p_hex[2];
-        green = p_hex[1];
-        blue  = p_hex[0];
-    }
+        RGB_Color(uint32 hex)
+        {
+            uint8* p_hex = (uint8*) &hex;
 
-    RGB_Color( const RGB_Color& color) = default;
+            red   = p_hex[2];
+            green = p_hex[1];
+            blue  = p_hex[0];
+        }
 
-    static const RGB_Color WHITE;
-    static const RGB_Color LIGHT_GREY;
-    static const RGB_Color GREY;
-    static const RGB_Color DARK_GREY;
-    static const RGB_Color BLACK;
+        RGB_Color( const RGB_Color& color) = default;
 
-    static const RGB_Color GB_WHITE;
-    static const RGB_Color GB_LIGHT_GREY;
-    static const RGB_Color GB_DARK_GREY;
-    static const RGB_Color GB_BLACK;
+        static const RGB_Color WHITE;
+        static const RGB_Color LIGHT_GREY;
+        static const RGB_Color GREY;
+        static const RGB_Color DARK_GREY;
+        static const RGB_Color BLACK;
+
+        static const RGB_Color GB_WHITE;
+        static const RGB_Color GB_LIGHT_GREY;
+        static const RGB_Color GB_DARK_GREY;
+        static const RGB_Color GB_BLACK;
 };
 
 // 24bit RGB Palette struct //
@@ -140,7 +142,7 @@ struct RGB_Palette
 
 // Tile helper class //
 
-typedef std::array<RGB_Color, 64> Tile_RGB_Pixel_Array;
+typedef RGB_Color Tile_Pixel_Array[64];
 
 struct Tile
 {
@@ -148,9 +150,10 @@ struct Tile
 
         uint8 getPixel(uint8 x, uint8 y);
 
-        Tile_RGB_Pixel_Array toRGB( uint8 gb_palette = 0xE4, 
-                                    const RGB_Palette& rgb_palette = RGB_Palette::BLACK_AND_WHITE 
-                                  ) const;
+        void toRGB( Tile_Pixel_Array pixels,
+                    uint8 gb_palette = 0xE4, 
+                    const RGB_Palette& rgb_palette = RGB_Palette::BLACK_AND_WHITE 
+                  ) const;
 
     private:
 
@@ -159,15 +162,15 @@ struct Tile
 
 // Sprite (OBJ - Object) helper class //
 
-struct Sprite
+struct Object
 {
     public:
 
         enum ATTRIBUTE : uint8
         {
             PRIORITY   = 7,
-            Y_FLIP     = 6,
-            X_FLIP     = 5,
+            FLIP_Y     = 6,
+            FLIP_X     = 5,
             GB_PALETTE = 4,
             TILE_BANK  = 3
         };
@@ -189,18 +192,20 @@ struct Sprite
 
         void set_cgb_palette(uint8 palette)
         {
-            attributes &= ( palette | 0xF8 );
+            attributes &= 0xF8;
+            attributes |= (palette & 0x07);
         }
 
         uint8 pos_y;
         uint8 pos_x;
         uint8 tile_number;
+        uint8 attributes;
 
     private:
 
-        uint8 attributes;
+        
 };
 
-typedef Sprite Object;
+typedef Object Sprite;
 
 #endif // _TYPES_H_

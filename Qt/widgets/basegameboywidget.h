@@ -37,4 +37,7 @@ private:
     static QVector<BaseGameboyWidget*> widgets;
 };
 
+// Helper function
+QString toHexQString(uint32 value, int width);
+
 #endif // BASEGAMEBOYWIDGET_H

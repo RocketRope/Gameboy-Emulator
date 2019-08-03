@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>705</width>
     <height>800</height>
    </rect>
   </property>
@@ -200,7 +200,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>705</width>
      <height>21</height>
     </rect>
    </property>
@@ -212,7 +212,6 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionLoad_ROM">
    <property name="text">
     <string>Load ROM</string>

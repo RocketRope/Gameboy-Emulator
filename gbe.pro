@@ -31,6 +31,8 @@ SOURCES += \
     Qt/widgets/cpuflagswidget.cpp \
     Qt/widgets/interruptwidget.cpp \
     Qt/widgets/memorywidget.cpp \
+    Qt/widgets/oamwidget.cpp \
+    Qt/widgets/objectwidget.cpp \
     Qt/widgets/serialwidget.cpp \
     Qt/widgets/tilegraphicsitem.cpp \
     Qt/widgets/tilemapwidget.cpp \
@@ -54,6 +56,8 @@ HEADERS += \
     Qt/widgets/cpuflagswidget.h \
     Qt/widgets/interruptwidget.h \
     Qt/widgets/memorywidget.h \
+    Qt/widgets/oamwidget.h \
+    Qt/widgets/objectwidget.h \
     Qt/widgets/serialwidget.h \
     Qt/widgets/tilegraphicsitem.h \
     Qt/widgets/tilemapwidget.h \
@@ -75,6 +79,8 @@ FORMS += \
     Qt/widgets/cpuflagswidget.ui \
     Qt/widgets/interruptwidget.ui \
     Qt/widgets/memorywidget.ui \
+    Qt/widgets/oamwidget.ui \
+    Qt/widgets/objectwidget.ui \
     Qt/widgets/serialwidget.ui \
     Qt/widgets/tilemapwidget.ui \
     Qt/widgets/timerwidget.ui \

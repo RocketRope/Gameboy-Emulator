@@ -15,16 +15,19 @@ class TileMapWidget : public BaseGameboyWidget
     Q_OBJECT
 
 public:
+
     explicit TileMapWidget(QWidget *parent = nullptr);
     ~TileMapWidget();
 
     void update();
 
 private:
+
     Ui::TileMapWidget *ui;
 
-    std::array<TileGraphicsItem, 768> tiles;
     QGraphicsScene scene;
+
+    std::array<TileGraphicsItem, 768> tiles;
 };
 
 #endif // TILEMAPWIDGET_H

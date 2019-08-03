@@ -36,9 +36,8 @@ private slots:
     void on_if_serial_checkBox_toggled(bool checked);
     void on_if_joypad_checkBox_toggled(bool checked);
 
-
-
 private:
+
     Ui::InterruptWidget *ui;
 };
 

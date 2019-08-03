@@ -23,12 +23,17 @@ BaseGameboyWidget::~BaseGameboyWidget()
 void BaseGameboyWidget::setGameboyPtr(Gameboy *_gameboy)
 {
     gameboy = _gameboy;
-    cpu = &gameboy->cpu;
-    mcu = &gameboy->mcu;
+    cpu     = &gameboy->cpu;
+    mcu     = &gameboy->mcu;
 }
 
 void BaseGameboyWidget::updateWidgets()
 {
     for ( auto w : widgets )
         w->update();
+}
+
+QString toHexQString(uint32 value, int width)
+{
+    return QString::number(value, 16).toUpper().rightJustified(width,'0');
 }

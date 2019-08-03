@@ -32,7 +32,7 @@ uint8 Tile::getPixel(uint8 x, uint8 y)
     if ( y > 7 )
         return 0x00;
 
-    uint8 pixel_value;
+    uint8 pixel_value = 0;
     uint8 mask = 0x80 >> x;
 
     uint8 index = y * 2;
@@ -45,10 +45,9 @@ uint8 Tile::getPixel(uint8 x, uint8 y)
     return pixel_value;
 }
 
-Tile_RGB_Pixel_Array Tile::toRGB( uint8 gb_palette, const RGB_Palette& rgb_palette ) const
+void Tile::toRGB( Tile_Pixel_Array pixels, uint8 gb_palette, const RGB_Palette& rgb_palette ) const
 {
     size_t index = 0;
-    Tile_RGB_Pixel_Array pixel_array;
 
     for( int i = 0 ; i < 16 ; i += 2)
     {
@@ -80,11 +79,10 @@ Tile_RGB_Pixel_Array Tile::toRGB( uint8 gb_palette, const RGB_Palette& rgb_palet
             }
             */
 
-            pixel_array[index] = rgb_palette[pixel_color];
+            pixels[index] = rgb_palette[pixel_color];
 
             index++;
         }
     }
 
-    return pixel_array;
 }

@@ -1,12 +1,18 @@
 #include "tilemapwidget.h"
 #include "ui_tilemapwidget.h"
 
+
+#include <iostream>
+
 TileMapWidget::TileMapWidget(QWidget *parent) :
     BaseGameboyWidget(parent),
     ui(new Ui::TileMapWidget),
     scene(this)
 {
     ui->setupUi(this);
+
+    ui->graphicsView->setSceneRect(0,0, 256, 192);
+    ui->graphicsView->setScene(&scene);
 
     size_t index = 0;
 
@@ -32,12 +38,6 @@ TileMapWidget::TileMapWidget(QWidget *parent) :
         }
     }
 
-    ui->graphicsView->setSceneRect(0,0, 256, 192);
-
-    //ui->graphicsView->scale(2.0f, 2.0f);
-
-    ui->graphicsView->setScene(&scene);
-
     update();
 }
 
@@ -50,6 +50,8 @@ void TileMapWidget::update()
 {
     for ( auto& tile : tiles )
         tile.update();
+
+    scene.update();
 }
 
 
