@@ -20,7 +20,7 @@ class Gameboy
         LR35902 cpu;
         Timer timer;
         std::unique_ptr<Cartridge> cartridge;
-
+        
         // Constructor/Destructor //
 
         Gameboy();

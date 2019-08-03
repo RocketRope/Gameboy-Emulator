@@ -6,6 +6,7 @@
 
 #include <QGraphicsScene>
 
+
 namespace Ui {
 class BackgroundMapWidget;
 }
@@ -29,6 +30,9 @@ private:
 
     std::array<TileGraphicsItem, 1024> tiles;
 
+    std::array<QGraphicsLineItem, 8> view_lines;
+
+    void updateViewLines();
 };
 
 #endif // BACKGROUNDMAPWIDGET_H

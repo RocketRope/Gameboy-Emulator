@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>266</width>
-    <height>217</height>
+    <width>260</width>
+    <height>218</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,15 +57,21 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>260</width>
-          <height>196</height>
+          <width>256</width>
+          <height>192</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>260</width>
-          <height>196</height>
+          <width>256</width>
+          <height>192</height>
          </size>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
        </widget>
       </item>
