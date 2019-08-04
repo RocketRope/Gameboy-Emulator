@@ -30,6 +30,7 @@ SOURCES += \
     Qt/widgets/cpuregisterswidget.cpp \
     Qt/widgets/cpuflagswidget.cpp \
     Qt/widgets/interruptwidget.cpp \
+    Qt/widgets/lcdregisterswidget.cpp \
     Qt/widgets/memorywidget.cpp \
     Qt/widgets/oamwidget.cpp \
     Qt/widgets/objectwidget.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
     Qt/widgets/tilemapwidget.cpp \
     Qt/widgets/timerwidget.cpp \
     Qt/windows/debugwindow.cpp \
+    Qt/windows/screenwindow.cpp \
     Qt/windows/vramwindow.cpp \
     src/cpu.cpp \
     src/el/easylogging++.cc \
@@ -55,6 +57,7 @@ HEADERS += \
     Qt/widgets/cpuregisterswidget.h \
     Qt/widgets/cpuflagswidget.h \
     Qt/widgets/interruptwidget.h \
+    Qt/widgets/lcdregisterswidget.h \
     Qt/widgets/memorywidget.h \
     Qt/widgets/oamwidget.h \
     Qt/widgets/objectwidget.h \
@@ -63,6 +66,7 @@ HEADERS += \
     Qt/widgets/tilemapwidget.h \
     Qt/widgets/timerwidget.h \
     Qt/windows/debugwindow.h \
+    Qt/windows/screenwindow.h \
     Qt/windows/vramwindow.h \
     include/cpu.h \
     include/el/easylogging++.h \
@@ -78,6 +82,7 @@ FORMS += \
     Qt/widgets/cpuregisterswidget.ui \
     Qt/widgets/cpuflagswidget.ui \
     Qt/widgets/interruptwidget.ui \
+    Qt/widgets/lcdregisterswidget.ui \
     Qt/widgets/memorywidget.ui \
     Qt/widgets/oamwidget.ui \
     Qt/widgets/objectwidget.ui \
@@ -85,6 +90,7 @@ FORMS += \
     Qt/widgets/tilemapwidget.ui \
     Qt/widgets/timerwidget.ui \
     Qt/windows/debugwindow.ui \
+    Qt/windows/screenwindow.ui \
     Qt/windows/vramwindow.ui
 
 INCLUDEPATH = \

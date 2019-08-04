@@ -6,6 +6,7 @@
 class Timer
 {
     public:
+    
         Timer(MCU* _mcu);
 
         enum SPEED : uint8
@@ -16,7 +17,7 @@ class Timer
             FREQ_4kHz   = 0x00
         };
 
-        void step(uint16 elapsed_cycles);
+        void step(uint16 elapsed_clocks);
 
     private:
 

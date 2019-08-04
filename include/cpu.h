@@ -87,13 +87,13 @@ class LR35902
 
         // Interrupts //
 
-        enum Interrupt : uint8
+        enum INTERRUPT : uint8
         {
-            v_blank = 0x00,
-            lcd     = 0x01,
-            timer   = 0x02,
-            serial  = 0x03,
-            joypad  = 0x04
+            V_BLANK = 0x00,
+            LCD     = 0x01,
+            TIMER   = 0x02,
+            SERIAL  = 0x03,
+            JOYPAD  = 0x04
         };
 
         uint8& if_register;
@@ -115,7 +115,7 @@ class LR35902
         void reset();
         uint64 step();
 
-        void requests_interupt(Interrupt interrupt);
+        void requests_interupt(INTERRUPT interrupt);
 
     private:
 
@@ -123,9 +123,9 @@ class LR35902
 
         MCU* mcu;
 
-        // Cycles counters //
-        uint64 t_cycles = 0;
-        uint64 m_cycles = 0;
+        // Clock & Cycles counters //
+        uint64 clocks = 0; // Clocks 4Mhz
+        uint64 cycles = 0; // Machine cycles 1MHZ 
 
         // 
 

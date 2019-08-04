@@ -13,15 +13,15 @@ Timer::Timer(MCU* _mcu) :
 
 }
 
-void Timer::step(uint16 elapsed_cycles)
+void Timer::step(uint16 elapsed_clocks)
 {
 
-    uint16 cycles = 0;
+    uint16 clocks = 0;
 
-    while ( elapsed_cycles > cycles )
+    while ( elapsed_clocks > clocks )
     {
         div +=  4;
-        cycles += 4;
+        clocks += 4;
 
         // If timer is enabled 
         if ( get_bit(2, tac) )

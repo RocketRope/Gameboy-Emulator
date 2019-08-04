@@ -41,6 +41,9 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
+       <widget class="LCDRegistersWidget" name="lcd_reigsters_widget" native="true"/>
+      </item>
+      <item>
        <widget class="OAMWidget" name="oam_widget" native="true"/>
       </item>
      </layout>
@@ -75,6 +78,12 @@
    <class>OAMWidget</class>
    <extends>QWidget</extends>
    <header>oamwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LCDRegistersWidget</class>
+   <extends>QWidget</extends>
+   <header>lcdregisterswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

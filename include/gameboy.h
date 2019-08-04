@@ -1,11 +1,10 @@
 #ifndef _GAMEBOY_H_
 #define _GAMEBOY_H_
 
-#include <iostream>
-
 #include "el/easylogging++.h"
 
 #include "cpu.h"
+#include "video.h"
 #include "timer.h"
 #include "memory.h"
 #include "cartridge.h"
@@ -19,6 +18,7 @@ class Gameboy
         MCU mcu;
         LR35902 cpu;
         Timer timer;
+        PPU ppu;
         std::unique_ptr<Cartridge> cartridge;
         
         // Constructor/Destructor //

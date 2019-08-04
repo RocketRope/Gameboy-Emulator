@@ -87,7 +87,7 @@ struct RGB_Color
 
         }
 
-        RGB_Color(uint32 hex)
+        RGB_Color(int32 hex)
         {
             uint8* p_hex = (uint8*) &hex;
 
