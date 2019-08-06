@@ -25,14 +25,13 @@ QRectF TileGraphicsItem::boundingRect() const
 void TileGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
 {
     painter->drawImage(QPoint(0,0), image);
-   // painter->drawRect( QRectF(QPoint(8,8), QPoint(16,16)));
 }
 
 void TileGraphicsItem::update()
 {
     if ( tile != nullptr )
     {
-        tile->toRGB(pixels);
+        tile->to_rgb(pixels);
     }
 }
 

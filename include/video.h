@@ -24,6 +24,10 @@ class PPU
 
         //
 
+        void reset();
+
+        //
+
         void step(uint16 elapsed_clocks);
 
         //
@@ -33,27 +37,28 @@ class PPU
 
         // Callback register function //
 
-        void register_v_blank_callback(std::function<void()> callback);
+        void register_vblank_callback(std::function<void()> callback);
 
     private:
 
-        const uint8 screen_width  = 160;
-        const uint8 screen_height = 144;
+        static constexpr uint8 screen_width  = 160;
+        static constexpr uint8 screen_height = 144;
 
         MCU* mcu;
 
         uint16 scanline_vertical_counter;
 
         MODE current_mode;
-        uint8 framebuffer[144][160] = {3};
+        
+        uint8 framebuffer[screen_height][screen_width];
 
         // IO Register reference
         
         uint8& stat;
         Bit<6> lyc_match_interrupt;
         Bit<5> oam_search_interrupt;
-        Bit<4> v_blank_interrupt;
-        Bit<3> h_blank_interrupt;
+        Bit<4> vblank_interrupt;
+        Bit<3> hblank_interrupt;
         Bit<2> lyc_match_flag;
 
         uint8& lcdc;
@@ -62,8 +67,8 @@ class PPU
         Bit<5> window_enabled;
         Bit<4> tile_data_map;
         Bit<3> bg_tile_map;
-        Bit<2> object_size;
-        Bit<1> object_enabled;
+        Bit<2> sprite_size;
+        Bit<1> sprite_enabled;
         Bit<0> bg_enabled;
 
         uint8& ly;
@@ -75,6 +80,9 @@ class PPU
         uint8& wx;
         uint8& wy;
 
+        // Interrupt vblank request bit
+        Bit<0> if_vblank_bit;
+
         // Palette reference
 
         uint8& bgp;
@@ -82,12 +90,21 @@ class PPU
         uint8& obp1;
 
         // Callback function variable
-        std::function<void()> v_blank_callback;
+        std::function<void()> vblank_callback;
 
         //
         
         void set_mode(MODE mode);
+        
+        //
+        void clear_framebuffer();
         void draw_scanline();
+
+        void draw_scanline_bg_pixels();
+        void draw_scanline_sprite_pixels();
+        
+        std::vector<const Sprite*> oam_search();
+        const Sprite* get_highest_priority_sprite(uint8 x, const std::vector<const Sprite*>& sprites);
 };
 
 #endif // _VIDEO_H_

@@ -124,6 +124,12 @@ bool MCU::write_8bit( uint16 address, uint8  data)
     // IO registers
     if ( address < 0xFF80 )
     {
+        // DMA Transfer
+        if ( address == MCU::ADDRESS::DMA )
+        {
+            dma(data);
+        }
+
         // Send serial
         if ( (address == MCU::ADDRESS::SC) && (data == 0x81) )
         {
@@ -215,6 +221,15 @@ uint8&  MCU::get_memory_reference(uint16 address)
         return hram[address - 0xFF80];
 
     throw "Error: Unable to get reference from invalid address";
+}
+
+// DMA transfer function
+void MCU::dma(uint8 source)
+{
+    uint16 address = static_cast<uint16>( source << 8 );
+
+    for ( uint16 i = 0 ; i < 0x00A0 ; i++ )
+        oam[i] = get_memory_reference(address + i);
 }
 
 

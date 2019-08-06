@@ -2,6 +2,7 @@
 #define _TYPES_H_
 
 #include <array>
+#include <functional>
 
 // Typedef of regular integer types //
 
@@ -148,9 +149,9 @@ struct Tile
 {
     public:
 
-        uint8 getPixel(uint8 x, uint8 y);
+        uint8 get_pixel(uint8 x, uint8 y);
 
-        void toRGB( Tile_Pixel_Array pixels,
+        void to_rgb( Tile_Pixel_Array pixels,
                     uint8 gb_palette = 0xE4, 
                     const RGB_Palette& rgb_palette = RGB_Palette::BLACK_AND_WHITE 
                   ) const;
@@ -162,7 +163,7 @@ struct Tile
 
 // Sprite (OBJ - Object) helper class //
 
-struct Object
+struct Sprite
 {
     public:
 
@@ -175,7 +176,7 @@ struct Object
             TILE_BANK  = 3
         };
 
-        bool get_attribute(ATTRIBUTE bit)
+        bool get_attribute(ATTRIBUTE bit) const
         {
             return get_bit(bit, attributes);
         }
@@ -185,7 +186,7 @@ struct Object
             set_bit(bit, attributes, value);
         }
 
-        uint8 get_cgb_palette()
+        uint8 get_cgb_palette() const
         {
             return attributes & 0x07;
         }
@@ -201,11 +202,11 @@ struct Object
         uint8 tile_number;
         uint8 attributes;
 
-    private:
-
+        static const std::function<bool(const Sprite, const Sprite)> comp_x;
+        static const std::function<bool(const Sprite, const Sprite)> comp_y;
         
 };
 
-typedef Object Sprite;
+typedef Sprite Object;
 
 #endif // _TYPES_H_

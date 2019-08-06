@@ -160,6 +160,9 @@ class MCU
 
         el::Logger* log;
 
+        // DMA transfer function
+        void dma(uint8 source);
+
         // Cartridge Rom (0x0000 - 0x7FFF) + Ram (0xA000 - 0xBFFF)
         std::unique_ptr<Cartridge>& cartridge;
 

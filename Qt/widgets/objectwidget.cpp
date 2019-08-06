@@ -27,7 +27,7 @@ ObjectWidget::ObjectWidget(Object* _object, unsigned int number, QWidget *parent
     ui->tile_bank_comboBox->addItem("VRAM Bank 0");
     ui->tile_bank_comboBox->addItem("VRAM Bank 1");
 
-    ui->tile_bank_comboBox->setEnabled(false);
+    //ui->tile_bank_comboBox->setEnabled(false);
 
     //
     ui->dmg_palette_comboBox->addItem("OBP0");
@@ -44,7 +44,7 @@ ObjectWidget::ObjectWidget(Object* _object, unsigned int number, QWidget *parent
     ui->cgb_palette_comboBox->addItem("OBP6");
     ui->cgb_palette_comboBox->addItem("OBP7");
 
-    ui->cgb_palette_comboBox->setEnabled(false);
+    //ui->cgb_palette_comboBox->setEnabled(false);
 
     update();
 }

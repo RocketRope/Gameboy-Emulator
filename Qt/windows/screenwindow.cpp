@@ -12,7 +12,7 @@ ScreenWindow::ScreenWindow(Gameboy* _gameboy, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    gameboy->ppu.register_v_blank_callback( std::bind(&ScreenWindow::vblank_update_callback, this) );
+    gameboy->ppu.register_vblank_callback( std::bind(&ScreenWindow::vblank_update_callback, this) );
 
     ui->graphicsView->setSceneRect(0,0, 160, 144);
     ui->graphicsView->setScene(&scene);
