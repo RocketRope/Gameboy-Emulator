@@ -17,6 +17,31 @@ MCU::~MCU()
 //
 void MCU::reset()
 {
+    // Reset Video ram
+    for ( int bank = 0 ; bank < 1 ; bank++ )
+        for ( int i = 0 ; i < 0x2000 ; i++ )
+            vram[bank][i] = 0x00;
+
+    // Reset Work ram
+    for ( int bank = 0 ; bank < 8 ; bank++ )
+        for ( int i = 0 ; i < 0x1000 ; i++ )
+            wram[bank][i] = 0x00;
+
+    // Reset OAM
+    for ( int i = 0 ; i < 0x00A0 ; i++ )
+        oam[i] = 0x00;
+
+    // Reset IO Registers
+    for ( int i = 0 ; i < 0x00E0 ; i++ )
+        io_registers[i] = 0x00;
+
+    for ( int i = 0 ; i < 0x005F ; i++ )
+        io_registers[i] = 0xFF;
+
+    // Reset hram
+    for ( int i = 0 ; i < 0x0080 ; i ++)
+        hram[i] = 0x00;
+
     get_memory_reference(ADDRESS::TIMA) = 0x00;   // TIMA
     get_memory_reference(ADDRESS::TMA)  = 0x00;   // TMA
     get_memory_reference(ADDRESS::TAC)  = 0x00;   // TAC
@@ -50,7 +75,7 @@ void MCU::reset()
     get_memory_reference(ADDRESS::IE)   = 0x00;   // IE
 
     // TEMP???
-    get_memory_reference(ADDRESS::LY)      = 0x90; // LY
+    get_memory_reference(ADDRESS::LY)      = 0x00; // LY
     get_memory_reference(ADDRESS::DIV)     = 0x1E;   // DIV High
     get_memory_reference(ADDRESS::DIV - 1) = 0xA0;  // DIV low
 }
@@ -59,7 +84,34 @@ void MCU::reset()
 // 
 uint8 MCU::read_8bit( uint16 address)
 {
-    return get_memory_reference(address);
+    switch (address)
+    {
+        case MCU::ADDRESS::JOYP:
+        {
+            uint8& joyp = get_memory_reference(address);
+
+            if ( get_bit(4, joyp) == false )
+            {
+                set_bit(0, joyp, !joypad.right);
+                set_bit(1, joyp, !joypad.left);
+                set_bit(2, joyp, !joypad.up);
+                set_bit(3, joyp, !joypad.down);
+            }
+            else if ( get_bit(5, joyp) == false )
+            {
+                set_bit(0, joyp, !joypad.a);
+                set_bit(1, joyp, !joypad.b);
+                set_bit(2, joyp, !joypad.select);
+                set_bit(3, joyp, !joypad.start);
+            }
+
+            return joyp;
+        }
+
+        default:
+            return get_memory_reference(address);
+    }
+    
 }
 uint16 MCU::read_16bit(uint16 address)
 {
@@ -124,42 +176,77 @@ bool MCU::write_8bit( uint16 address, uint8  data)
     // IO registers
     if ( address < 0xFF80 )
     {
-
         switch (address)
         {
-        case /* constant-expression */:
-            /* code */
-            break;
-        
-        default:
-            io_registers[address - 0xFEA0] = data;
-            break;
+            case MCU::ADDRESS::SC:
+            {
+                if ( data == 0x81 )
+                    if ( serial_send_callback )
+                        serial_send_callback( io_registers[MCU::ADDRESS::SB - 0xFEA0] );
+
+                return true;
+            }
+
+            case MCU::ADDRESS::DIV:
+            {
+                io_registers[MCU::ADDRESS::DIV - 0xFEA0] = 0x00;
+                io_registers[(MCU::ADDRESS::DIV - 1) - 0xFEA0] = 0x00;
+
+                return true;
+            }
+
+            case MCU::ADDRESS::DMA:
+            {
+                dma(data);
+                
+                return true;
+            }
+
+            case MCU::ADDRESS::JOYP:
+            {
+                io_registers[address - 0xFEA0] = data & 0x30;
+
+                return true;
+            }
+            case MCU::ADDRESS::SB:
+            case MCU::ADDRESS::TIMA:
+            case MCU::ADDRESS::TMA:
+            case MCU::ADDRESS::TAC:
+            case MCU::ADDRESS::NR10:
+            case MCU::ADDRESS::NR11:
+            case MCU::ADDRESS::NR12:
+            case MCU::ADDRESS::NR13:
+            case MCU::ADDRESS::NR14:
+            case MCU::ADDRESS::NR21:
+            case MCU::ADDRESS::NR22:
+            case MCU::ADDRESS::NR23:
+            case MCU::ADDRESS::NR24:
+            case MCU::ADDRESS::NR30:
+            case MCU::ADDRESS::NR31:
+            case MCU::ADDRESS::NR32:
+            case MCU::ADDRESS::NR33:
+            case MCU::ADDRESS::NR34:
+            case MCU::ADDRESS::NR41:
+            case MCU::ADDRESS::NR42:
+            case MCU::ADDRESS::NR43:
+            case MCU::ADDRESS::NR44:
+            case MCU::ADDRESS::NR50:
+            case MCU::ADDRESS::NR51:
+            case MCU::ADDRESS::NR52:
+            case MCU::ADDRESS::LCDC:
+            case MCU::ADDRESS::STAT:
+            case MCU::ADDRESS::SCY:
+            case MCU::ADDRESS::SCX:
+            case MCU::ADDRESS::LY:
+            case MCU::ADDRESS::LYC:
+            case MCU::ADDRESS::BGP:
+            case MCU::ADDRESS::OBP0:
+            case MCU::ADDRESS::OBP1:
+            case MCU::ADDRESS::WY:
+            case MCU::ADDRESS::WX:
+            default:
+                io_registers[address - 0xFEA0] = data;
         }
-        // DMA Transfer
-        if ( address == MCU::ADDRESS::DMA )
-        {
-            dma(data);
-        }
-
-        // Send serial
-        if ( (address == MCU::ADDRESS::SC) && (data == 0x81) )
-        {
-            if ( serial_send_callback )
-                serial_send_callback( io_registers[MCU::ADDRESS::SB - 0xFEA0] );
-
-            return true;
-        }
-
-        // Clear DIV
-        if ( address == MCU::ADDRESS::DIV )
-        {
-            io_registers[MCU::ADDRESS::DIV - 0xFEA0] = 0x00;
-            io_registers[(MCU::ADDRESS::DIV - 1) - 0xFEA0] = 0x00;
-
-            return true;
-        }
-
-        io_registers[address - 0xFEA0] = data;
 
         return true;
     }

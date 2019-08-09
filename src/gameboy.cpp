@@ -19,6 +19,8 @@ void Gameboy::reset()
 {
     mcu.reset();
     cpu.reset();
+    ppu.reset();
+    timer.reset();
 }
 
 void Gameboy::run(int clocks, uint16 break_pc)

@@ -131,6 +131,9 @@
        <widget class="TimerWidget" name="timer" native="true"/>
       </item>
       <item>
+       <widget class="JoypadWidget" name="joypad" native="true"/>
+      </item>
+      <item>
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -253,6 +256,12 @@
    <class>InterruptWidget</class>
    <extends>QWidget</extends>
    <header>interruptwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>JoypadWidget</class>
+   <extends>QWidget</extends>
+   <header>joypadwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

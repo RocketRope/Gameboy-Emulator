@@ -30,6 +30,7 @@ SOURCES += \
     Qt/widgets/cpuregisterswidget.cpp \
     Qt/widgets/cpuflagswidget.cpp \
     Qt/widgets/interruptwidget.cpp \
+    Qt/widgets/joypadwidget.cpp \
     Qt/widgets/lcdregisterswidget.cpp \
     Qt/widgets/memorywidget.cpp \
     Qt/widgets/oamwidget.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     Qt/widgets/cpuregisterswidget.h \
     Qt/widgets/cpuflagswidget.h \
     Qt/widgets/interruptwidget.h \
+    Qt/widgets/joypadwidget.h \
     Qt/widgets/lcdregisterswidget.h \
     Qt/widgets/memorywidget.h \
     Qt/widgets/oamwidget.h \
@@ -82,6 +84,7 @@ FORMS += \
     Qt/widgets/cpuregisterswidget.ui \
     Qt/widgets/cpuflagswidget.ui \
     Qt/widgets/interruptwidget.ui \
+    Qt/widgets/joypadwidget.ui \
     Qt/widgets/lcdregisterswidget.ui \
     Qt/widgets/memorywidget.ui \
     Qt/widgets/oamwidget.ui \

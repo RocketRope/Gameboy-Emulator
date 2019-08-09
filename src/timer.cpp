@@ -3,14 +3,19 @@
 Timer::Timer(MCU* _mcu) :
     mcu(_mcu),
     div( *((uint16*) (&(mcu->get_memory_reference(MCU::ADDRESS::DIV - 1)))) ),
-    div_low( mcu->get_memory_reference(0xFF03) ),
+    div_low(  mcu->get_memory_reference(0xFF03) ),
     div_high( mcu->get_memory_reference(MCU::ADDRESS::DIV) ),
-    tima( mcu->get_memory_reference(MCU::ADDRESS::TIMA) ),
-    tma( mcu->get_memory_reference(MCU::ADDRESS::TMA) ),
-    tac( mcu->get_memory_reference(MCU::ADDRESS::TAC) ),
+    tima(     mcu->get_memory_reference(MCU::ADDRESS::TIMA) ),
+    tma(      mcu->get_memory_reference(MCU::ADDRESS::TMA) ),
+    tac(      mcu->get_memory_reference(MCU::ADDRESS::TAC) ),
     if_timer_flag( mcu->get_memory_reference(MCU::ADDRESS::IF) )
 {
+    reset();
+}
 
+void Timer::reset()
+{
+    prev_edge = false;
 }
 
 void Timer::step(uint16 elapsed_clocks)

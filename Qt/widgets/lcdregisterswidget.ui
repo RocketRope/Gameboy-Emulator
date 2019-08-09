@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>231</height>
+    <width>385</width>
+    <height>242</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,6 +28,12 @@
    </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>LCD Registers</string>
      </property>
@@ -47,76 +53,76 @@
       <item>
        <widget class="QGroupBox" name="lcdc_groupBox">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="title">
-         <string>LCDC</string>
+         <string>LCDC - 0xFF40</string>
         </property>
         <property name="flat">
          <bool>true</bool>
         </property>
         <layout class="QFormLayout" name="formLayout">
          <item row="0" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_bg_display_on">
            <property name="text">
-            <string>BG Display  On</string>
+            <string>BG Display Enable :</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="label_objects_on">
            <property name="text">
-            <string>Objects On </string>
+            <string>Objects  Enable  :</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="label_object_size">
            <property name="text">
-            <string>Objects Size </string>
+            <string>Objects Size : </string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="label_bg_map">
            <property name="text">
-            <string>BG Map</string>
+            <string>BG Map Area:</string>
            </property>
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="label_bg_tile_area">
            <property name="text">
-            <string>BG Tile Area </string>
+            <string>BG &amp; WindowTile Area :  </string>
            </property>
           </widget>
          </item>
          <item row="5" column="0">
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="label_window_on">
            <property name="text">
-            <string>Window On</string>
+            <string>Window Enable :</string>
            </property>
           </widget>
          </item>
          <item row="6" column="0">
-          <widget class="QLabel" name="label_8">
+          <widget class="QLabel" name="label_window_map">
            <property name="text">
-            <string>Window Map</string>
+            <string>Window Map Area :</string>
            </property>
           </widget>
          </item>
          <item row="7" column="0">
-          <widget class="QLabel" name="label_9">
+          <widget class="QLabel" name="label_lcd_stop_flag">
            <property name="text">
-            <string>LCD Stop Flag</string>
+            <string>LCD Stop Flag :</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="checkBox_bg_display_on">
            <property name="layoutDirection">
             <enum>Qt::RightToLeft</enum>
            </property>
@@ -126,7 +132,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QCheckBox" name="checkBox_2">
+          <widget class="QCheckBox" name="checkBox_objects_on">
            <property name="layoutDirection">
             <enum>Qt::RightToLeft</enum>
            </property>
@@ -136,7 +142,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QCheckBox" name="checkBox_3">
+          <widget class="QCheckBox" name="checkBox_window_on">
            <property name="layoutDirection">
             <enum>Qt::RightToLeft</enum>
            </property>
@@ -146,7 +152,7 @@
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="QCheckBox" name="checkBox_4">
+          <widget class="QCheckBox" name="checkBox_lcd_stop_flag">
            <property name="layoutDirection">
             <enum>Qt::RightToLeft</enum>
            </property>
@@ -156,100 +162,16 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QRadioButton" name="radioButton_2">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>8x8</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>8x16</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QComboBox" name="comboBox_object_size"/>
          </item>
          <item row="3" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QRadioButton" name="radioButton_4">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>0x9800</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton_3">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>0x9C00</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QComboBox" name="comboBox_bg_map"/>
          </item>
          <item row="4" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QRadioButton" name="radioButton_6">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>0x8000</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton_5">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>0x8800</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QComboBox" name="comboBox_bg_tile_area"/>
          </item>
          <item row="6" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QRadioButton" name="radioButton_8">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>0x9800</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton_7">
-             <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
-             </property>
-             <property name="text">
-              <string>0x9C00</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QComboBox" name="comboBox_window_map"/>
          </item>
         </layout>
        </widget>
@@ -257,18 +179,21 @@
       <item>
        <widget class="QGroupBox" name="stat_groupBox">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
         <property name="title">
-         <string>STAT</string>
+         <string>STAT -  0xFF41</string>
         </property>
         <property name="flat">
          <bool>true</bool>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="spacing">
+          <number>9</number>
+         </property>
          <item>
           <layout class="QFormLayout" name="formLayout_2">
            <property name="fieldGrowthPolicy">
@@ -278,14 +203,14 @@
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
            </property>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_2">
+            <widget class="QLabel" name="label_mode">
              <property name="text">
               <string>Mode :</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLabel" name="label_10">
+            <widget class="QLabel" name="label_mode_value">
              <property name="text">
               <string/>
              </property>
@@ -295,14 +220,14 @@
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="label_12">
+            <widget class="QLabel" name="label_lyc_coincidence">
              <property name="text">
               <string>LY = LYC</string>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QCheckBox" name="checkBox_5">
+            <widget class="QCheckBox" name="checkBox_lyc_coincidence">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -317,7 +242,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_4">
+          <widget class="QGroupBox" name="groupBox_interrupt_enable_bits">
            <property name="title">
             <string>Interrupt Enable Bits</string>
            </property>
@@ -338,14 +263,14 @@
              <number>0</number>
             </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="label_11">
+             <widget class="QLabel" name="label_interrupt_hblank">
               <property name="text">
                <string>H-Blank </string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QCheckBox" name="checkBox_6">
+             <widget class="QCheckBox" name="checkBox_interrupt_hblank">
               <property name="layoutDirection">
                <enum>Qt::RightToLeft</enum>
               </property>
@@ -355,14 +280,14 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_15">
+             <widget class="QLabel" name="label_interrupt_vblank">
               <property name="text">
                <string>V-Blank</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QCheckBox" name="checkBox_7">
+             <widget class="QCheckBox" name="checkBox_interrupt_vblank">
               <property name="layoutDirection">
                <enum>Qt::RightToLeft</enum>
               </property>
@@ -372,14 +297,14 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_16">
+             <widget class="QLabel" name="label_interrupt_oam">
               <property name="text">
                <string>OAM</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QCheckBox" name="checkBox_8">
+             <widget class="QCheckBox" name="checkBox_interrupt_oam">
               <property name="layoutDirection">
                <enum>Qt::RightToLeft</enum>
               </property>
@@ -389,14 +314,14 @@
              </widget>
             </item>
             <item row="3" column="0">
-             <widget class="QLabel" name="label_17">
+             <widget class="QLabel" name="label_interrupt_ly">
               <property name="text">
-               <string>LY </string>
+               <string>LYC Match</string>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QCheckBox" name="checkBox_9">
+             <widget class="QCheckBox" name="checkBox_interrupt_ly">
               <property name="layoutDirection">
                <enum>Qt::RightToLeft</enum>
               </property>
@@ -408,70 +333,21 @@
            </layout>
           </widget>
          </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </widget>
-      </item>
-      <item>
-       <layout class="QFormLayout" name="formLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string>LY :</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>40</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>LYC :</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>40</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>40</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
      </layout>
     </widget>
