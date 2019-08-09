@@ -111,6 +111,9 @@ class MCU
             IE = 0xFFFF
         };
 
+        // Joypad
+        Joypad joypad;
+
         // Video ram (Tile + BG maps), 2 banks in cgb mode. 0x8000 - 0x9FFF
         uint8 vram[2][0x2000] = {{0},{0}};
 

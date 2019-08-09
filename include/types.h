@@ -149,7 +149,7 @@ struct Tile
 {
     public:
 
-        uint8 get_pixel(uint8 x, uint8 y);
+        uint8 get_pixel(uint8 x, uint8 y) const;
 
         void to_rgb( Tile_Pixel_Array pixels,
                     uint8 gb_palette = 0xE4, 
@@ -197,16 +197,42 @@ struct Sprite
             attributes |= (palette & 0x07);
         }
 
+        uint8 get_pixel(const Tile& tile, uint8 x, uint8 y)
+        {
+            if (  get_attribute(ATTRIBUTE::FLIP_X) )
+                x = 7 - x;
+            if (  get_attribute(ATTRIBUTE::FLIP_Y) )
+                y = 7 - y;
+
+            return tile.get_pixel(x, y);
+        }
+
         uint8 pos_y;
         uint8 pos_x;
         uint8 tile_number;
         uint8 attributes;
 
-        static const std::function<bool(const Sprite, const Sprite)> comp_x;
-        static const std::function<bool(const Sprite, const Sprite)> comp_y;
+        static const std::function<bool(const Sprite&, const Sprite&)> comp_x;
+        static const std::function<bool(const Sprite&, const Sprite&)> comp_y;
         
 };
 
 typedef Sprite Object;
+
+// Joypad helper struct
+
+struct Joypad
+{
+    bool up    = false;
+    bool down  = false;
+    bool left  = false;
+    bool right = false;
+
+    bool start  = false;
+    bool select = false;
+
+    bool a = false;
+    bool b = false;
+};
 
 #endif // _TYPES_H_

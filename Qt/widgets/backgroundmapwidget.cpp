@@ -9,7 +9,7 @@ BackgroundMapWidget::BackgroundMapWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // Scene
-    scene.setSceneRect(0, 0, 256, 256);
+    scene.setSceneRect(0, 0, 255, 255);
     ui->graphicsView->setScene(&scene);
 
     // Tiles setup
@@ -61,11 +61,11 @@ void BackgroundMapWidget::updateViewLines()
     const uint8 screen_width  = 160;
     const uint8 screen_height = 144;
 
-    uint8 left = mcu->get_memory_reference(MCU::ADDRESS::SCX) - 1;
-    uint8 top  = mcu->get_memory_reference(MCU::ADDRESS::SCY) - 1;
+    uint8 left = mcu->get_memory_reference(MCU::ADDRESS::SCX);
+    uint8 top  = mcu->get_memory_reference(MCU::ADDRESS::SCY);
 
-    uint8 bottom = top + screen_height + 2;
-    uint8 right  = left + screen_width + 2;
+    uint8 bottom = top + screen_height;
+    uint8 right  = left + screen_width;
 
     // Horizontal lines
     if ( left > right )

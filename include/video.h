@@ -103,7 +103,7 @@ class PPU
         void draw_scanline_bg_pixels();
         void draw_scanline_sprite_pixels();
         
-        std::vector<const Sprite*> oam_search();
+        std::vector<Sprite> oam_search();
         const Sprite* get_highest_priority_sprite(uint8 x, const std::vector<const Sprite*>& sprites);
 };
 

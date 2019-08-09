@@ -27,7 +27,7 @@ ObjectWidget::ObjectWidget(Object* _object, unsigned int number, QWidget *parent
     ui->tile_bank_comboBox->addItem("VRAM Bank 0");
     ui->tile_bank_comboBox->addItem("VRAM Bank 1");
 
-    //ui->tile_bank_comboBox->setEnabled(false);
+    ui->tile_bank_comboBox->setEnabled(false);
 
     //
     ui->dmg_palette_comboBox->addItem("OBP0");
@@ -44,7 +44,7 @@ ObjectWidget::ObjectWidget(Object* _object, unsigned int number, QWidget *parent
     ui->cgb_palette_comboBox->addItem("OBP6");
     ui->cgb_palette_comboBox->addItem("OBP7");
 
-    //ui->cgb_palette_comboBox->setEnabled(false);
+    ui->cgb_palette_comboBox->setEnabled(false);
 
     update();
 }
@@ -58,20 +58,24 @@ void ObjectWidget::update()
 {
     // Tile Graphics View
 
+    /* CGB
     if ( object->get_attribute(Object::ATTRIBUTE::TILE_BANK) )
         tile.setTilePtr(&mcu->tile_map_1[object->tile_number]);
     else
         tile.setTilePtr(&mcu->tile_map_0[object->tile_number]);
+    */
+
+    tile.setTilePtr(&mcu->tile_map_0[object->tile_number]);
 
     tile.update();
     scene.update();
 
-    // Tile Vumber
+    // Tile Number
     ui->tile_number_lineEdit->setText( toHexQString(object->tile_number, 2) );
 
     // Tile Address
 
-    QString str_address = QString::number( object->get_attribute(Object::ATTRIBUTE::TILE_BANK) );
+    QString str_address = "0"; // = QString::number( object->get_attribute(Object::ATTRIBUTE::TILE_BANK) );
 
     uint16 address = (object->tile_number * sizeof(Tile)) + 0x8000;
     str_address += ':' + toHexQString(address, 4);

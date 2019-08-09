@@ -27,7 +27,7 @@ const RGB_Palette RGB_Palette::GB_ORIGINAL_GREEN{ RGB_Color::GB_WHITE,
 
 // Tile helper class //
 
-uint8 Tile::get_pixel(uint8 x, uint8 y)
+uint8 Tile::get_pixel(uint8 x, uint8 y) const
 {
     if ( y > 7 )
         return 0x00;
@@ -88,5 +88,5 @@ void Tile::to_rgb( Tile_Pixel_Array pixels, uint8 gb_palette, const RGB_Palette&
 
 // Sprite helper class
 
-const std::function<bool(const Sprite, const Sprite)> Sprite::comp_x = [](const Sprite& a, const Sprite& b) { return a.pos_x > b.pos_x; };
-const std::function<bool(const Sprite, const Sprite)> Sprite::comp_y = [](const Sprite& a, const Sprite& b) { return a.pos_y > b.pos_y; };
+const std::function<bool(const Sprite&, const Sprite&)> Sprite::comp_x = [](const Sprite& a, const Sprite& b) { return a.pos_x > b.pos_x; };
+const std::function<bool(const Sprite&, const Sprite&)> Sprite::comp_y = [](const Sprite& a, const Sprite& b) { return a.pos_y > b.pos_y; };

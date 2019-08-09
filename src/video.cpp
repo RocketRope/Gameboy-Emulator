@@ -159,39 +159,67 @@ void PPU::draw_scanline_bg_pixels()
 
 void PPU::draw_scanline_sprite_pixels()
 {
+    // OAM search
+    std::vector<Sprite> sprites = oam_search();
 
+    for ( auto sprite = sprites.begin() ; sprite != sprites.end() ; sprite++ )
+    {
+        uint8 y = ly - sprite->pos_y + 16;
+
+        Tile tile = mcu->tile_map_0[sprite->tile_number];
+
+        for ( int x = 0 ; x < 8 ; x++ )
+        {
+            if ( (sprite->pos_x + x) >= screen_width )
+                break;
+            if ( (sprite->pos_x + x - 8) < 0)
+                continue;
+
+            if ( sprite->get_attribute(Sprite::ATTRIBUTE::PRIORITY) )
+            {
+                // Background over sprite
+
+                if ( framebuffer[ly][sprite->pos_x + x - 8] == 0x00 )
+                {
+                    uint8 pixel = sprite->get_pixel(tile, x, y);
+
+                    framebuffer[ly][sprite->pos_x + x - 8] = pixel;
+                }
+            }
+            else
+            {
+                // Sprite over background
+
+                uint8 pixel = sprite->get_pixel(tile, x, y);
+
+                if ( pixel != 0x00 )
+                    framebuffer[ly][sprite->pos_x + x - 8] = pixel;
+            }
+        }
+    }
 }
 
-std::vector<const Sprite*> PPU::oam_search()
+std::vector<Sprite> PPU::oam_search()
 {
-    std::vector<const Sprite*> sprites;
+    std::vector<Sprite> sprites;
 
     for ( int i = 0 ; i < 40 ; i++ )
     {
-        Sprite* sprite = &mcu->objects[i];
+        Sprite sprite = mcu->objects[i];
 
-        if ( ( sprite->pos_y >= ly ) && ( sprite->pos_y <= (ly + 8) ) )
-            sprites.push_back(sprite);
+        // Add only sprites that are inside the screen
+        if ( (ly >= (sprite.pos_y - 16)) &&
+             (ly < (sprite.pos_y + 8 - 16)) )
+        {
+                sprites.push_back(sprite);
+        }
     }
 
-    std::sort( sprites.begin(), sprites.end(), []( const Sprite* a,const Sprite* b){ return a->pos_x > b->pos_y; } );
+    //std::sort( sprites.begin(), sprites.end(), []( const Sprite a,const Sprite b){ return a.pos_x > b.pos_y; } );
 
     return sprites;
 }
 
-const Sprite* PPU::get_highest_priority_sprite(uint8 x, const std::vector<const Sprite*>& sprites)
-{
-    for ( const Sprite* sprite : sprites )
-    {
-        if ( ( sprite->pos_x >= x ) && (sprite->pos_x <= (x + 8) ) )
-            return sprite;
-
-        if ( sprite->pos_x > (x + 8) )
-            return nullptr;
-    }
-
-    return nullptr;
-}
 
 
 

@@ -124,6 +124,17 @@ bool MCU::write_8bit( uint16 address, uint8  data)
     // IO registers
     if ( address < 0xFF80 )
     {
+
+        switch (address)
+        {
+        case /* constant-expression */:
+            /* code */
+            break;
+        
+        default:
+            io_registers[address - 0xFEA0] = data;
+            break;
+        }
         // DMA Transfer
         if ( address == MCU::ADDRESS::DMA )
         {
