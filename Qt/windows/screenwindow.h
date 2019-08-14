@@ -16,12 +16,25 @@ class ScreenWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
     explicit ScreenWindow(Gameboy* _gameboy, QWidget *parent = nullptr);
     ~ScreenWindow();
 
     void vblank_update_callback();
 
+    // Events
+
+    bool eventFilter(QObject *obj, QEvent *event);
+
+    void changeEvent(QEvent *event);
+
+    bool setJoypadKey(int key, bool value);
+
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
+
 private:
+
     Ui::ScreenWindow *ui;
 
     Gameboy* gameboy;

@@ -274,7 +274,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="lcd_label">
           <property name="text">
-           <string>LCD</string>
+           <string>LCD STAT</string>
           </property>
          </widget>
         </item>

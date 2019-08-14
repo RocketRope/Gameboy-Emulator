@@ -24,6 +24,16 @@ public:
     virtual void update() {}
     static void updateWidgets();
 
+    template<typename T>
+    static void updateWidgetType()
+    {
+        for ( auto w : widgets )
+        {
+            if ( dynamic_cast<T>(w) != nullptr )
+                w->update();
+        }
+    }
+
 protected:
 
     static Gameboy* gameboy;

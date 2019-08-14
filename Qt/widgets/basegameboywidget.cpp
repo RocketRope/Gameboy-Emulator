@@ -1,13 +1,12 @@
 #include "basegameboywidget.h"
 
-#include <iostream> // Temp!!!
-
 // Static member declaration
 Gameboy* BaseGameboyWidget::gameboy = nullptr;
 CPU*     BaseGameboyWidget::cpu     = nullptr;
 MCU*     BaseGameboyWidget::mcu     = nullptr;
 
 QVector<BaseGameboyWidget*> BaseGameboyWidget::widgets;
+
 
 BaseGameboyWidget::BaseGameboyWidget(QWidget *parent) :
     QWidget(parent)
