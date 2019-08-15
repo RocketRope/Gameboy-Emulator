@@ -20,6 +20,7 @@ public:
     explicit ScreenWindow(Gameboy* _gameboy, QWidget *parent = nullptr);
     ~ScreenWindow();
 
+    Q_INVOKABLE void updateFramebuffer();
     void vblank_update_callback();
 
     // Events
@@ -32,6 +33,7 @@ public:
 
     void keyPressEvent(QKeyEvent* event);
     void keyReleaseEvent(QKeyEvent* event);
+
 
 private:
 

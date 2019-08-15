@@ -1,6 +1,8 @@
 #ifndef _VIDEO_H_
 #define _VIDEO_H_
 
+#include <chrono>
+
 #include "types.h"
 #include "memory.h"
 
@@ -91,6 +93,11 @@ class PPU
 
         // Callback function variable
         std::function<void()> vblank_callback;
+
+        // Time keeping
+
+        const std::chrono::microseconds frame_time{16742};
+        std::chrono::time_point<std::chrono::high_resolution_clock> frame_start;
 
         //
         

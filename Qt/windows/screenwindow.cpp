@@ -35,10 +35,16 @@ ScreenWindow::~ScreenWindow()
     delete ui;
 }
 
-void ScreenWindow::vblank_update_callback()
+void ScreenWindow::updateFramebuffer()
 {
+    //std::cerr << "Slot" << std::endl;
     gameboy->ppu.get_framebuffer(pixels);
     pixmap->setPixmap(QPixmap::fromImage(image));
+}
+
+void ScreenWindow::vblank_update_callback()
+{
+    QMetaObject::invokeMethod(this, "updateFramebuffer", Qt::QueuedConnection);
 }
 
 bool ScreenWindow::eventFilter(QObject *obj, QEvent *event)
@@ -95,7 +101,6 @@ bool ScreenWindow::setJoypadKey(int key, bool value)
 
         case Qt::Key_Up:
             gameboy->mcu.joypad.up = value;
-            std::cout << value << " : " << gameboy->mcu.joypad.up << std::endl;
             break;
         case Qt::Key_Left:
             gameboy->mcu.joypad.left = value;
@@ -111,7 +116,6 @@ bool ScreenWindow::setJoypadKey(int key, bool value)
             return false;
     }
 
-    BaseGameboyWidget::updateWidgetType<JoypadWidget*>();
     return true;
 }
 

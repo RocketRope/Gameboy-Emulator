@@ -32,37 +32,7 @@ void DebugWindow::on_actionLoad_ROM_triggered()
     BaseGameboyWidget::updateWidgets();
 
     this->setWindowTitle("Debug Window | " + rom_name.mid(rom_name.lastIndexOf('/') + 1));
+
+    gameboy->run();
 }
 
-void DebugWindow::on_run_to_pushButton_clicked()
-{
-    bool ok;
-
-    uint16 break_pc = static_cast<uint16>( ui->run_to_lineEdit->text().toUInt(&ok, 16) );
-
-    if ( ok )
-        gameboy->run(100000, break_pc);
-
-    BaseGameboyWidget::updateWidgets();
-}
-
-void DebugWindow::on_run_pushButton_clicked()
-{
-    gameboy->run(100000);
-
-    BaseGameboyWidget::updateWidgets();
-}
-
-void DebugWindow::on_step_pushButton_clicked()
-{
-    gameboy->run(1);
-
-    BaseGameboyWidget::updateWidgets();
-}
-
-void DebugWindow::on_pushButton_clicked()
-{
-    gameboy->reset();
-
-    BaseGameboyWidget::updateWidgets();
-}

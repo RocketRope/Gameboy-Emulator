@@ -30,7 +30,7 @@ class Cartridge
             uint16 global_checksum;       // 0x014E - 0x014F - Global Checksum
         };
 
-        enum MBC_Type
+        enum MBC_TYPE
         {
             ROM_ONLY                = 0x00,
             ROM_RAM                 = 0x08,
@@ -74,6 +74,10 @@ class Cartridge
 
         Cartridge( Header _header = {} );
         virtual ~Cartridge();
+
+        // Reset function //
+        
+        virtual void reset();
 
         // Virtual Read/Write functions //
 

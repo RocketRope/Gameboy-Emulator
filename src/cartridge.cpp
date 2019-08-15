@@ -15,6 +15,13 @@ Cartridge::~Cartridge()
 
 }
 
+// Reset function //
+
+void Cartridge::reset()
+{
+    ram.fill(0x00);
+}
+
 // Virtual Read/Write functions //
 
 uint8& Cartridge::read_8bit(uint16 /*address*/)
@@ -55,12 +62,12 @@ std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
     switch ( h.cartridge_type )
     {
 
-    case MBC_Type::ROM_ONLY :
-    case MBC_Type::ROM_RAM  :
-    case MBC_Type::ROM_RAM_BATTERY :
+    case MBC_TYPE::ROM_ONLY :
+    case MBC_TYPE::ROM_RAM  :
+    case MBC_TYPE::ROM_RAM_BATTERY :
         return std::make_unique<No_MBC>(h, file);
 
-    case MBC_Type::MBC1:
+    case MBC_TYPE::MBC1:
         return std::make_unique<No_MBC>(h, file); // Temp!!!!!
 
     default:

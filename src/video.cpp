@@ -1,6 +1,6 @@
 #include "video.h"
 
-#include <map>
+#include <thread> // Temp!!!!!!!
 
 // Constructor //
 
@@ -42,6 +42,8 @@ void PPU::reset()
 {
     scanline_vertical_counter = 0;
 
+    frame_start = std::chrono::high_resolution_clock::now();
+
     set_mode( MODE::OAM_SEARCH );
 
     clear_framebuffer();
@@ -79,21 +81,42 @@ void PPU::step(uint16 elapsed_clocks)
     }
     else // V BLANK
     {
+        // One time when entering vblank
+        if ( current_mode != MODE::V_BLANK )
+        {
+            set_mode( MODE::V_BLANK );
+
+            // Request interrupt
+            if_vblank_bit = true;
+            
+            if ( vblank_callback )
+                vblank_callback();
+            
+            //std::this_thread::sleep_for(std::chrono::milliseconds(16));
+
+            // Frametime synchronize
+            
+            auto frame_end = std::chrono::high_resolution_clock::now();
+
+            std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(frame_end - frame_start);
+
+            if ( delta_time < frame_time )
+            {
+                std::this_thread::sleep_for(frame_time - delta_time);
+            }
+
+            frame_start = frame_end;
+            
+
+        }
+
         // Start new frame when ly > 153
         if ( ly > 153 )
         {
             ly = 0;
 
-            // Request interrupt
-            if_vblank_bit = true;
-
-            if ( vblank_callback )
-                vblank_callback();
-
             clear_framebuffer();
         }
-
-        set_mode( MODE::V_BLANK );
     }
 }
 

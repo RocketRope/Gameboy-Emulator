@@ -1,6 +1,11 @@
 #ifndef _GAMEBOY_H_
 #define _GAMEBOY_H_
 
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <condition_variable>
+
 #include "el/easylogging++.h"
 
 #include "cpu.h"
@@ -28,12 +33,23 @@ class Gameboy
 
         void reset();
 
-        void run(int cycles, uint16 break_pc = 0x0000);
+        void step();
+
+        void run();
+        void pause();
 
         void load_rom(const char* filename);
 
     private:
 
+        std::atomic<bool> exit;
+        std::atomic<bool> running;
+
+        std::thread run_thread;
+        std::mutex  run_mutex;
+        std::condition_variable run_cv;
+
+        void run_loop();
 };
 
 #endif // _GAMEBOY_H_
