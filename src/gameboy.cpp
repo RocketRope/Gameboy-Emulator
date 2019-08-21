@@ -5,9 +5,9 @@
 // Constructor/Destructor //
 
 Gameboy::Gameboy() :
-    mcu(cartridge),
-    cpu(&mcu),
-    timer(&mcu),
+    mcu(this),
+    cpu(this),
+    timer(this),
     ppu(&mcu)
 {
     cartridge = std::make_unique<Cartridge>();

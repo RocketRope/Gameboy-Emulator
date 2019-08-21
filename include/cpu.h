@@ -8,8 +8,9 @@
 #include <el/easylogging++.h>
 
 // gbe
-#include "memory.h"
 #include "types.h"
+
+class Gameboy;
 
 struct Registers
 {
@@ -96,18 +97,11 @@ class LR35902
             JOYPAD  = 0x04
         };
 
-        uint8& if_register;
-        uint8& ie_register;
-
         bool interrupt_enable;
-
-        //
-
-        bool halted;
 
         // Constructor/Destructor //
 
-        LR35902(MCU* _mcu);
+        LR35902(Gameboy* gameboy);
         ~LR35902();
 
         // Controll functions //
@@ -121,11 +115,17 @@ class LR35902
 
         el::Logger* log;
 
-        MCU* mcu;
+        Gameboy& system;
 
-        // Clock & Cycles counters //
-        uint64 clocks = 0; // Clocks 4Mhz
-        uint64 cycles = 0; // Machine cycles 1MHZ 
+        // Clock counter //
+        uint64 clocks = 0; // Clocks 4Mhz DMG
+
+        //
+
+        bool halted;
+
+        uint8& if_register;
+        uint8& ie_register;
 
         // 
 

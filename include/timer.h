@@ -15,19 +15,22 @@ class Timer
             FREQ_4kHz   = 0x00
         };
     
-        Timer(MCU* _mcu);
+        Timer(Gameboy* gameboy);
 
         void reset();
-
         void step(uint16 elapsed_clocks);
 
     private:
 
-        MCU* mcu;
+        Gameboy& system;
 
-        uint16& div;
-        uint8&  div_low;
-        uint8&  div_high;
+        union 
+        {
+            uint16 div;
+            struct { uint8 div_low, div_high; };
+        };
+
+        uint8& div_ref;
 
         uint8& tima;
         uint8& tma;

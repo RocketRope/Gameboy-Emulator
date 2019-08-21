@@ -1,3 +1,4 @@
+
 #ifndef _MCU_H_
 #define _MCU_H_
 
@@ -5,12 +6,13 @@
 #include <array>
 #include <functional>
 
-// el
+//  el
 #include "el/easylogging++.h"
 
 // gbe
 #include "types.h"
-#include "cartridge.h"
+
+class Gameboy;
 
 class MCU 
 {
@@ -138,49 +140,44 @@ class MCU
         uint8 hram[0x0080] = {0};
 
         // Constructor/Destructor //
-        MCU(std::unique_ptr<Cartridge>& _cartridge);
+        MCU(Gameboy* gameboy);
         ~MCU();
 
         //
         void reset();
 
-        //
+        // 
+        uint8& get_memory_reference(uint16 address);
+
+        // Read functions
         uint8  read_8bit( uint16 address);
         uint16 read_16bit(uint16 address);
 
-        //
+        // Write Functions
         bool write_8bit( uint16 address, uint8  data);
         bool write_16bit(uint16 address, uint16 data);
-
-        // 
-        uint8&  get_memory_reference(uint16 address);
-
+        
         // Callback register functions 
         void register_serial_send_callback(std::function<void(uint8)> callback);
         void register_input_read_callback(std::function<void(void)> callback);
 
     private:
 
+        //
+        Gameboy& system;
+
         el::Logger* log;
-
-        // DMA transfer function
-        void dma(uint8 source);
-
-        // Cartridge Rom (0x0000 - 0x7FFF) + Ram (0xA000 - 0xBFFF)
-        std::unique_ptr<Cartridge>& cartridge;
 
         // 
         uint8 current_vram_bank = 0;
         uint8 current_wram_bank = 1;
 
+        // DMA transfer function
+        void dma(uint8 source);
+
         // Callback functions variables
         std::function<void(uint8)> serial_send_callback;
         std::function<void(void)>  joypad_read_callback;
-
-    // Friends
-
-    friend class Timer;
-    friend class LR35902;
 };
 
 #endif // _MCU_H_

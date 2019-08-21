@@ -1,21 +1,21 @@
 #include "timer.h"
 
-Timer::Timer(MCU* _mcu) :
-    mcu(_mcu),
-    div( *((uint16*) (&(mcu->get_memory_reference(MCU::ADDRESS::DIV - 1)))) ),
-    div_low(  mcu->get_memory_reference(0xFF03) ),
-    div_high( mcu->get_memory_reference(MCU::ADDRESS::DIV) ),
-    tima(     mcu->get_memory_reference(MCU::ADDRESS::TIMA) ),
-    tma(      mcu->get_memory_reference(MCU::ADDRESS::TMA) ),
-    tac(      mcu->get_memory_reference(MCU::ADDRESS::TAC) ),
-    if_timer_flag( mcu->get_memory_reference(MCU::ADDRESS::IF) )
+#include "gameboy.h"
+
+Timer::Timer(Gameboy* gameboy) :
+    system(*gameboy),
+    div_ref( system.mcu.get_memory_reference(MCU::ADDRESS::DIV) ),
+    tima( system.mcu.get_memory_reference(MCU::ADDRESS::TIMA) ),
+    tma( system.mcu.get_memory_reference(MCU::ADDRESS::TMA) ),
+    tac( system.mcu.get_memory_reference(MCU::ADDRESS::TAC) ),
+    if_timer_flag( system.mcu.get_memory_reference(MCU::ADDRESS::IF) )
 {
     reset();
 }
 
 void Timer::reset()
 {
-    prev_edge = false;
+    div = 0x0000;
 }
 
 void Timer::step(uint16 elapsed_clocks)
@@ -27,6 +27,8 @@ void Timer::step(uint16 elapsed_clocks)
     {
         div +=  4;
         clocks += 4;
+
+        div_ref = div_high;
 
         // If timer is enabled 
         if ( get_bit(2, tac) )

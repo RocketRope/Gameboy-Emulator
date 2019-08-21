@@ -8,6 +8,8 @@
 
 #include "el/easylogging++.h"
 
+#include "types.h"
+
 #include "cpu.h"
 #include "video.h"
 #include "timer.h"

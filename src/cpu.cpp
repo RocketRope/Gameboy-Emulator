@@ -1,15 +1,19 @@
 #include "cpu.h"
 
+#include "gameboy.h"
+
 // Constructor/Destructor //
 
-LR35902::LR35902(MCU *_mcu)
-    : carry(reg.f),
-      half_carry(reg.f),
-      subtraction(reg.f),
-      zero(reg.f),
-      if_register(_mcu->get_memory_reference(MCU::ADDRESS::IF)),
-      ie_register(_mcu->get_memory_reference(MCU::ADDRESS::IE)),
-      mcu(_mcu)
+LR35902::LR35902(Gameboy* gameboy)
+    : 
+        system(*gameboy),
+        carry(reg.f),
+        half_carry(reg.f),
+        subtraction(reg.f),
+        zero(reg.f),
+        if_register(system.mcu.get_memory_reference(MCU::ADDRESS::IF)),
+        ie_register(system.mcu.get_memory_reference(MCU::ADDRESS::IE))
+      
 {
     log = el::Loggers::getLogger("CPU");
 
@@ -25,6 +29,8 @@ LR35902::~LR35902()
 void LR35902::reset()
 {
     di();
+
+    clocks = 0;
 
     halted = false;
 
@@ -44,7 +50,7 @@ uint64 LR35902::step()
     if (!handle_interrupts())
     {
         // Fetch
-        uint8 opcode = mcu->read_8bit(reg.pc);
+        uint8 opcode = system.mcu.read_8bit(reg.pc);
 
         // Decode/Execute
         if (opcode != 0xCB)
@@ -54,7 +60,7 @@ uint64 LR35902::step()
         else
         {
             reg.pc++;
-            opcode = mcu->read_8bit(reg.pc);
+            opcode = system.mcu.read_8bit(reg.pc);
 
             execute_opcode(opcode, true);
         }
@@ -117,7 +123,7 @@ bool LR35902::handle_interrupts()
 
             di();
 
-            mcu->write_8bit(MCU::ADDRESS::IF, if_register);
+            system.mcu.write_8bit(MCU::ADDRESS::IF, if_register);
 
             return true;
         }
@@ -247,7 +253,7 @@ void LR35902::rst(uint16 address)
 
 uint16 LR35902::pop()
 {
-    uint16 value = mcu->read_16bit(reg.sp);
+    uint16 value = system.mcu.read_16bit(reg.sp);
     reg.sp += 2;
 
     return value;
@@ -255,7 +261,7 @@ uint16 LR35902::pop()
 void LR35902::push(uint16 source)
 {
     reg.sp -= 2;
-    mcu->write_16bit(reg.sp, source);
+    system.mcu.write_16bit(reg.sp, source);
 }
 
 // ALU functions //
@@ -554,14 +560,14 @@ void LR35902::instr_0x00() // NOP
 }
 void LR35902::instr_0x01() // LD BC,d16
 {
-    reg.bc = mcu->read_16bit(reg.pc + 1);
+    reg.bc = system.mcu.read_16bit(reg.pc + 1);
 
     reg.pc += 3;
     clocks += 12;
 }
 void LR35902::instr_0x02() // LD (BC),A
 {
-    mcu->write_8bit(reg.bc, reg.a);
+    system.mcu.write_8bit(reg.bc, reg.a);
 
     reg.pc += 1;
     clocks += 8;
@@ -589,7 +595,7 @@ void LR35902::instr_0x05() // DEC B
 }
 void LR35902::instr_0x06() // LD B,d8
 {
-    reg.b = mcu->read_8bit(reg.pc + 1);
+    reg.b = system.mcu.read_8bit(reg.pc + 1);
 
     reg.pc += 2;
     clocks += 8;
@@ -605,7 +611,7 @@ void LR35902::instr_0x07() // RLCA
 }
 void LR35902::instr_0x08() // LD (a16),SP
 {
-    mcu->write_16bit(mcu->read_16bit(reg.pc + 1), reg.sp);
+    system.mcu.write_16bit(system.mcu.read_16bit(reg.pc + 1), reg.sp);
 
     reg.pc += 3;
     clocks += 20;
@@ -619,7 +625,7 @@ void LR35902::instr_0x09() // ADD HL,BC
 }
 void LR35902::instr_0x0A() // LD A,(BC)
 {
-    reg.a = mcu->read_8bit(reg.bc);
+    reg.a = system.mcu.read_8bit(reg.bc);
 
     reg.pc += 1;
     clocks += 8;
@@ -647,7 +653,7 @@ void LR35902::instr_0x0D() // DEC C
 }
 void LR35902::instr_0x0E() // LD C,d8
 {
-    reg.c = mcu->read_8bit(reg.pc + 1);
+    reg.c = system.mcu.read_8bit(reg.pc + 1);
 
     reg.pc += 2;
     clocks += 8;
@@ -670,14 +676,14 @@ void LR35902::instr_0x10() // STOP 0
 }
 void LR35902::instr_0x11() // LD DE,d16
 {
-    reg.de = mcu->read_16bit(reg.pc + 1);
+    reg.de = system.mcu.read_16bit(reg.pc + 1);
 
     reg.pc += 3;
     clocks += 12;
 }
 void LR35902::instr_0x12() // LD (DE),A
 {
-    mcu->write_8bit(reg.de, reg.a);
+    system.mcu.write_8bit(reg.de, reg.a);
 
     reg.pc += 1;
     clocks += 8;
@@ -705,7 +711,7 @@ void LR35902::instr_0x15() // DEC D
 }
 void LR35902::instr_0x16() // LD D,d8
 {
-    reg.d = mcu->read_8bit(reg.pc + 1);
+    reg.d = system.mcu.read_8bit(reg.pc + 1);
 
     reg.pc += 2;
     clocks += 8;
@@ -721,7 +727,7 @@ void LR35902::instr_0x17() // RLA
 }
 void LR35902::instr_0x18() // JR r8
 {
-    reg.pc += static_cast<int8>(mcu->read_8bit(reg.pc + 1));
+    reg.pc += static_cast<int8>(system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 12;
@@ -735,7 +741,7 @@ void LR35902::instr_0x19() // ADD HL,DE
 }
 void LR35902::instr_0x1A() // LD A,(DE)
 {
-    reg.a = mcu->read_8bit(reg.de);
+    reg.a = system.mcu.read_8bit(reg.de);
 
     reg.pc += 1;
     clocks += 8;
@@ -763,7 +769,7 @@ void LR35902::instr_0x1D() // DEC E
 }
 void LR35902::instr_0x1E() // LD E,d8
 {
-    reg.e = mcu->read_8bit(reg.pc + 1);
+    reg.e = system.mcu.read_8bit(reg.pc + 1);
 
     reg.pc += 2;
     clocks += 8;
@@ -781,7 +787,7 @@ void LR35902::instr_0x20() // JR NZ,r8
 {
     if (zero == false)
     {
-        reg.pc += static_cast<int8>(mcu->read_8bit(reg.pc + 1));
+        reg.pc += static_cast<int8>(system.mcu.read_8bit(reg.pc + 1));
         clocks += 12;
     }
     else
@@ -793,14 +799,14 @@ void LR35902::instr_0x20() // JR NZ,r8
 }
 void LR35902::instr_0x21() // LD HL,d16
 {
-    reg.hl = mcu->read_16bit(reg.pc + 1);
+    reg.hl = system.mcu.read_16bit(reg.pc + 1);
 
     reg.pc += 3;
     clocks += 12;
 }
 void LR35902::instr_0x22() // LD (HL+),A
 {
-    mcu->write_8bit(reg.hl, reg.a);
+    system.mcu.write_8bit(reg.hl, reg.a);
     reg.hl++;
 
     reg.pc += 1;
@@ -829,7 +835,7 @@ void LR35902::instr_0x25() // DEC H
 }
 void LR35902::instr_0x26() // LD H,d8
 {
-    reg.h = mcu->read_8bit(reg.pc + 1);
+    reg.h = system.mcu.read_8bit(reg.pc + 1);
 
     reg.pc += 2;
     clocks += 8;
@@ -845,7 +851,7 @@ void LR35902::instr_0x28() // JR Z,r8
 {
     if (zero == true)
     {
-        reg.pc += static_cast<int8>(mcu->read_8bit(reg.pc + 1));
+        reg.pc += static_cast<int8>(system.mcu.read_8bit(reg.pc + 1));
         clocks += 12;
     }
     else
@@ -864,7 +870,7 @@ void LR35902::instr_0x29() // ADD HL,HL
 }
 void LR35902::instr_0x2A() // LD A,(HL+)
 {
-    reg.a = mcu->read_8bit(reg.hl);
+    reg.a = system.mcu.read_8bit(reg.hl);
     reg.hl++;
 
     reg.pc += 1;
@@ -893,7 +899,7 @@ void LR35902::instr_0x2D() // DEC L
 }
 void LR35902::instr_0x2E() // LD L,d8
 {
-    reg.l = mcu->read_8bit(reg.pc + 1);
+    reg.l = system.mcu.read_8bit(reg.pc + 1);
 
     reg.pc += 2;
     clocks += 8;
@@ -909,7 +915,7 @@ void LR35902::instr_0x30() // JR NC,r8
 {
     if (carry == false)
     {
-        reg.pc += static_cast<int8>(mcu->read_8bit(reg.pc + 1));
+        reg.pc += static_cast<int8>(system.mcu.read_8bit(reg.pc + 1));
         clocks += 12;
     }
     else
@@ -921,14 +927,14 @@ void LR35902::instr_0x30() // JR NC,r8
 }
 void LR35902::instr_0x31() // LD SP,d16
 {
-    reg.sp = mcu->read_16bit(reg.pc + 1);
+    reg.sp = system.mcu.read_16bit(reg.pc + 1);
 
     reg.pc += 3;
     clocks += 12;
 }
 void LR35902::instr_0x32() // LD (HL-),A
 {
-    mcu->write_8bit(reg.hl, reg.a);
+    system.mcu.write_8bit(reg.hl, reg.a);
     reg.hl--;
 
     reg.pc += 1;
@@ -943,29 +949,29 @@ void LR35902::instr_0x33() // INC SP
 }
 void LR35902::instr_0x34() // INC (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     inc_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 12;
 }
 void LR35902::instr_0x35() // DEC (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     dec_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 12;
 }
 void LR35902::instr_0x36() // LD (HL),d8
 {
-    mcu->write_8bit(reg.hl, mcu->read_8bit(reg.pc + 1));
+    system.mcu.write_8bit(reg.hl, system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 12;
@@ -981,7 +987,7 @@ void LR35902::instr_0x38() // JR C,r8
 {
     if (carry == true)
     {
-        reg.pc += static_cast<int8>(mcu->read_8bit(reg.pc + 1));
+        reg.pc += static_cast<int8>(system.mcu.read_8bit(reg.pc + 1));
         clocks += 12;
     }
     else
@@ -1000,7 +1006,7 @@ void LR35902::instr_0x39() // ADD HL,SP
 }
 void LR35902::instr_0x3A() // LD A,(HL-)
 {
-    reg.a = mcu->read_8bit(reg.hl);
+    reg.a = system.mcu.read_8bit(reg.hl);
     reg.hl--;
 
     reg.pc += 1;
@@ -1029,7 +1035,7 @@ void LR35902::instr_0x3D() // DEC A
 }
 void LR35902::instr_0x3E() // LD A,d8
 {
-    reg.a = mcu->read_8bit(reg.pc + 1);
+    reg.a = system.mcu.read_8bit(reg.pc + 1);
 
     reg.pc += 2;
     clocks += 8;
@@ -1085,7 +1091,7 @@ void LR35902::instr_0x45() // LD B,L
 }
 void LR35902::instr_0x46() // LD B,(HL)
 {
-    reg.b = mcu->read_8bit(reg.hl);
+    reg.b = system.mcu.read_8bit(reg.hl);
 
     reg.pc += 1;
     clocks += 8;
@@ -1141,7 +1147,7 @@ void LR35902::instr_0x4D() // LD C,L
 }
 void LR35902::instr_0x4E() // LD C,(HL)
 {
-    reg.c = mcu->read_8bit(reg.hl);
+    reg.c = system.mcu.read_8bit(reg.hl);
 
     reg.pc += 1;
     clocks += 8;
@@ -1197,7 +1203,7 @@ void LR35902::instr_0x55() // LD D,L
 }
 void LR35902::instr_0x56() // LD D,(HL)
 {
-    reg.d = mcu->read_8bit(reg.hl);
+    reg.d = system.mcu.read_8bit(reg.hl);
 
     reg.pc += 1;
     clocks += 8;
@@ -1253,7 +1259,7 @@ void LR35902::instr_0x5D() // LD E,L
 }
 void LR35902::instr_0x5E() // LD E,(HL)
 {
-    reg.e = mcu->read_8bit(reg.hl);
+    reg.e = system.mcu.read_8bit(reg.hl);
 
     reg.pc += 1;
     clocks += 8;
@@ -1309,7 +1315,7 @@ void LR35902::instr_0x65() // LD H,L
 }
 void LR35902::instr_0x66() // LD H,(HL)
 {
-    reg.h = mcu->read_8bit(reg.hl);
+    reg.h = system.mcu.read_8bit(reg.hl);
 
     reg.pc += 1;
     clocks += 8;
@@ -1365,7 +1371,7 @@ void LR35902::instr_0x6D() // LD L,L
 }
 void LR35902::instr_0x6E() // LD L,(HL)
 {
-    reg.l = mcu->read_8bit(reg.hl);
+    reg.l = system.mcu.read_8bit(reg.hl);
 
     reg.pc += 1;
     clocks += 8;
@@ -1379,42 +1385,42 @@ void LR35902::instr_0x6F() // LD L,A
 }
 void LR35902::instr_0x70() // LD (HL),B
 {
-    mcu->write_8bit(reg.hl, reg.b);
+    system.mcu.write_8bit(reg.hl, reg.b);
 
     reg.pc += 1;
     clocks += 8;
 }
 void LR35902::instr_0x71() // LD (HL),C
 {
-    mcu->write_8bit(reg.hl, reg.c);
+    system.mcu.write_8bit(reg.hl, reg.c);
 
     reg.pc += 1;
     clocks += 8;
 }
 void LR35902::instr_0x72() // LD (HL),D
 {
-    mcu->write_8bit(reg.hl, reg.d);
+    system.mcu.write_8bit(reg.hl, reg.d);
 
     reg.pc += 1;
     clocks += 8;
 }
 void LR35902::instr_0x73() // LD (HL),E
 {
-    mcu->write_8bit(reg.hl, reg.e);
+    system.mcu.write_8bit(reg.hl, reg.e);
 
     reg.pc += 1;
     clocks += 8;
 }
 void LR35902::instr_0x74() // LD (HL),H
 {
-    mcu->write_8bit(reg.hl, reg.h);
+    system.mcu.write_8bit(reg.hl, reg.h);
 
     reg.pc += 1;
     clocks += 8;
 }
 void LR35902::instr_0x75() // LD (HL),L
 {
-    mcu->write_8bit(reg.hl, reg.l);
+    system.mcu.write_8bit(reg.hl, reg.l);
 
     reg.pc += 1;
     clocks += 8;
@@ -1431,7 +1437,7 @@ void LR35902::instr_0x76() // HALT
 }
 void LR35902::instr_0x77() // LD (HL),A
 {
-    mcu->write_8bit(reg.hl, reg.a);
+    system.mcu.write_8bit(reg.hl, reg.a);
 
     reg.pc += 1;
     clocks += 8;
@@ -1480,7 +1486,7 @@ void LR35902::instr_0x7D() // LD A,L
 }
 void LR35902::instr_0x7E() // LD A,(HL)
 {
-    reg.a = mcu->read_8bit(reg.hl);
+    reg.a = system.mcu.read_8bit(reg.hl);
 
     reg.pc += 1;
     clocks += 8;
@@ -1536,7 +1542,7 @@ void LR35902::instr_0x85() // ADD A,L
 }
 void LR35902::instr_0x86() // ADD A,(HL)
 {
-    add_8bit(mcu->read_8bit(reg.hl), false);
+    add_8bit(system.mcu.read_8bit(reg.hl), false);
 
     reg.pc += 1;
     clocks += 8;
@@ -1592,7 +1598,7 @@ void LR35902::instr_0x8D() // ADC A,L
 }
 void LR35902::instr_0x8E() // ADC A,(HL)
 {
-    add_8bit(mcu->read_8bit(reg.hl), true);
+    add_8bit(system.mcu.read_8bit(reg.hl), true);
 
     reg.pc += 1;
     clocks += 8;
@@ -1648,7 +1654,7 @@ void LR35902::instr_0x95() // SUB L
 }
 void LR35902::instr_0x96() // SUB (HL)
 {
-    sub_8bit(mcu->read_8bit(reg.hl), false);
+    sub_8bit(system.mcu.read_8bit(reg.hl), false);
 
     reg.pc += 1;
     clocks += 8;
@@ -1704,7 +1710,7 @@ void LR35902::instr_0x9D() // SBC A,L
 }
 void LR35902::instr_0x9E() // SBC A,(HL)
 {
-    sub_8bit(mcu->read_8bit(reg.hl), true);
+    sub_8bit(system.mcu.read_8bit(reg.hl), true);
 
     reg.pc += 1;
     clocks += 8;
@@ -1760,7 +1766,7 @@ void LR35902::instr_0xA5() // AND L
 }
 void LR35902::instr_0xA6() // AND (HL)
 {
-    and_8bit(mcu->read_8bit(reg.hl));
+    and_8bit(system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 8;
@@ -1816,7 +1822,7 @@ void LR35902::instr_0xAD() // XOR L
 }
 void LR35902::instr_0xAE() // XOR (HL)
 {
-    xor_8bit(mcu->read_8bit(reg.hl));
+    xor_8bit(system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 8;
@@ -1872,7 +1878,7 @@ void LR35902::instr_0xB5() // OR L
 }
 void LR35902::instr_0xB6() // OR (HL)
 {
-    or_8bit(mcu->read_8bit(reg.hl));
+    or_8bit(system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 8;
@@ -1928,7 +1934,7 @@ void LR35902::instr_0xBD() // CP L
 }
 void LR35902::instr_0xBE() // CP (HL)
 {
-    cp_8bit(mcu->read_8bit(reg.hl));
+    cp_8bit(system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 8;
@@ -1964,7 +1970,7 @@ void LR35902::instr_0xC2() // JP NZ,a16
 {
     if (zero == false)
     {
-        reg.pc = mcu->read_16bit(reg.pc + 1);
+        reg.pc = system.mcu.read_16bit(reg.pc + 1);
         clocks += 16;
     }
     else
@@ -1975,7 +1981,7 @@ void LR35902::instr_0xC2() // JP NZ,a16
 }
 void LR35902::instr_0xC3() // JP a16
 {
-    reg.pc = mcu->read_16bit(reg.pc + 1);
+    reg.pc = system.mcu.read_16bit(reg.pc + 1);
 
     clocks += 16;
 }
@@ -1983,7 +1989,7 @@ void LR35902::instr_0xC4() // CALL NZ,a16
 {
     if (zero == false)
     {
-        call(mcu->read_16bit(reg.pc + 1));
+        call(system.mcu.read_16bit(reg.pc + 1));
         clocks += 24;
     }
     else
@@ -2001,7 +2007,7 @@ void LR35902::instr_0xC5() // PUSH BC
 }
 void LR35902::instr_0xC6() // ADD A,d8
 {
-    add_8bit(mcu->read_8bit(reg.pc + 1), false);
+    add_8bit(system.mcu.read_8bit(reg.pc + 1), false);
 
     reg.pc += 2;
     clocks += 8;
@@ -2036,7 +2042,7 @@ void LR35902::instr_0xCA() // JP Z,a16
 {
     if (zero == true)
     {
-        reg.pc = mcu->read_16bit(reg.pc + 1);
+        reg.pc = system.mcu.read_16bit(reg.pc + 1);
         clocks += 16;
     }
     else
@@ -2053,7 +2059,7 @@ void LR35902::instr_0xCC() // CALL Z,a16
 {
     if (zero == true)
     {
-        call(mcu->read_16bit(reg.pc + 1));
+        call(system.mcu.read_16bit(reg.pc + 1));
         clocks += 24;
     }
     else
@@ -2064,13 +2070,13 @@ void LR35902::instr_0xCC() // CALL Z,a16
 }
 void LR35902::instr_0xCD() // CALL a16
 {
-    call(mcu->read_16bit(reg.pc + 1));
+    call(system.mcu.read_16bit(reg.pc + 1));
 
     clocks += 24;
 }
 void LR35902::instr_0xCE() // ADC A,d8
 {
-    add_8bit(mcu->read_8bit(reg.pc + 1), true);
+    add_8bit(system.mcu.read_8bit(reg.pc + 1), true);
 
     reg.pc += 2;
     clocks += 8;
@@ -2105,7 +2111,7 @@ void LR35902::instr_0xD2() // JP NC,a16
 {
     if (carry == false)
     {
-        reg.pc = mcu->read_16bit(reg.pc + 1);
+        reg.pc = system.mcu.read_16bit(reg.pc + 1);
         clocks += 16;
     }
     else
@@ -2125,7 +2131,7 @@ void LR35902::instr_0xD4() // CALL NC,a16
 {
     if (carry == false)
     {
-        call(mcu->read_16bit(reg.pc + 1));
+        call(system.mcu.read_16bit(reg.pc + 1));
         clocks += 24;
     }
     else
@@ -2143,7 +2149,7 @@ void LR35902::instr_0xD5() // PUSH DE
 }
 void LR35902::instr_0xD6() // SUB d8
 {
-    sub_8bit(mcu->read_8bit(reg.pc + 1));
+    sub_8bit(system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 8;
@@ -2178,7 +2184,7 @@ void LR35902::instr_0xDA() // JP C,a16
 {
     if (carry == true)
     {
-        reg.pc = mcu->read_16bit(reg.pc + 1);
+        reg.pc = system.mcu.read_16bit(reg.pc + 1);
         clocks += 16;
     }
     else
@@ -2198,7 +2204,7 @@ void LR35902::instr_0xDC() // CALL C,a16
 {
     if (carry == true)
     {
-        call(mcu->read_16bit(reg.pc + 1));
+        call(system.mcu.read_16bit(reg.pc + 1));
         clocks += 24;
     }
     else
@@ -2216,7 +2222,7 @@ void LR35902::instr_0xDD() // Invalid instruction
 }
 void LR35902::instr_0xDE() // SBC A,d8
 {
-    sub_8bit(mcu->read_8bit(reg.pc + 1), true);
+    sub_8bit(system.mcu.read_8bit(reg.pc + 1), true);
 
     reg.pc += 2;
     clocks += 8;
@@ -2229,7 +2235,7 @@ void LR35902::instr_0xDF() // RST 18H
 }
 void LR35902::instr_0xE0() // LDH (a8),A
 {
-    mcu->write_8bit(0xFF00 + mcu->read_8bit(reg.pc + 1), reg.a);
+    system.mcu.write_8bit(0xFF00 + system.mcu.read_8bit(reg.pc + 1), reg.a);
 
     reg.pc += 2;
     clocks += 12;
@@ -2243,7 +2249,7 @@ void LR35902::instr_0xE1() // POP HL
 }
 void LR35902::instr_0xE2() // LD (C),A
 {
-    mcu->write_8bit(0xFF00 + reg.c, reg.a);
+    system.mcu.write_8bit(0xFF00 + reg.c, reg.a);
 
     reg.pc += 1;
     clocks += 8;
@@ -2271,7 +2277,7 @@ void LR35902::instr_0xE5() // PUSH HL
 }
 void LR35902::instr_0xE6() // AND d8
 {
-    and_8bit(mcu->read_8bit(reg.pc + 1));
+    and_8bit(system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 8;
@@ -2284,7 +2290,7 @@ void LR35902::instr_0xE7() // RST 20H
 }
 void LR35902::instr_0xE8() // ADD SP,r8
 {
-    int8 e = static_cast<int8>(mcu->read_8bit(reg.pc + 1));
+    int8 e = static_cast<int8>(system.mcu.read_8bit(reg.pc + 1));
 
     carry = get_bit(8, (reg.sp & 0x00FF) + e);
     half_carry = get_bit(4, (reg.sp & 0x000F) + e);
@@ -2312,7 +2318,7 @@ void LR35902::instr_0xE9() // JP (HL)
 }
 void LR35902::instr_0xEA() // LD (a16),A
 {
-    mcu->write_8bit(mcu->read_16bit(reg.pc + 1), reg.a);
+    system.mcu.write_8bit(system.mcu.read_16bit(reg.pc + 1), reg.a);
 
     reg.pc += 3;
     clocks += 16;
@@ -2342,7 +2348,7 @@ void LR35902::instr_0xED() // Invalid instruction
 }
 void LR35902::instr_0xEE() // XOR d8
 {
-    xor_8bit(mcu->read_8bit(reg.pc + 1));
+    xor_8bit(system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 8;
@@ -2355,7 +2361,7 @@ void LR35902::instr_0xEF() // RST 28H
 }
 void LR35902::instr_0xF0() // LDH A,(a8)
 {
-    reg.a = mcu->read_8bit(0xFF00 + mcu->read_8bit(reg.pc + 1));
+    reg.a = system.mcu.read_8bit(0xFF00 + system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 12;
@@ -2372,7 +2378,7 @@ void LR35902::instr_0xF1() // POP AF
 }
 void LR35902::instr_0xF2() // LD A,(C)
 {
-    reg.a = mcu->read_8bit(0xFF00 + reg.c);
+    reg.a = system.mcu.read_8bit(0xFF00 + reg.c);
 
     reg.pc += 2;
     clocks += 8;
@@ -2400,7 +2406,7 @@ void LR35902::instr_0xF5() // PUSH AF
 }
 void LR35902::instr_0xF6() // OR d8
 {
-    or_8bit(mcu->read_8bit(reg.pc + 1));
+    or_8bit(system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 8;
@@ -2413,7 +2419,7 @@ void LR35902::instr_0xF7() // RST 30H
 }
 void LR35902::instr_0xF8() // LD HL,SP+r8
 {
-    int8 e = static_cast<int8>(mcu->read_8bit(reg.pc + 1));
+    int8 e = static_cast<int8>(system.mcu.read_8bit(reg.pc + 1));
 
     carry = get_bit(8, (reg.sp & 0x00FF) + e);
     half_carry = get_bit(4, (reg.sp & 0x000F) + e);
@@ -2442,7 +2448,7 @@ void LR35902::instr_0xF9() // LD SP,HL
 }
 void LR35902::instr_0xFA() // LD A,(a16)
 {
-    reg.a = mcu->read_8bit(mcu->read_16bit(reg.pc + 1));
+    reg.a = system.mcu.read_8bit(system.mcu.read_16bit(reg.pc + 1));
 
     reg.pc += 3;
     clocks += 16;
@@ -2470,7 +2476,7 @@ void LR35902::instr_0xFD() // Invalid instruction
 }
 void LR35902::instr_0xFE() // CP d8
 {
-    cp_8bit(mcu->read_8bit(reg.pc + 1));
+    cp_8bit(system.mcu.read_8bit(reg.pc + 1));
 
     reg.pc += 2;
     clocks += 8;
@@ -2526,11 +2532,11 @@ void LR35902::instr_0xCB05() // RLC L
 }
 void LR35902::instr_0xCB06() // RLC (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     rlc_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -2586,11 +2592,11 @@ void LR35902::instr_0xCB0D() // RRC L
 }
 void LR35902::instr_0xCB0E() // RRC (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     rrc_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -2646,11 +2652,11 @@ void LR35902::instr_0xCB15() // RL L
 }
 void LR35902::instr_0xCB16() // RL (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     rl_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -2706,11 +2712,11 @@ void LR35902::instr_0xCB1D() // RR L
 }
 void LR35902::instr_0xCB1E() // RR (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     rr_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -2766,11 +2772,11 @@ void LR35902::instr_0xCB25() // SLA L
 }
 void LR35902::instr_0xCB26() // SLA (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     sla_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -2826,11 +2832,11 @@ void LR35902::instr_0xCB2D() // SRA L
 }
 void LR35902::instr_0xCB2E() // SRA (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     sra_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -2886,11 +2892,11 @@ void LR35902::instr_0xCB35() // SWAP L
 }
 void LR35902::instr_0xCB36() // SWAP (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     swap(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -2946,11 +2952,11 @@ void LR35902::instr_0xCB3D() // SRL L
 }
 void LR35902::instr_0xCB3E() // SRL (HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     srl_8bit(value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3006,7 +3012,7 @@ void LR35902::instr_0xCB45() // BIT 0,L
 }
 void LR35902::instr_0xCB46() // BIT 0,(HL)
 {
-    bit(0, mcu->read_8bit(reg.hl));
+    bit(0, system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 10;
@@ -3062,7 +3068,7 @@ void LR35902::instr_0xCB4D() // BIT 1,L
 }
 void LR35902::instr_0xCB4E() // BIT 1,(HL)
 {
-    bit(1, mcu->read_8bit(reg.hl));
+    bit(1, system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 10;
@@ -3118,7 +3124,7 @@ void LR35902::instr_0xCB55() // BIT 2,L
 }
 void LR35902::instr_0xCB56() // BIT 2,(HL)
 {
-    bit(2, mcu->read_8bit(reg.hl));
+    bit(2, system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 10;
@@ -3174,7 +3180,7 @@ void LR35902::instr_0xCB5D() // BIT 3,L
 }
 void LR35902::instr_0xCB5E() // BIT 3,(HL)
 {
-    bit(3, mcu->read_8bit(reg.hl));
+    bit(3, system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 10;
@@ -3230,7 +3236,7 @@ void LR35902::instr_0xCB65() // BIT 4,L
 }
 void LR35902::instr_0xCB66() // BIT 4,(HL)
 {
-    bit(4, mcu->read_8bit(reg.hl));
+    bit(4, system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 10;
@@ -3286,7 +3292,7 @@ void LR35902::instr_0xCB6D() // BIT 5,L
 }
 void LR35902::instr_0xCB6E() // BIT 5,(HL)
 {
-    bit(5, mcu->read_8bit(reg.hl));
+    bit(5, system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 10;
@@ -3342,11 +3348,11 @@ void LR35902::instr_0xCB75() // BIT 6,L
 }
 void LR35902::instr_0xCB76() // BIT 6,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     bit(6, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3402,7 +3408,7 @@ void LR35902::instr_0xCB7D() // BIT 7,L
 }
 void LR35902::instr_0xCB7E() // BIT 7,(HL)
 {
-    bit(7, mcu->read_8bit(reg.hl));
+    bit(7, system.mcu.read_8bit(reg.hl));
 
     reg.pc += 1;
     clocks += 10;
@@ -3458,11 +3464,11 @@ void LR35902::instr_0xCB85() // RES 0,L
 }
 void LR35902::instr_0xCB86() // RES 0,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(0, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3518,11 +3524,11 @@ void LR35902::instr_0xCB8D() // RES 1,L
 }
 void LR35902::instr_0xCB8E() // RES 1,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(1, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3578,11 +3584,11 @@ void LR35902::instr_0xCB95() // RES 2,L
 }
 void LR35902::instr_0xCB96() // RES 2,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(2, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3638,11 +3644,11 @@ void LR35902::instr_0xCB9D() // RES 3,L
 }
 void LR35902::instr_0xCB9E() // RES 3,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(3, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3698,11 +3704,11 @@ void LR35902::instr_0xCBA5() // RES 4,L
 }
 void LR35902::instr_0xCBA6() // RES 4,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(4, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3758,11 +3764,11 @@ void LR35902::instr_0xCBAD() // RES 5,L
 }
 void LR35902::instr_0xCBAE() // RES 5,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(5, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3818,11 +3824,11 @@ void LR35902::instr_0xCBB5() // RES 6,L
 }
 void LR35902::instr_0xCBB6() // RES 6,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(6, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3878,11 +3884,11 @@ void LR35902::instr_0xCBBD() // RES 7,L
 }
 void LR35902::instr_0xCBBE() // RES 7,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     res(7, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3938,11 +3944,11 @@ void LR35902::instr_0xCBC5() // SET 0,L
 }
 void LR35902::instr_0xCBC6() // SET 0,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(0, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -3998,11 +4004,11 @@ void LR35902::instr_0xCBCD() // SET 1,L
 }
 void LR35902::instr_0xCBCE() // SET 1,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(1, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -4058,11 +4064,11 @@ void LR35902::instr_0xCBD5() // SET 2,L
 }
 void LR35902::instr_0xCBD6() // SET 2,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(2, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -4118,11 +4124,11 @@ void LR35902::instr_0xCBDD() // SET 3,L
 }
 void LR35902::instr_0xCBDE() // SET 3,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(3, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -4178,11 +4184,11 @@ void LR35902::instr_0xCBE5() // SET 4,L
 }
 void LR35902::instr_0xCBE6() // SET 4,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(4, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -4238,11 +4244,11 @@ void LR35902::instr_0xCBED() // SET 5,L
 }
 void LR35902::instr_0xCBEE() // SET 5,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(5, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -4298,11 +4304,11 @@ void LR35902::instr_0xCBF5() // SET 6,L
 }
 void LR35902::instr_0xCBF6() // SET 6,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(6, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;
@@ -4358,11 +4364,11 @@ void LR35902::instr_0xCBFD() // SET 7,L
 }
 void LR35902::instr_0xCBFE() // SET 7,(HL)
 {
-    uint8 value = mcu->read_8bit(reg.hl);
+    uint8 value = system.mcu.read_8bit(reg.hl);
 
     set(7, value);
 
-    mcu->write_8bit(reg.hl, value);
+    system.mcu.write_8bit(reg.hl, value);
 
     reg.pc += 1;
     clocks += 10;

@@ -1,8 +1,10 @@
 #include "memory.h"
 
+#include "gameboy.h"
+
 // Constructor
-MCU::MCU(std::unique_ptr<Cartridge>& _cartridge) :
-    cartridge(_cartridge)
+MCU::MCU(Gameboy* gameboy) :
+    system(*gameboy)
 {
     log = el::Loggers::getLogger("MCU");
 
@@ -76,8 +78,8 @@ void MCU::reset()
 
     // TEMP???
     get_memory_reference(ADDRESS::LY)      = 0x00; // LY
-    get_memory_reference(ADDRESS::DIV)     = 0x1E;   // DIV High
-    get_memory_reference(ADDRESS::DIV - 1) = 0xA0;  // DIV low
+    //get_memory_reference(ADDRESS::DIV)     = 0x1E;   // DIV High
+    //get_memory_reference(ADDRESS::DIV - 1) = 0xA0;  // DIV low
 }
 
 
@@ -129,7 +131,7 @@ bool MCU::write_8bit( uint16 address, uint8  data)
 
     // Rom
     if ( address < 0x8000 )
-       return  cartridge->write_8bit(address, data);
+       return  system.cartridge->write_8bit(address, data);
 
     // Vram
     if ( address < 0xA000 )
@@ -140,7 +142,7 @@ bool MCU::write_8bit( uint16 address, uint8  data)
     
     // Ext Ram
     if ( address < 0xC000 )
-        return cartridge->write_8bit(address, data);
+        return system.cartridge->write_8bit(address, data);
 
     // Wram 
     if ( address < 0xD000 ) // Fixed bank
@@ -284,7 +286,7 @@ uint8&  MCU::get_memory_reference(uint16 address)
 {
     // Rom
     if ( address < 0x8000 )
-        return cartridge->read_8bit(address);
+        return system.cartridge->read_8bit(address);
 
     // Vram
     if ( address < 0xA000 )
@@ -292,7 +294,7 @@ uint8&  MCU::get_memory_reference(uint16 address)
 
     // Ext Ram
     if ( address < 0xC000 )
-        return cartridge->read_8bit(address);
+        return system.cartridge->read_8bit(address);
 
     // Wram 
     if ( address < 0xD000 ) // Fixed bank

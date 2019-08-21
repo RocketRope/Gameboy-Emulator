@@ -42,3 +42,6 @@
 moc_*.h
 moc_*.cpp
 *.autosave
+
+# VS Code
+.vscode
