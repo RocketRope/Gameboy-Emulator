@@ -7,11 +7,19 @@
 #include <QPainter>
 #include <QImage>
 
+#include <iostream>
+
+static int counter = 1;
+
 class TileGraphicsItem : public QGraphicsItem
 {
 public:
 
     explicit TileGraphicsItem(const Tile* _tile = nullptr, QGraphicsItem *parent = nullptr);
+    ~TileGraphicsItem()
+    {
+        std::cerr << counter++ << std::endl;
+    }
 
     void setTilePtr(const Tile* _tile);
     void update();
@@ -23,8 +31,6 @@ public:
 private:
 
     const Tile* tile;
-
-    static const QRectF bounding_rect;
 
     QImage image;
     Tile_Pixel_Array pixels;

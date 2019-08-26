@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-const QRectF TileGraphicsItem::bounding_rect(0.0, 0.0, 8.0, 8.0);
-
 TileGraphicsItem::TileGraphicsItem(const Tile* _tile, QGraphicsItem *parent) :
     QGraphicsItem(parent),
     tile(_tile),
@@ -19,7 +17,7 @@ void TileGraphicsItem::setTilePtr(const Tile *_tile)
 
 QRectF TileGraphicsItem::boundingRect() const
 {
-    return bounding_rect;
+    return QRectF(0.0, 0.0, 8.0, 8.0);
 }
 
 void TileGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
@@ -30,8 +28,6 @@ void TileGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 void TileGraphicsItem::update()
 {
     if ( tile != nullptr )
-    {
         tile->to_rgb(pixels);
-    }
 }
 

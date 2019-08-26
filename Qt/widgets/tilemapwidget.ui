@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
-    <height>218</height>
+    <width>270</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,6 +49,9 @@
       </property>
       <item>
        <widget class="QGraphicsView" name="graphicsView">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -57,14 +60,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>256</width>
-          <height>192</height>
+          <width>260</width>
+          <height>196</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>256</width>
-          <height>192</height>
+          <width>260</width>
+          <height>196</height>
          </size>
         </property>
         <property name="verticalScrollBarPolicy">

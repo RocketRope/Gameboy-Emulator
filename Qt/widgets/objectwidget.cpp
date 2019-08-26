@@ -16,7 +16,6 @@ ObjectWidget::ObjectWidget(Object* _object, unsigned int number, QWidget *parent
     ui->tile_graphicsView->scale(6.0, 6.0);
     ui->tile_graphicsView->setScene(&scene);
 
-
     scene.addItem(&tile);
 
     //

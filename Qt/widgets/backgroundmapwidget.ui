@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>BackgroundMapWidget</class>
  <widget class="QWidget" name="BackgroundMapWidget">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
-    <height>282</height>
+    <width>270</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,6 +49,9 @@
       </property>
       <item>
        <widget class="QGraphicsView" name="graphicsView">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -54,14 +60,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>256</width>
-          <height>256</height>
+          <width>260</width>
+          <height>260</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>256</width>
-          <height>256</height>
+          <width>260</width>
+          <height>260</height>
          </size>
         </property>
         <property name="verticalScrollBarPolicy">

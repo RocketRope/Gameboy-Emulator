@@ -18,8 +18,6 @@ ScreenWindow::ScreenWindow(Gameboy* _gameboy, QWidget *parent) :
 
     installEventFilter(this);
 
-    //ui->graphicsView->installEventFilter(this);
-
     gameboy->ppu.register_vblank_callback( std::bind(&ScreenWindow::vblank_update_callback, this) );
 
     ui->graphicsView->setSceneRect(0,0, 160, 144);
@@ -37,14 +35,15 @@ ScreenWindow::~ScreenWindow()
 
 void ScreenWindow::updateFramebuffer()
 {
-    //std::cerr << "Slot" << std::endl;
-    gameboy->ppu.get_framebuffer(pixels);
     pixmap->setPixmap(QPixmap::fromImage(image));
+
+    BaseGameboyWidget::updateWidgets();
 }
 
 void ScreenWindow::vblank_update_callback()
 {
     QMetaObject::invokeMethod(this, "updateFramebuffer", Qt::QueuedConnection);
+    gameboy->ppu.get_framebuffer(pixels);
 }
 
 bool ScreenWindow::eventFilter(QObject *obj, QEvent *event)
@@ -56,7 +55,6 @@ bool ScreenWindow::eventFilter(QObject *obj, QEvent *event)
         std::cout << "Out focus" << std::endl;
         return false;
     }
-
 
     return QMainWindow::eventFilter(obj, event);
 }
@@ -71,11 +69,15 @@ void ScreenWindow::changeEvent(QEvent *event)
         {
             // Window received focus
             grabKeyboard();
+            gameboy->run();
         }
         else
         {
             // Window lost focus
             releaseKeyboard();
+            gameboy->pause();
+
+            BaseGameboyWidget::updateWidgets();
         }
     }
 }

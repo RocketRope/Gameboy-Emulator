@@ -9,7 +9,7 @@ BackgroundMapWidget::BackgroundMapWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // Scene
-    scene.setSceneRect(0, 0, 255, 255);
+    scene.setSceneRect(min, min, max, max);
     ui->graphicsView->setScene(&scene);
 
     // Tiles setup
@@ -71,11 +71,11 @@ void BackgroundMapWidget::updateViewLines()
     if ( left > right )
     {
         // Wrap right size
-        view_lines[0].setLine(left, top,    0xFF, top);
-        view_lines[2].setLine(left, bottom, 0xFF, bottom);
+        view_lines[0].setLine(left, top,    max, top);
+        view_lines[2].setLine(left, bottom, max, bottom);
 
-        view_lines[4].setLine(0x00, top,    right, top);
-        view_lines[6].setLine(0x00, bottom, right, bottom);
+        view_lines[4].setLine(min, top,    right, top);
+        view_lines[6].setLine(min, bottom, right, bottom);
     }
     else
     {
@@ -90,11 +90,11 @@ void BackgroundMapWidget::updateViewLines()
     if ( top > bottom )
     {
         // Wrap bottom
-        view_lines[1].setLine(right, top, right, 0xFF);
-        view_lines[3].setLine(left,  top, left,  0xFF);
+        view_lines[1].setLine(right, top, right, max);
+        view_lines[3].setLine(left,  top, left,  max);
 
-        view_lines[5].setLine(right, 0x00, right, bottom);
-        view_lines[7].setLine(left,  0x00, left,  bottom);
+        view_lines[5].setLine(right, min, right, bottom);
+        view_lines[7].setLine(left,  min, left,  bottom);
     }
     else
     {

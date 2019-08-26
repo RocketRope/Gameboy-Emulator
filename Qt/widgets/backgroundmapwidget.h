@@ -24,6 +24,9 @@ public:
 
 private:
 
+    const int max = 255;
+    const int min = 0;
+
     Ui::BackgroundMapWidget *ui;
 
     QGraphicsScene scene;

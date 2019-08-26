@@ -57,6 +57,8 @@ void PPU::step(uint16 elapsed_clocks)
 
     if ( scanline_vertical_counter > 456 )
     {
+        draw_scanline();
+
         // Next scanline
         scanline_vertical_counter -= 456;
         ly++;
@@ -65,8 +67,6 @@ void PPU::step(uint16 elapsed_clocks)
             lyc_match_flag = true;
         else
             lyc_match_flag = false;
-
-        draw_scanline();
     }
 
     if ( ly < 144 )
@@ -81,7 +81,6 @@ void PPU::step(uint16 elapsed_clocks)
     }
     else // V BLANK
     {
-        // One time when entering vblank
         if ( current_mode != MODE::V_BLANK )
         {
             set_mode( MODE::V_BLANK );
@@ -91,11 +90,9 @@ void PPU::step(uint16 elapsed_clocks)
             
             if ( vblank_callback )
                 vblank_callback();
-            
-            //std::this_thread::sleep_for(std::chrono::milliseconds(16));
 
             // Frametime synchronize
-            
+
             auto frame_end = std::chrono::high_resolution_clock::now();
 
             std::chrono::microseconds delta_time = std::chrono::duration_cast<std::chrono::microseconds>(frame_end - frame_start);
@@ -106,8 +103,6 @@ void PPU::step(uint16 elapsed_clocks)
             }
 
             frame_start = frame_end;
-            
-
         }
 
         // Start new frame when ly > 153
@@ -230,7 +225,7 @@ std::vector<Sprite> PPU::oam_search()
     {
         Sprite sprite = mcu->objects[i];
 
-        // Add only sprites that are inside the screen
+        // Add only sprites that are on screen
         if ( (ly >= (sprite.pos_y - 16)) &&
              (ly < (sprite.pos_y + 8 - 16)) )
         {

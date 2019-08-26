@@ -39,6 +39,7 @@ SOURCES += \
     Qt/widgets/tilegraphicsitem.cpp \
     Qt/widgets/tilemapwidget.cpp \
     Qt/widgets/timerwidget.cpp \
+    Qt/windows/basewindow.cpp \
     Qt/windows/debugwindow.cpp \
     Qt/windows/screenwindow.cpp \
     Qt/windows/vramwindow.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     Qt/widgets/tilegraphicsitem.h \
     Qt/widgets/tilemapwidget.h \
     Qt/widgets/timerwidget.h \
+    Qt/windows/basewindow.h \
     Qt/windows/debugwindow.h \
     Qt/windows/screenwindow.h \
     Qt/windows/vramwindow.h \
@@ -92,6 +94,7 @@ FORMS += \
     Qt/widgets/serialwidget.ui \
     Qt/widgets/tilemapwidget.ui \
     Qt/widgets/timerwidget.ui \
+    Qt/windows/basewindow.ui \
     Qt/windows/debugwindow.ui \
     Qt/windows/screenwindow.ui \
     Qt/windows/vramwindow.ui
