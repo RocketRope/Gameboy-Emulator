@@ -22,6 +22,13 @@ void Cartridge::reset()
     ram.fill(0x00);
 }
 
+//
+
+bool Cartridge::is_empty()
+{
+    return dynamic_cast<Empty_Cartridge*>( this ) != nullptr;
+}
+
 // Virtual Read/Write functions //
 
 uint8& Cartridge::read_8bit(uint16 /*address*/)
@@ -40,41 +47,39 @@ Cartridge::Header Cartridge::get_header()
 
 // Static functions //
 
-std::unique_ptr<Cartridge> Cartridge::load_rom(const char* filename)
+std::unique_ptr<Cartridge> Cartridge::load_rom(const std::string& filename)
 {
-    Header h;
+    Header header;
     std::ifstream file;
     
     file.open(filename, std::ios::binary);
 
     if ( !file.is_open() )
-        return std::make_unique<Cartridge>();
+        return std::make_unique<Empty_Cartridge>();
 
     // Go to start of rom header
     file.seekg(0x0104);
 
     // Read header
-    file.read((char*) &h, sizeof(Header));
+    file.read((char*) &header, sizeof(Header));
 
     // Rewind
     file.seekg(0x0000);
 
-    switch ( h.cartridge_type )
+    switch ( header.cartridge_type )
     {
 
     case MBC_TYPE::ROM_ONLY :
     case MBC_TYPE::ROM_RAM  :
     case MBC_TYPE::ROM_RAM_BATTERY :
-        return std::make_unique<No_MBC>(h, file);
+        return std::make_unique<No_MBC>(header, file);
 
     case MBC_TYPE::MBC1:
-        return std::make_unique<No_MBC>(h, file); // Temp!!!!!
+        return std::make_unique<No_MBC>(header, file); // Temp!!!!!
 
     default:
-        return std::make_unique<No_MBC>(h, file); // Temp!!!!!
+        return std::make_unique<Empty_Cartridge>();
     }
-
-    return std::make_unique<Cartridge>();
 }
 
 // Sub Class No_MBC //

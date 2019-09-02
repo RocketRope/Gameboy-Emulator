@@ -1,8 +1,9 @@
 #ifndef _CARTRIDGE_H_
 #define _CARTRIDGE_H_
 
-#include <fstream>
+#include <string>
 #include <memory>
+#include <fstream>
 
 #include "types.h"
 
@@ -79,17 +80,23 @@ class Cartridge
         
         virtual void reset();
 
+
+        //
+
+        bool is_empty();
+
         // Virtual Read/Write functions //
 
         virtual uint8& read_8bit(uint16 address);
         virtual bool   write_8bit(uint16 address, uint8 data);
 
         // Get functions //
+
         Header get_header();
 
         // Static functions //
 
-        static std::unique_ptr<Cartridge> load_rom(const char* filename);
+        static std::unique_ptr<Cartridge> load_rom(const std::string& filename);
         
     protected:
 
@@ -97,6 +104,11 @@ class Cartridge
 
         std::array<uint8, 0x8000> rom;
         std::array<uint8, 0x2000> ram;
+};
+
+class Empty_Cartridge : public Cartridge
+{
+
 };
 
 class No_MBC : public Cartridge

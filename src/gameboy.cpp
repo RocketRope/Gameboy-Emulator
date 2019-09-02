@@ -8,9 +8,9 @@ Gameboy::Gameboy() :
     mcu(this),
     cpu(this),
     timer(this),
-    ppu(&mcu)
+    ppu(this)
 {
-    cartridge = std::make_unique<Cartridge>();
+    cartridge = std::make_unique<Empty_Cartridge>();
 
     exit = false;
     pause();
@@ -20,8 +20,9 @@ Gameboy::Gameboy() :
 Gameboy::~Gameboy()
 {
     exit = true;
-    run();
 
+    running = true;
+    run_cv.notify_one();
     run_thread.join();
 }
 
@@ -32,8 +33,7 @@ void Gameboy::reset()
     ppu.reset();
     timer.reset();
 
-    if ( cartridge != nullptr )
-        cartridge->reset();
+    cartridge->reset();
 }
 
 void Gameboy::step()
@@ -47,8 +47,11 @@ void Gameboy::step()
 
 void Gameboy::run()
 {
-    running = true;
-    run_cv.notify_one();
+    if ( !cartridge->is_empty() )
+    {
+        running = true;
+        run_cv.notify_one();
+    }
 }
 
 void Gameboy::pause()
@@ -56,11 +59,18 @@ void Gameboy::pause()
     running = false;
 }
 
-void Gameboy::load_rom(const char* filename)
+bool Gameboy::load_rom(const std::string& filename)
 {
+    auto new_cartridge = Cartridge::load_rom(filename);
+
+    if ( new_cartridge->is_empty() )
+        return false;
+
+    cartridge = std::move(new_cartridge);
+
     reset();
 
-    cartridge = Cartridge::load_rom(filename);
+    return true;
 }
 
 void Gameboy::run_loop()

@@ -6,6 +6,8 @@
 #include "types.h"
 #include "memory.h"
 
+class Gameboy;
+
 typedef RGB_Color RGB_Framebuffer[144][160];
 
 class PPU
@@ -22,7 +24,7 @@ class PPU
 
         // Constructor //
 
-        PPU(MCU* _mcu);
+        PPU(Gameboy* gameboy);
 
         //
 
@@ -46,7 +48,7 @@ class PPU
         static constexpr uint8 screen_width  = 160;
         static constexpr uint8 screen_height = 144;
 
-        MCU* mcu;
+        Gameboy& system;
 
         uint16 scanline_vertical_counter;
 
@@ -104,6 +106,7 @@ class PPU
         void set_mode(MODE mode);
         
         //
+
         void clear_framebuffer();
         void draw_scanline();
 

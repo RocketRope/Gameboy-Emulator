@@ -1,9 +1,6 @@
 #include "tilemapwidget.h"
 #include "ui_tilemapwidget.h"
 
-
-#include <iostream>
-
 TileMapWidget::TileMapWidget(QWidget *parent) :
     BaseGameboyWidget(parent),
     ui(new Ui::TileMapWidget),

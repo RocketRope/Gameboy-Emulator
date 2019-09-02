@@ -1,18 +1,20 @@
 #include "video.h"
 
+#include "gameboy.h"
+
 #include <thread> // Temp!!!!!!!
 
 // Constructor //
 
-PPU::PPU(MCU* _mcu) :
-    mcu(_mcu),
-    stat ( mcu->get_memory_reference(MCU::ADDRESS::STAT) ),
+PPU::PPU(Gameboy* gameboy) :
+    system(*gameboy),
+    stat ( system.mcu.get_memory_reference(MCU::ADDRESS::STAT) ),
     lyc_match_interrupt(stat), 
     oam_search_interrupt(stat), 
     vblank_interrupt(stat), 
     hblank_interrupt(stat),
     lyc_match_flag(stat),
-    lcdc ( mcu->get_memory_reference(MCU::ADDRESS::LCDC)  ),
+    lcdc ( system.mcu.get_memory_reference(MCU::ADDRESS::LCDC)  ),
     lcd_enabled(lcdc),
     window_tile_map(lcdc),
     window_enabled(lcdc),
@@ -21,16 +23,16 @@ PPU::PPU(MCU* _mcu) :
     sprite_size(lcdc),
     sprite_enabled(lcdc),
     bg_enabled(lcdc),
-    ly   ( mcu->get_memory_reference(MCU::ADDRESS::LY)   ),
-    lyc  ( mcu->get_memory_reference(MCU::ADDRESS::LYC)  ),
-    scx  ( mcu->get_memory_reference(MCU::ADDRESS::SCX)  ),
-    scy  ( mcu->get_memory_reference(MCU::ADDRESS::SCY)  ),
-    wx   ( mcu->get_memory_reference(MCU::ADDRESS::WX)   ),
-    wy   ( mcu->get_memory_reference(MCU::ADDRESS::WY)   ),
-    if_vblank_bit( mcu->get_memory_reference(MCU::ADDRESS::IF) ),
-    bgp  ( mcu->get_memory_reference(MCU::ADDRESS::BGP)  ),
-    obp0 ( mcu->get_memory_reference(MCU::ADDRESS::OBP0) ),
-    obp1 ( mcu->get_memory_reference(MCU::ADDRESS::OBP1) )
+    ly ( system.mcu.get_memory_reference(MCU::ADDRESS::LY)   ),
+    lyc ( system.mcu.get_memory_reference(MCU::ADDRESS::LYC)  ),
+    scx ( system.mcu.get_memory_reference(MCU::ADDRESS::SCX)  ),
+    scy ( system.mcu.get_memory_reference(MCU::ADDRESS::SCY)  ),
+    wx ( system.mcu.get_memory_reference(MCU::ADDRESS::WX)   ),
+    wy ( system.mcu.get_memory_reference(MCU::ADDRESS::WY)   ),
+    if_vblank_bit( system.mcu.get_memory_reference(MCU::ADDRESS::IF) ),
+    bgp  ( system.mcu.get_memory_reference(MCU::ADDRESS::BGP)  ),
+    obp0 ( system.mcu.get_memory_reference(MCU::ADDRESS::OBP0) ),
+    obp1 ( system.mcu.get_memory_reference(MCU::ADDRESS::OBP1) )
     
 {
     reset();
@@ -168,8 +170,8 @@ void PPU::draw_scanline_bg_pixels()
 
         // Find bg tile
         uint16 bg_index   = (offset_x / 8) + ( (offset_y / 8) * 32 );
-        uint8  tile_index = mcu->bg_map_0[bg_index];
-        Tile   tile       = mcu->tile_map_0[tile_index];
+        uint8  tile_index = system.mcu.bg_map_0[bg_index];
+        Tile   tile       = system.mcu.tile_map_0[tile_index];
 
         framebuffer[ly][x] = tile.get_pixel(offset_x % 8, offset_y % 8);
     }
@@ -184,7 +186,7 @@ void PPU::draw_scanline_sprite_pixels()
     {
         uint8 y = ly - sprite->pos_y + 16;
 
-        Tile tile = mcu->tile_map_0[sprite->tile_number];
+        Tile tile = system.mcu.tile_map_0[sprite->tile_number];
 
         for ( int x = 0 ; x < 8 ; x++ )
         {
@@ -223,7 +225,7 @@ std::vector<Sprite> PPU::oam_search()
 
     for ( int i = 0 ; i < 40 ; i++ )
     {
-        Sprite sprite = mcu->objects[i];
+        Sprite sprite = system.mcu.objects[i];
 
         // Add only sprites that are on screen
         if ( (ly >= (sprite.pos_y - 16)) &&

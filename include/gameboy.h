@@ -6,6 +6,8 @@
 #include <atomic>
 #include <condition_variable>
 
+#include <string>
+
 #include "el/easylogging++.h"
 
 #include "types.h"
@@ -27,8 +29,6 @@ class Gameboy
         Timer timer;
         PPU ppu;
         std::unique_ptr<Cartridge> cartridge;
-        
-        // Constructor/Destructor //
 
         Gameboy();
         ~Gameboy();
@@ -40,7 +40,7 @@ class Gameboy
         void run();
         void pause();
 
-        void load_rom(const char* filename);
+        bool load_rom(const std::string& filename);
 
     private:
 

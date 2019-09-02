@@ -1,6 +1,7 @@
 #include "debugwindow.h"
 #include "vramwindow.h"
 #include "screenwindow.h"
+#include "basewindow.h"
 #include "basegameboywidget.h"
 #include <QApplication>
 
@@ -23,11 +24,12 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     DebugWindow debug_window(&gameboy);
-    VramWindow vram_window(&gameboy);
-    ScreenWindow screen_window(&gameboy);
-
     debug_window.show();
+
+    VramWindow vram_window(&gameboy);
     vram_window.show();
+
+    ScreenWindow screen_window(&gameboy);
     screen_window.show();
 
     return a.exec();
