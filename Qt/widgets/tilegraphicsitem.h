@@ -9,8 +9,6 @@
 
 #include <iostream>
 
-static int counter = 1;
-
 class TileGraphicsItem : public QGraphicsItem
 {
 public:
