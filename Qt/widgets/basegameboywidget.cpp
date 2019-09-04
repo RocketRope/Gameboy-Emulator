@@ -1,5 +1,7 @@
 #include "basegameboywidget.h"
 
+#include "tilegraphicsitem.h"
+
 // Static member declaration
 Gameboy* BaseGameboyWidget::gameboy = nullptr;
 CPU*     BaseGameboyWidget::cpu     = nullptr;
@@ -30,6 +32,8 @@ void BaseGameboyWidget::updateWidgets()
 {
     for ( auto w : widgets )
         w->update();
+
+    TileGraphicsItem::updateAllTiles(gameboy);
 }
 
 QString toHexQString(uint32 value, int width)

@@ -64,9 +64,8 @@ void ObjectWidget::update()
         tile.setTilePtr(&mcu->tile_map_0[object->tile_number]);
     */
 
-    tile.setTilePtr(&mcu->tile_map_0[object->tile_number]);
+    tile.setTileNumber(object->tile_number);
 
-    tile.update();
     scene.update();
 
     // Tile Number

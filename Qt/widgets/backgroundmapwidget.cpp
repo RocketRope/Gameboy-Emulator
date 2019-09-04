@@ -44,12 +44,8 @@ BackgroundMapWidget::~BackgroundMapWidget()
 
 void BackgroundMapWidget::update()
 {
-    // Tiles
     for ( size_t i = 0 ; i < 1024 ; i++ )
-    {
-        tiles[i].setTilePtr( &mcu->tile_map_0[mcu->bg_map_0[i]] );
-        tiles[i].update();
-    }
+        tiles[i].setTileNumber( mcu->bg_map_0[i] );
 
     updateViewLines();
 

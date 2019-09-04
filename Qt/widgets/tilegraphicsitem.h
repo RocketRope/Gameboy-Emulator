@@ -1,33 +1,37 @@
 #ifndef TILEGRAPHICSITEM_H
 #define TILEGRAPHICSITEM_H
 
-#include "types.h"
+#include "gameboy.h"
+
+#include <array>
 
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QImage>
 
-#include <iostream>
-
 class TileGraphicsItem : public QGraphicsItem
 {
 public:
 
-    explicit TileGraphicsItem(const Tile* _tile = nullptr, QGraphicsItem *parent = nullptr);
+    explicit TileGraphicsItem(unsigned int tile = 0, QGraphicsItem *parent = nullptr);
+    ~TileGraphicsItem()
+    {
 
-    void setTilePtr(const Tile* _tile);
-    void update();
+    }
+    void setTileNumber(unsigned int tile);
 
     QRectF boundingRect() const override;
-
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+    static void updateAllTiles(Gameboy* system);
 
 private:
 
-    const Tile* tile;
+    unsigned int tile_number;
 
-    QImage image;
-    Tile_Pixel_Array pixels;
+    const static unsigned int max_tiles = 768;
 
+    static std::array<QImage, max_tiles> images;
+    static std::array<Tile_Pixel_Array, max_tiles> bitmaps;
 };
 #endif // TILEGRAPHICSITEM_H

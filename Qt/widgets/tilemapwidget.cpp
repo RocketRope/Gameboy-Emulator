@@ -11,7 +11,7 @@ TileMapWidget::TileMapWidget(QWidget *parent) :
     ui->graphicsView->setSceneRect(0,0, 256, 192);
     ui->graphicsView->setScene(&scene);
 
-    size_t index = 0;
+    unsigned int index = 0;
 
     for ( int bank = 0 ; bank < 2 ; bank++ )
     {
@@ -22,9 +22,9 @@ TileMapWidget::TileMapWidget(QWidget *parent) :
                 TileGraphicsItem& tile = tiles[index];
 
                 if ( bank == 0 )
-                    tile.setTilePtr( &mcu->tile_map_0[index] );
+                    tile.setTileNumber( index );
                 else
-                    tile.setTilePtr( &mcu->tile_map_1[index] );
+                    tile.setTileNumber( index );
 
                 tile.setPos((x * 8) + (bank * 16 * 8), y * 8);
 
@@ -45,9 +45,6 @@ TileMapWidget::~TileMapWidget()
 
 void TileMapWidget::update()
 {
-    for ( auto& tile : tiles )
-        tile.update();
-
     scene.update();
 }
 

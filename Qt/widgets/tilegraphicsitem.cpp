@@ -1,19 +1,22 @@
 #include "tilegraphicsitem.h"
 
-#include <iostream>
+std::array<QImage, TileGraphicsItem::max_tiles> TileGraphicsItem::images;
+std::array<Tile_Pixel_Array, TileGraphicsItem::max_tiles> TileGraphicsItem::bitmaps;
 
-TileGraphicsItem::TileGraphicsItem(const Tile* _tile, QGraphicsItem *parent) :
-    QGraphicsItem(parent),
-    tile(_tile),
-    image( (uint8*) pixels, 8, 8, QImage::Format_RGB888)
+TileGraphicsItem::TileGraphicsItem(unsigned int tile, QGraphicsItem *parent) :
+    QGraphicsItem(parent)
 {
-    update();
+    setTileNumber(tile);
 }
 
-void TileGraphicsItem::setTilePtr(const Tile *_tile)
+void TileGraphicsItem::setTileNumber(unsigned int tile)
 {
-    tile = _tile;
+    if ( tile >= max_tiles)
+        tile = max_tiles;
+
+    tile_number = tile;
 }
+
 
 QRectF TileGraphicsItem::boundingRect() const
 {
@@ -22,12 +25,19 @@ QRectF TileGraphicsItem::boundingRect() const
 
 void TileGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
 {
-    painter->drawImage(QPoint(0,0), image);
+    painter->drawImage(QPoint(0,0), images[tile_number]);
 }
 
-void TileGraphicsItem::update()
+void TileGraphicsItem::updateAllTiles(Gameboy* system)
 {
-    if ( tile != nullptr )
-        tile->to_rgb(pixels);
+    for ( unsigned int i = 0 ; i < max_tiles ; i++ )
+    {
+        if ( i < (max_tiles / 2) )
+            system->mcu.tile_map_0[i].to_rgb(bitmaps[i]);
+        else
+            system->mcu.tile_map_1[i].to_rgb(bitmaps[i]);
+
+        images[i] = QImage((uchar*) bitmaps[i], 8, 8, QImage::Format_RGB888);
+    }
 }
 
