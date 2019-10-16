@@ -73,6 +73,7 @@ HEADERS += \
     Qt/windows/screenwindow.h \
     Qt/windows/vramwindow.h \
     include/cpu.h \
+    include/decoder.h \
     include/el/easylogging++.h \
     include/gameboy.h \
     include/memory.h \

@@ -16,6 +16,35 @@ typedef unsigned short      uint16;
 typedef unsigned int        uint32;
 typedef unsigned long long  uint64;
 
+
+// Simple binary sorted vector class
+
+template <typename T>
+class sorted_vector : public std::vector<T>
+{
+    public:
+    
+        sorted_vector() {}
+
+        void insert(const T& value)
+        {
+            auto pos = std::upper_bound( std::vector<T>::begin(), 
+                                         std::vector<T>::end(), 
+                                         value );
+
+            std::vector<T>::insert(pos, value);
+        }
+
+        bool contatins(const T& value)
+        {
+            return std::binary_search( std::vector<T>::begin(),
+                                       std::vector<T>::end(), 
+                                       value );
+        }
+
+    private:
+};
+
 // Bit manipulation helper functions //
 
 template <typename T>
